@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.report.mapper.DailyRecordMapper">
+
+	<!-- 상황일지 리스트 -->
+	<select id="selectDailyRecordList" parameterType="DailyRecord" resultType="flkMap">
+		/* com.flk.mng.report.mapper.DailyRecordMapper.selectDailyRecordList */
+		SELECT    DR_ID
+				 ,DATE
+				 ,CONCAT(LEFT(TIME,2),':',RIGHT(TIME,2)) AS TIME
+				 ,RECORD_TYPE
+				 ,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = RECORD_TYPE) AS RECORD_TYPE_NM
+				 ,RECORD_NAME
+				 ,IFNULL(REASON,'') AS REASON
+				 ,IFNULL(RESULT,'') AS RESULT
+				 ,IFNULL(ETC,'') AS ETC
+				 ,MANUALLY_FLAG
+				 ,USE_FLAG
+				 ,SITE_ID
+		  FROM TBL_DAILY_RECORD
+		 WHERE SITE_ID = #{siteId}
+		   AND DATE = #{date}
+		   AND USE_FLAG = 'Y'
+		 ORDER BY TIME
+	</select>
+	
+	<!-- 상황일지 수정 -->
+	<update id="updateDailyRecord" parameterType="DailyRecord">
+		/* com.flk.mng.report.mapper.DailyRecordMapper.updateDailyRecord */
+		UPDATE TBL_DAILY_RECORD
+		   SET   REASON = #{reason}
+		       , RESULT = #{result}
+		       , ETC = #{etc}
+		       , UPDATE_ID = #{updateId}
+		       , UPDATE_DATE = NOW()
+		 WHERE DR_ID = #{drId}		 
+	</update>
+	
+	<!-- 상황일지 등록 -->
+	<insert id="insertDailyRecord" parameterType="java.util.List">
+		/* com.flk.mng.report.mapper.DailyRecordMapper.insertDailyRecord */
+		INSERT INTO TBL_DAILY_RECORD (
+			   	 TIME
+			   , RECORD_TYPE
+			   , RECORD_NAME
+			   , REASON
+			   , RESULT
+			   , ETC
+			   , SITE_ID
+			   , DATE
+			   , REG_ID
+			   , UPDATE_ID
+			   , REG_DATE
+			   , USE_FLAG
+			   , MANUALLY_FLAG
+			   )
+		VALUES (
+			    <foreach collection="list" item="type" index="index" separator=",">
+		            #{type}
+		        </foreach>
+			   , NOW()
+			   , 'Y'
+			   , 'Y'
+			   )
+	</insert>
+	
+	<!-- 상황일지 삭제 -->
+	<update id="updateDailyRecordNotUse" parameterType="DailyRecord">
+		/* com.flk.mng.report.mapper.DailyRecordMapper.updateDailyRecordNotUse */
+		UPDATE TBL_DAILY_RECORD
+		   SET   USE_FLAG = 'N'
+		       , UPDATE_ID = #{updateId}
+		       , UPDATE_DATE = NOW()
+		 WHERE DR_ID IN 
+		 <foreach collection="deleteDailyRecordList" item="item" index="index" separator="," open="(" close=")">
+		 	#{item}
+		 </foreach>
+	</update>
+
+</mapper>

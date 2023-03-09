@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.integration.mapper.IntegrationMapper">
+	
+	<!-- 통합관리 (진입) -->
+	<select id="selectIntegration" parameterType="Integration" resultType="Integration">
+	/* com.flk.integration.mapper.IntegrationMapper.selectIntegration */
+		SELECT 
+			TSG.SG_CD,
+			TSG.SG_NAME,	
+			TS.SITE_CD,
+			TS.SITE_NAME,
+			TS.WEATHER_X,
+			TS.WEATHER_Y,
+			TSS.SITE_ID,
+			TSS.TEMPLATE_ID,
+			TST.TEMPLATE_TYPE,
+			TST.TEMPLATE_FILE_PATH,
+			TST.THUMNAIL_FILE_PATH,
+			TST.TEMPLATE_DESC,
+			TST.USE_FLAG,
+			TSTC.GROUP_ID,
+			TSTC.COMPONENT_ID,
+			TSTC.COMPONENT_NAME,
+			TSTC.GROUP_NAME,
+			TSTC.VIEW_NO,
+			TSTC.TAG_TYPE_CD,
+			TSTM.TAG_ID,
+			TSTM.SET_FLAG,
+			TSTM.UPDATE_ID,
+			TSTM.UPDATE_DATE,
+			IFNULL(SUBSTRING_INDEX(TRAV.TAG_VALUE, '.', 2), 0) TAG_VALUE,
+			MS.ARRAY_NO,
+			GROUP_CONCAT(CONCAT('"',TSTC.COMPONENT_ID,'":"', IFNULL(SUBSTRING_INDEX(TRAV.TAG_VALUE, '.', 2), 0),'"')) AS COMPONENT_VALUE
+		FROM TBL_TOC_SYSTEM_SITE TSS  INNER JOIN TBL_SITE TS 								ON TSS.SITE_ID = TS.SITE_ID
+									  INNER JOIN TBL_SITE_GROUP TSG 						ON TS.SG_ID = TSG.SG_ID
+									  INNER JOIN TBL_TOC_SYSTEM_TEMPLATE TST 				ON TSS.TEMPLATE_ID = TST.TEMPLATE_ID
+									  INNER JOIN TBL_TOC_SYSTEM_TEMPLATE_COMPONENT TSTC  	ON TSS.TEMPLATE_ID = TSTC.TEMPLATE_ID
+									  INNER JOIN TBL_MNG_SITE MS 							ON TSS.SITE_ID = MS.SITE_ID 
+									  INNER JOIN TBL_TOC_SYSTEM_TAG_MAPPING TSTM 			ON TSS.SITE_ID = TSTM.SITE_ID 
+									  													AND TSTC.TEMPLATE_ID = TSTM.TEMPLATE_ID 
+									  													AND TSTC.GROUP_ID = TSTM.GROUP_ID 
+									  													AND TSTC.COMPONENT_ID = TSTM.COMPONENT_ID
+									  LEFT OUTER JOIN TBL_RAW_DATA_VIEW TRAV 				ON TS.SITE_CD = TRAV.SITE_CD AND TSTM.TAG_ID = TRAV.TAG_ID													
+		WHERE TST.USE_FLAG = 'Y'
+		AND   TSTM.SET_FLAG = 'Y'
+		AND   MS.MNG_ID = #{mngId}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(siteId)">
+		    AND	TSS.SITE_ID = #{siteId}
+	    </if>
+	    <if test="!@org.springframework.util.StringUtils@isEmpty(arrayNo)">
+		    AND	MS.ARRAY_NO = #{arrayNo}
+	    </if>
+		GROUP BY TSS.SITE_ID
+	</select>
+
+	<!-- 통합관리 (지도) -->
+	<select id="selectIntegrationMapList" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectIntegrationMapList */
+		SELECT 
+			TTSS.TEMPLATE_ID,
+			TSG.SG_NAME,
+			TS.SITE_ID,
+			TS.SITE_CD,
+			TS.SITE_NAME,
+		   	TS.REGION_X,
+		   	TS.REGION_Y,
+       		MS.MNG_ID
+		FROM
+			TBL_SITE TS	
+      		INNER JOIN TBL_TOC_SYSTEM_SITE TTSS 
+        	ON TS.SITE_ID = TTSS.SITE_ID
+			INNER JOIN TBL_SITE_GROUP TSG       
+        	ON TS.SG_ID = TSG.SG_ID
+			LEFT OUTER JOIN TBL_MNG_SITE MS 			
+        	ON TTSS.SITE_ID = MS.SITE_ID 
+        	AND MS.MNG_ID = #{mngId}
+			AND	TS.USE_FLAG = 'Y'
+			ORDER BY MNG_ID ASC
+	</select>
+	
+	<!-- 통합관리 (Template 조회) -->
+	<select id="selectTemplateList" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectTemplateList */
+		SELECT 
+			TSS.SITE_ID,
+			TS.SITE_CD,
+			TSG.SG_NAME,
+			TSS.TEMPLATE_ID,
+			TST.TEMPLATE_FILE_PATH,
+			TST.TEMPLATE_TYPE,
+			MS.ARRAY_NO
+		FROM TBL_TOC_SYSTEM_SITE TSS  INNER JOIN TBL_SITE TS 										ON TSS.SITE_ID = TS.SITE_ID
+												INNER JOIN TBL_SITE_GROUP TSG 						ON TS.SG_ID = TSG.SG_ID
+												INNER JOIN TBL_TOC_SYSTEM_TEMPLATE TST 				ON TSS.TEMPLATE_ID = TST.TEMPLATE_ID
+												INNER JOIN TBL_TOC_SYSTEM_TEMPLATE_COMPONENT TSTC   ON TSS.TEMPLATE_ID = TSTC.TEMPLATE_ID
+												INNER JOIN TBL_MNG_SITE MS 							ON TSS.SITE_ID = MS.SITE_ID 
+												INNER JOIN TBL_TOC_SYSTEM_TAG_MAPPING TSTM 			ON TSS.SITE_ID = TSTM.SITE_ID 
+																								AND TSTC.TEMPLATE_ID = TSTM.TEMPLATE_ID 
+																								AND TSTC.GROUP_ID = TSTM.GROUP_ID 
+																								AND TSTC.COMPONENT_ID = TSTM.COMPONENT_ID
+												<!-- LEFT OUTER JOIN TBL_RAW_DATA_VIEW TRAV 				ON TS.SITE_CD = TRAV.SITE_CD AND TSTM.TAG_ID = TRAV.TAG_ID -->													
+		WHERE TST.USE_FLAG = 'Y'
+		AND   TSTM.SET_FLAG = 'Y'
+		AND   MS.MNG_ID = #{mngId}
+		
+		<if test="!@org.springframework.util.StringUtils@isEmpty(siteId)">
+		    AND	TSS.SITE_ID = #{siteId}
+	    </if>
+		
+		GROUP BY TSS.SITE_ID
+		ORDER BY MS.ARRAY_NO
+	</select>
+	
+	<!-- 통합관리 (실시간알람조회) -->
+	<select id="selectAlarmStatusList" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectAlarmStatusList */
+		SELECT TA.ALARM_ID
+			   , TA.TAG_ID
+			   , TA.ALARM_MSG
+			   , TA.ALARM_STATUS_CD
+			   , DATE_FORMAT(TA.REG_DATE,'%Y/%m/%d %H:%i:%S') AS REG_DATE
+			   , TS.SITE_NAME
+			   , TT.TAG_DESC
+		FROM TBL_ALARM TA INNER JOIN TBL_SITE TS 	ON TA.SITE_CD = TS.SITE_CD
+						  INNER JOIN TBL_TAG  TT  ON TA.SITE_CD = TT.SITE_CD AND TA.TAG_ID = TT.TAG_ID
+	    WHERE 1=1
+	    <!-- <if test="!@org.springframework.util.StringUtils@isEmpty(siteCdList)">
+		   AND TA.SITE_CD IN
+			    <foreach collection="siteCdList" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		</foreach>
+	    </if>  -->
+	     AND TA.ALARM_STATUS_CD IN ('ALARM_STATUS01', 'ALARM_STATUS02')
+	     AND TA.reg_date >= DATE_ADD(NOW(), INTERVAL -7 DAY)
+	     AND TA.alarm_msg not like ('최대전력관리장치%')
+	    ORDER BY REG_DATE DESC
+	</select>
+	
+	<!-- 통합관리 (실시간태그값조회) -->
+	<select id="selectTagValueList" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectTagValueList */
+		SELECT 
+			TS.SITE_CD
+      	  , TRAV.TAG_ID
+       	  , IFNULL(SUBSTRING_INDEX(TRAV.TAG_VALUE, '.', 2), 0) TAG_VALUE
+		  , TSTC.GROUP_ID
+		  , TSTM.COMPONENT_ID
+		  , TSTC.COMPONENT_NAME
+		  , TSS.TEMPLATE_ID
+		  , TST.TEMPLATE_TYPE
+		  , IFNULL(DATE_FORMAT(TRAV.REG_DATE, '%Y%m%d%H%i%s'), '') AS REG_DATE
+		  , TIME_TO_SEC(TIMEDIFF(SYSDATE(), TRAV.REG_DATE)) AS DIFF_SEC
+		FROM TBL_TOC_SYSTEM_SITE TSS    INNER JOIN TBL_SITE TS 								ON TSS.SITE_ID = TS.SITE_ID
+										INNER JOIN TBL_TOC_SYSTEM_TAG_MAPPING TSTM 			ON TSS.SITE_ID = TSTM.SITE_ID
+										INNER JOIN TBL_TOC_SYSTEM_TEMPLATE TST 				ON TSS.TEMPLATE_ID = TST.TEMPLATE_ID
+										INNER JOIN TBL_TOC_SYSTEM_TEMPLATE_COMPONENT TSTC  	ON TSS.TEMPLATE_ID = TSTC.TEMPLATE_ID
+																						AND TSTC.TEMPLATE_ID = TSTM.TEMPLATE_ID 
+										  												AND TSTC.GROUP_ID = TSTM.GROUP_ID 
+										  												AND TSTC.COMPONENT_ID = TSTM.COMPONENT_ID			 	
+										LEFT OUTER JOIN TBL_RAW_DATA_VIEW TRAV 				ON TS.SITE_CD = TRAV.SITE_CD AND TSTM.TAG_ID = TRAV.TAG_ID
+		WHERE 1=1 
+		<if test="!@org.springframework.util.StringUtils@isEmpty(siteCdList)">
+		   AND TS.SITE_CD IN
+			    <foreach collection="siteCdList" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		</foreach>
+	    </if>
+	</select>
+	
+	<!-- 통합관리 (10분 단위 날씨 데이터 조회 / 내일날씨) -->
+	<select id="selectWeatherStatusList" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectWeatherStatusList */
+		SELECT TMS.SITE_ID
+		       , TW.DATE
+		       , TW.HOUR
+		       , IFNULL(TW.TEH,'-') AS TEH
+		       , IFNULL(TW.REH,'-') AS REH
+		       , IFNULL(TW.TMN,'-') AS TMN
+		       , IFNULL(TW.TMX,'-') AS TMX
+		       , IFNULL(TW.SKY,'-') AS SKY
+		       , IFNULL(TW.PTY,'-') AS PTY
+		       , TS.SITE_CD
+			FROM TBL_MNG_SITE TMS 
+		  INNER JOIN TBL_WEATHER TW
+		     ON TMS.SITE_ID = TW.SITE_ID
+		  INNER JOIN TBL_SITE TS
+		     ON TMS.SITE_ID = TS.SITE_ID 
+		  WHERE TMS.MNG_ID = #{mngId}
+		    AND CONCAT(TW.DATE, TW.HOUR) = DATE_FORMAT(NOW(), '%Y%m%d%H')  
+		<if test="!@org.springframework.util.StringUtils@isEmpty(siteCdList)">
+		   AND TS.SITE_CD IN
+			    <foreach collection="siteCdList" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		</foreach>
+	    </if>
+	    GROUP BY TS.SITE_ID
+	</select>
+	
+	<!-- 사용자 관리 Template 추가 -->
+	<insert id="insertIntegrationTemplate" parameterType="Integration">
+	/* com.flk.integration.mapper.IntegrationMapper.insertIntegrationTemplate */
+		INSERT INTO TBL_MNG_SITE (
+			MNG_ID
+			, SITE_ID
+			, ARRAY_NO
+			, UPDATE_ID
+			, UPDATE_DATE
+			, REG_ID
+			, REG_DATE
+			)
+		VALUES 
+		(
+			#{mngId}
+			, #{siteId}
+			, #{arrayNo}
+			, #{updateId}
+			, now() 
+			, #{regId}
+			, now() 
+		)	
+	</insert>
+	
+	<!-- mysql set session variable -->
+	<insert id="groupConcatMaxLenSet" parameterType="java.lang.Integer">
+	/* com.flk.integration.mapper.IntegrationMapper.groupConcatMaxLenSet */
+		SET SESSION group_concat_max_len = #{groupConcatMaxLen};
+	</insert>
+	
+	<!-- 사용자 관리 Template 삭제 -->
+	<delete id="deleteIntegrationTemplate" parameterType = "Integration">
+	/* com.flk.integration.mapper.IntegrationMapper.deleteIntegrationTemplate */
+		DELETE FROM TBL_MNG_SITE
+		WHERE 
+			MNG_ID = #{mngId}
+		AND	
+			SITE_ID = #{siteId}
+		AND 
+			ARRAY_NO = #{arrayNo}
+	</delete>
+	
+	
+	<!-- 내일 날씨 조회 -->
+	<select id="selectTomorrowWeatherStatus" parameterType="Integration" resultType="FlkMap">
+		/* com.flk.integration.mapper.IntegrationMapper.selectTomorrowWeatherStatus */
+		SELECT TMS.SITE_ID
+		       , IFNULL(MIN(TW.TMN),'-') AS TMN
+		       , IFNULL(MAX(TW.TMX),'-') AS TMX
+		       , IFNULL(MAX(TW.SKY),'-') AS SKY
+		       , IFNULL(MAX(TW.PTY),'-') AS PTY
+		       , TS.SITE_CD
+			FROM TBL_MNG_SITE TMS 
+		  INNER JOIN TBL_WEATHER TW
+		     ON TMS.SITE_ID = TW.SITE_ID
+		  INNER JOIN TBL_SITE TS
+		     ON TMS.SITE_ID = TS.SITE_ID 
+		  WHERE TMS.MNG_ID = #{mngId}
+		    AND TW.DATE = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL +1 DAY), '%Y%m%d')		  
+		<if test="!@org.springframework.util.StringUtils@isEmpty(siteCdList)">
+		   AND TS.SITE_CD IN
+			    <foreach collection="siteCdList" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		</foreach>
+	    </if>
+	    GROUP BY TS.SITE_ID
+	</select>
+</mapper>

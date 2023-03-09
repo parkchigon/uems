@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ 
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/jsee/web-jsptagLibrary_2_0.xsd" version="2.0">
+        
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL functions</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>nowMenu</short-name>
+          
+	<function>
+		<description>nowMenu</description>
+		<name>getMenuInfo</name>
+		<function-class>com.flk.common.tld.MenuTld</function-class> <!--클래스경로까지써주세요-->
+		<function-signature>net.sf.json.JSONArray getMenuInfo()</function-signature>
+		<example>${nowMenu:getMenuInfo()}</example>
+	</function>
+	
+	<function>
+		<description>nowMenu</description>
+		<name>getSubMenuInfo</name>
+		<function-class>com.flk.common.tld.MenuTld</function-class> <!--클래스경로까지써주세요-->
+		<function-signature>net.sf.json.JSONArray getSubMenuInfo()</function-signature>
+		<example>${nowMenu:getSubMenuInfo()}</example>
+	</function>
+	
+	<function>
+		<description>nowMenu</description>
+		<name>getMenuNavi</name>
+		<function-class>com.flk.common.tld.MenuTld</function-class> 클래스경로까지써주세요
+		<function-signature>java.lang.String getMenuNavi(java.util.HashMap, java.lang.String)</function-signature>
+		<example>${nowMenu:getMenuNavi(java.util.HashMap, java.lang.String)}</example>
+	</function>
+	
+<!-- 	
+	<function>
+		<description>nowMenu</description>
+		<name>getLeftMenuTopTitle</name>
+		<function-class>com.skt.common.utility.MenuUtil</function-class> 클래스경로까지써주세요
+		<function-signature>java.lang.String getLeftMenuTopTitle()</function-signature>
+		<example>${nowMenu:getLeftMenuTopTitle()}</example>
+	</function>
+ -->	
+
+
+</taglib>

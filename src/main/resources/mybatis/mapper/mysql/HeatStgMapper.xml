@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.HeatStgMapper">
+	
+	<!-- 축열조 및 배관 조회 -->
+	<select id ="selectHeatStgList" parameterType="HeatStg" resultType="flkMap">
+	/* com.flk.mng.equipment.mapper.HeatStgMapper.selectHeatStgList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY FHM.REG_DATE DESC) AS RNUM
+				,FHM.FHSM
+				,FHM.SITE_ID
+				,FHM.HEATSTG_NAME
+				,FHM.MATERIAL
+				,FHM.FORM
+				,FHM.TYPE
+				,S.SG_ID
+				,S.SITE_DESC
+				,FHM.REG_DATE	
+			FROM TBL_FACILITY_HEATSTG_MASTER FHM INNER JOIN TBL_SITE S
+			ON FHM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FHM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FHM.HEATSTG_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FHM.MATERIAL LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FHM.FORM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FHM.TYPE LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    AND FHM.USE_FLAG = 'Y'
+		    ORDER BY FHM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!-- 축열조 및 배관 상세정보 -->
+	<select id ="selectHeatStgInfo" parameterType="HeatStg" resultType="flkMap">
+	/* com.flk.mng.equipment.mapper.HeatStgMapper.selectHeatStgInfo */
+		SELECT
+	  	   FHM.FHSM
+			,FHM.SITE_ID
+			,FHM.HEATSTG_NAME
+			,FHM.ADDRESS
+			,FHM.PHONE	
+			,FHM.TEST_RUN_DATE
+			,DATE_FORMAT(FHM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FHM.MATERIAL
+			,FHM.FORM
+			,FHM.TYPE
+			,FHM.SALES_INFO
+			,FHM.AS_INFO
+			,FHM.PEAK_LOAD
+			,FHM.VOLUMN
+			,FHM.RATE
+			,FHM.SIZE_W
+			,FHM.SIZE_L
+			,FHM.SIZE_H
+			,FHM.CAPSULE_AMT
+			,FHM.FLUID
+			,FHM.BRINE_AMT_1  
+			,FHM.BRINE_AMT_2
+			,FHM.PIPE_MATERIAL
+			,FHM.PIPE_DIAM_STORAGE
+			,FHM.PIPE_DIAM_RELEASE
+			,FHM.VALVE_1_NAME
+			,FHM.VALVE_1_1
+			,FHM.VALVE_1_2
+			,FHM.VALVE_1_3
+			,FHM.VALVE_2_NAME
+			,FHM.VALVE_2_1
+			,FHM.VALVE_2_2
+			,FHM.VALVE_2_3
+			,FHM.CURRENT_1_NAME
+			,FHM.CURRENT_1_1
+			,FHM.CURRENT_1_2
+			,FHM.CURRENT_2_NAME
+			,FHM.CURRENT_2_1
+			,FHM.CURRENT_2_2
+			,FHM.CURRENT_3_NAME
+			,FHM.CURRENT_3_1
+			,FHM.CURRENT_3_2
+			,FHM.USE_FLAG
+			,FHM.UPDATE_ID
+			,FHM.UPDATE_DATE
+			,FHM.REG_ID  
+			,FHM.REG_DATE
+			,S.SG_ID
+		FROM TBL_FACILITY_HEATSTG_MASTER FHM INNER JOIN TBL_SITE S
+		ON FHM.SITE_ID = S.SITE_ID
+		WHERE FHM.FHSM = #{fhsm}
+	</select>
+	
+	<!-- 축열조 및 배관 등록  -->
+	<insert id="insertHeatStgInfo" parameterType="HeatStg" useGeneratedKeys="true" keyProperty="fhsm">
+	/* com.flk.mng.equipment.mapper.HeatStgMapper.insertHeatStgInfo */
+		INSERT INTO TBL_FACILITY_HEATSTG_MASTER
+		(
+			SITE_ID
+			,HEATSTG_NAME
+			,ADDRESS
+			,PHONE	
+			,TEST_RUN_DATE
+			,MATERIAL
+			,FORM
+			,TYPE
+			,SALES_INFO
+			,AS_INFO
+			,PEAK_LOAD
+			,VOLUMN
+			,RATE
+			,SIZE_W
+			,SIZE_L
+			,SIZE_H
+			,CAPSULE_AMT
+			,FLUID
+			,BRINE_AMT_1  
+			,BRINE_AMT_2
+			,PIPE_MATERIAL
+			,PIPE_DIAM_STORAGE
+			,PIPE_DIAM_RELEASE
+			,VALVE_1_NAME
+			,VALVE_1_1
+			,VALVE_1_2
+			,VALVE_1_3
+			,VALVE_2_NAME
+			,VALVE_2_1
+			,VALVE_2_2
+			,VALVE_2_3
+			,CURRENT_1_NAME
+			,CURRENT_1_1
+			,CURRENT_1_2
+			,CURRENT_2_NAME
+			,CURRENT_2_1
+			,CURRENT_2_2
+			,CURRENT_3_NAME
+			,CURRENT_3_1
+			,CURRENT_3_2
+			,USE_FLAG
+			,UPDATE_ID
+			,UPDATE_DATE
+			,REG_ID  
+			,REG_DATE 
+		)VALUES(
+			#{siteId}
+			,#{heatstgName}
+			,#{address}
+			,#{phone}	
+			,#{testRunDate}
+			,#{material}
+			,#{form}
+			,#{type}
+			,#{salesInfo}
+			,#{asInfo}
+			,#{peakLoad}
+			,#{volumn}
+			,#{rate}
+			,#{sizeW}
+			,#{sizeL}
+			,#{sizeH}
+			,#{capsuleAmt}
+			,#{fluid}
+			,#{brineAmt1}  
+			,#{brineAmt2}
+			,#{pipeMaterial}
+			,#{pipeDiamStorage}
+			,#{pipeDiamRelease}
+			,#{valve1Name}
+			,#{valve11}
+			,#{valve12}
+			,#{valve13}
+			,#{valve2Name}
+			,#{valve21}
+			,#{valve22}
+			,#{valve23}
+			,#{current1Name}
+			,#{current11}
+			,#{current12}
+			,#{current2Name}
+			,#{current21}
+			,#{current22}
+			,#{current3Name}
+			,#{current31}
+			,#{current32}
+			,'Y'
+			,#{regId}
+			,now()
+			,#{updateId}
+			,now()
+		)
+	</insert>
+	
+	<!-- 축열조 및 배관 삭제  -->
+	<update id ="updateUseFlag" parameterType="HeatStg">
+	/* com.flk.mng.equipment.mapper.HeatStgMapper.updateUseFlag */
+	UPDATE 
+		TBL_FACILITY_HEATSTG_MASTER
+	SET 
+		USE_FLAG = 'N'
+		,UPDATE_ID = #{updateId}
+		,UPDATE_DATE = now()
+	WHERE 
+		FHSM = #{fhsm}
+	</update>
+	
+	<!-- 축열조 및 배관 수정  -->
+	<update id= "updateHeatStgInfo" parameterType="HeatStg">
+	/* com.flk.mng.equipment.mapper.HeatStgMapper.updateHeatStgInfo */
+		UPDATE TBL_FACILITY_HEATSTG_MASTER
+		SET SITE_ID 	     =  #{siteId}    
+			,HEATSTG_NAME 	 =	#{heatstgName}
+			,ADDRESS   		 =  #{address}
+			,PHONE	 		 =	#{phone}
+			,TEST_RUN_DATE   = 	#{testRunDate}
+			,MATERIAL    	 = 	#{material}
+			,FORM            =	#{form}
+			,TYPE        	 =	#{type}
+			,SALES_INFO  	 =	#{salesInfo}
+			,AS_INFO   		 =  #{asInfo}  
+			,PEAK_LOAD   	 =	#{peakLoad}
+			,VOLUMN  	 	 =	#{volumn}
+			,RATE  	 		 =	#{rate}
+			,SIZE_W   	 	 =  #{sizeW}
+			,SIZE_L 	 	 =	#{sizeL}
+			,SIZE_H  	 	 =	#{sizeH}
+			,CAPSULE_AMT  	 =	#{capsuleAmt}
+			,FLUID  	 	 =	#{fluid}
+			,BRINE_AMT_1 	 = 	#{brineAmt1}
+			,BRINE_AMT_2  	 =	#{brineAmt2}  
+			,PIPE_MATERIAL	 =  #{pipeMaterial}  
+			,PIPE_DIAM_STORAGE =  #{pipeDiamStorage}  
+			,PIPE_DIAM_RELEASE =  #{pipeDiamRelease}  
+			,VALVE_1_NAME  	 =	#{valve1Name}
+			,VALVE_1_1 		 =  #{valve11}
+			,VALVE_1_2  	 =	#{valve12}
+			,VALVE_1_3 		 =  #{valve13}
+			,VALVE_2_NAME  	 = 	#{valve2Name}
+			,VALVE_2_1       =	#{valve21}
+			,VALVE_2_2		 =  #{valve22}
+			,VALVE_2_3 	 	 =  #{valve23}
+			,CURRENT_1_NAME	 =  #{current1Name}
+			,CURRENT_1_1 	 =  #{current11} 
+			,CURRENT_1_2  	 =  #{current12}
+			,CURRENT_2_NAME  =	#{current2Name}
+			,CURRENT_2_1  	 = 	#{current21}
+			,CURRENT_2_2  	 =	#{current22}
+			,CURRENT_3_NAME  = 	#{current3Name}
+			,CURRENT_3_1   	 = 	#{current31}
+			,CURRENT_3_2  	 = 	#{current32}
+			,UPDATE_ID 		 =	#{updateId}
+			,UPDATE_DATE     =  now()
+		WHERE FHSM = #{fhsm}
+	</update>
+	
+</mapper>

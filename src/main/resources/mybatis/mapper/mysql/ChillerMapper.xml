@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.ChillerMapper">
+	
+	<!-- 냉동기리스트조회 -->
+	<select id="selectChillerList" parameterType="Chiller" resultType="flkMap">
+	/*ChillerMapper.selectChillerList*/
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY FCM.REG_DATE DESC) AS RNUM
+				,FCM.FSM_ID
+				,FCM.SITE_ID
+				,FCM.CHILLER_NAME
+				,FCM.FORM
+				,FCM.MODEL_NO
+				,FCM.MANUFACTURE_NO
+				,FCM.COMP_COUNT
+				,FCM.REG_DATE
+				,S.SG_ID
+				,S.SITE_DESC
+			FROM TBL_FACILITY_CHILLER_MASTER FCM INNER JOIN TBL_SITE S
+			ON FCM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			AND FCM.USE_FLAG = 'Y'
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FCM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FCM.CHILLER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.FORM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.MODEL_NO LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.MANUFACTURE_NO LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.COMP_COUNT LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    ORDER BY FCM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!--냉동기타입 리스트 -->
+	<select id="selectChillerTypeList" parameterType="Chiller" resultType="flkMap">
+	/*ChillerMapper.selectChillerTypeList*/
+		SELECT CODE_ID,CODE_NAME,PARENT_CODE_ID
+		FROM TBL_CODE
+		WHERE PARENT_CODE_ID = 'CD_0000000000000319'
+	</select>
+	
+	<!-- 냉동기 상세정보 -->
+	<select id="selectChillerInfo" parameterType="Chiller" resultType="flkMap">
+	/*ChillerMapper.selectChillerInfo*/
+		SELECT
+			FCM.FSM_ID
+			,FCM.SITE_ID
+			,FCM.CHILLER_NAME
+			,FCM.CHILLER_TYPE_CD
+			,FCM.CHILLER_NO
+			,FCM.ADDRESS
+			,FCM.PHONE
+			,FCM.TEST_RUN_DATE	
+			,DATE_FORMAT(FCM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FCM.POWER_SUPPLY
+			,FCM.FORM
+			,FCM.MODEL_NO
+			,FCM.SALES_INFO
+			,FCM.AS_INFO
+			,FCM.MANUFACTURE_NO
+			,FCM.COMP_COUNT
+			,FCM.DRIVEN_METHOD
+			,FCM.REFRIG_NAME
+			,FCM.REFRIG_AMOUNT
+			,FCM.VOLUME_NIGHT
+			,FCM.VOLUME_DAY
+			,FCM.COL_TEMP_NIGHT_1
+			,FCM.COL_TEMP_NIGHT_2
+			,FCM.COL_TEMP_DAY_1
+			,FCM.COL_TEMP_DAY_2
+			,FCM.COLWATER_TEMP_NIGHT_1
+			,FCM.COLWATER_TEMP_NIGHT_2
+			,FCM.COLWATER_TEMP_DAY_1
+			,FCM.COLWATER_TEMP_DAY_2
+			,FCM.FLUID_NIGHT
+			,FCM.FLUID_DAY
+			,FCM.FLOW_NIGHT_1
+			,FCM.FLOW_NIGHT_2
+			,FCM.FLOW_DAY_1
+			,FCM.FLOW_DAY_2
+			,FCM.PRESSLOSS_NIGHT
+			,FCM.PRESSLOSS_DAY
+			,FCM.CONSUMPOWER_NIGHT
+			,FCM.CONSUMPOWER_DAY
+			,FCM.CURRENT_NIGHT
+			,FCM.CURRENT_DAY
+			,FCM.COP_NIGHT
+			,FCM.COP_DAY
+			,FCM.CONTROL_RANGE_1
+			,FCM.CONTROL_RANGE_2
+			,FCM.DETAIL
+			,FCM.WEIGHT_PRODUCT
+			,FCM.WEIGHT_DRIVEN
+			,FCM.PIPE_DIAM_WT
+			,FCM.PIPE_DIAM_CW
+			,S.SG_ID
+		FROM TBL_FACILITY_CHILLER_MASTER FCM INNER JOIN TBL_SITE S
+		ON FCM.SITE_ID = S.SITE_ID
+		WHERE FCM.FSM_ID = #{fsmId}
+	</select>
+	
+	<!-- 냉동기 등록 -->
+	<insert id="insertChillerInfo" parameterType="Chiller" useGeneratedKeys="true" keyProperty="fsmId">
+	/*ChillerMapper.insertChillerInfo*/
+		INSERT INTO TBL_FACILITY_CHILLER_MASTER(
+			SITE_ID
+			,CHILLER_NAME
+			,CHILLER_TYPE_CD
+			,CHILLER_NO
+			,ADDRESS
+			,PHONE
+			,TEST_RUN_DATE	
+			,POWER_SUPPLY
+			,FORM
+			,MODEL_NO
+			,SALES_INFO
+			,AS_INFO
+			,MANUFACTURE_NO
+			,COMP_COUNT
+			,DRIVEN_METHOD
+			,REFRIG_NAME
+			,REFRIG_AMOUNT
+			,VOLUME_NIGHT
+			,VOLUME_DAY
+			,COL_TEMP_NIGHT_1
+			,COL_TEMP_NIGHT_2
+			,COL_TEMP_DAY_1
+			,COL_TEMP_DAY_2
+			,COLWATER_TEMP_NIGHT_1
+			,COLWATER_TEMP_NIGHT_2
+			,COLWATER_TEMP_DAY_1
+			,COLWATER_TEMP_DAY_2
+			,FLUID_NIGHT
+			,FLUID_DAY
+			,FLOW_NIGHT_1
+			,FLOW_NIGHT_2
+			,FLOW_DAY_1
+			,FLOW_DAY_2
+			,PRESSLOSS_NIGHT
+			,PRESSLOSS_DAY
+			,CONSUMPOWER_NIGHT
+			,CONSUMPOWER_DAY
+			,CURRENT_NIGHT
+			,CURRENT_DAY
+			,COP_NIGHT
+			,COP_DAY
+			,CONTROL_RANGE_1
+			,CONTROL_RANGE_2
+			,DETAIL
+			,WEIGHT_PRODUCT
+			,WEIGHT_DRIVEN
+			,PIPE_DIAM_WT
+			,PIPE_DIAM_CW
+			,REG_ID
+			,REG_DATE
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{siteId}
+			,#{chillerName}
+			,#{chillerTypeCd}
+			,#{chillerNo}
+			,#{address}
+			,#{phone}
+			,#{testRunDate}
+			,#{powerSupply}
+			,#{form}
+			,#{modelNo}
+			,#{salesInfo}
+			,#{asInfo}
+			,#{manufactureNo}
+			,#{compCount}
+			,#{drivenMethod}
+			,#{refrigName}
+			,#{refrigAmount}
+			,#{volumeNight}
+			,#{volumeDay}
+			,#{colTempNight1}
+			,#{colTempNight2}
+			,#{colTempDay1}
+			,#{colTempDay2}
+			,#{colwaterTempNight1}
+			,#{colwaterTempNight2}
+			,#{colwaterTempDay1}
+			,#{colwaterTempDay2}
+			,#{fluidNight}
+			,#{fluidDay}
+			,#{flowNight1}
+			,#{flowNight2}
+			,#{flowDay1}
+			,#{flowDay2}
+			,#{presslossNight}
+			,#{presslossDay}
+			,#{consumpowerNight}
+			,#{consumpowerDay}
+			,#{currentNight}
+			,#{currentDay}
+			,#{copNight}
+			,#{copDay}
+			,#{controlRange1}
+			,#{controlRange2}
+			,#{detail}
+			,#{weightProduct}
+			,#{weightDriven}
+			,#{pipeDiamWt}
+			,#{pipeDiamCw}
+			,#{regId}
+			,now()
+			,#{updateId}
+			,now()		
+		)
+	</insert>
+	
+	<!--냉동기수정  -->
+	<update id="updateChillerInfo" parameterType="Chiller">
+	/*ChillerMapper.updateChillerInfo*/
+		UPDATE TBL_FACILITY_CHILLER_MASTER
+		SET
+			SITE_ID				    	=	#{siteId}
+			,CHILLER_NAME				=	#{chillerName}
+			,CHILLER_TYPE_CD			=	#{chillerTypeCd}
+			,CHILLER_NO					=	#{chillerNo}
+			,ADDRESS					=	#{address}	
+			,PHONE						=	#{phone}
+			,TEST_RUN_DATE				=	#{testRunDate}
+			,POWER_SUPPLY				=	#{powerSupply}
+			,FORM						=	#{form}
+			,MODEL_NO					=	#{modelNo}
+			,SALES_INFO					=	#{salesInfo}
+			,AS_INFO					=	#{asInfo}
+			,MANUFACTURE_NO				=	#{manufactureNo}
+			,COMP_COUNT					=	#{compCount}
+			,DRIVEN_METHOD				=	#{drivenMethod}
+			,REFRIG_NAME				=	#{refrigName}
+			,REFRIG_AMOUNT				=	#{refrigAmount}
+			,VOLUME_NIGHT				=	#{volumeNight}	
+			,VOLUME_DAY					=	#{volumeDay}
+			,COL_TEMP_NIGHT_1			=	#{colTempNight1}
+			,COL_TEMP_NIGHT_2			=	#{colTempNight2}
+			,COL_TEMP_DAY_1				=	#{colTempDay1}
+			,COL_TEMP_DAY_2				=	#{colTempDay2}
+			,COLWATER_TEMP_NIGHT_1		=	#{colwaterTempNight1}
+			,COLWATER_TEMP_NIGHT_2		=	#{colwaterTempNight2}
+			,COLWATER_TEMP_DAY_1		=	#{colwaterTempDay1}
+			,COLWATER_TEMP_DAY_2		=	#{colwaterTempDay2}
+			,FLUID_NIGHT				=	#{fluidNight}
+			,FLUID_DAY					=	#{fluidDay}
+			,FLOW_NIGHT_1				=	#{flowNight1}
+			,FLOW_NIGHT_2				=	#{flowNight2}
+			,FLOW_DAY_1					=	#{flowDay1}
+			,FLOW_DAY_2					=	#{flowDay2}
+			,PRESSLOSS_NIGHT			=	#{presslossNight}
+			,PRESSLOSS_DAY				=	#{presslossDay}
+			,CONSUMPOWER_NIGHT			=	#{consumpowerNight}
+			,CONSUMPOWER_DAY			=	#{consumpowerDay}
+			,CURRENT_NIGHT				=	#{currentNight}
+			,CURRENT_DAY				=	#{currentDay}
+			,COP_NIGHT					=	#{copNight}
+			,COP_DAY					=	#{copDay}
+			,CONTROL_RANGE_1			=	#{controlRange1}
+			,CONTROL_RANGE_2			=	#{controlRange2}
+			,DETAIL						=	#{detail}
+			,WEIGHT_PRODUCT				=	#{weightProduct}
+			,WEIGHT_DRIVEN				=	#{weightDriven}
+			,PIPE_DIAM_WT				=	#{pipeDiamWt}
+			,PIPE_DIAM_CW				=	#{pipeDiamCw}
+			,UPDATE_ID					=	#{updateId}
+			,UPDATE_DATE				=	now()
+		WHERE FSM_ID = #{fsmId}
+	</update>
+	
+	<!--냉동기 삭제  -->
+	<update id="updateUseFlag" parameterType="Chiller">
+	/*ChillerMapper.updateUseFlag*/
+		UPDATE TBL_FACILITY_CHILLER_MASTER
+		SET USE_FLAG = 'N'
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE FSM_ID = #{fsmId}
+	</update>
+	
+	<!-- 냉동기 번호 카운트 조회  -->
+	<select id="selectChiilerNoExistCount" parameterType="Chiller" resultType="Integer">
+		SELECT COUNT(1) 
+		FROM TBL_FACILITY_CHILLER_MASTER
+		WHERE site_id = #{siteId} 
+		AND chiller_no = #{chillerNo}
+		AND fsm_id != #{fsmId}
+	</select>
+		
+</mapper>

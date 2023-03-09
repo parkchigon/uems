@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+    <definition name="DefaultTemplate" template="/WEB-INF/tiles/layout.jsp">
+        <put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/uems/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/uems/css.jsp" />
+    </definition>
+
+    <!-- 로그인 -->
+    <definition name="LoginTemplate" template="/WEB-INF/tiles/loginLayout.jsp">
+        <put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/uems/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/uems/css.jsp" />
+    </definition>
+    
+	<!-- UEMS 메인 -->
+	<definition name="UemsTemplate" template="/WEB-INF/tiles/dashboardLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+		<put-attribute name="script" 		value="/WEB-INF/tiles/inc/uems/script.jsp" />
+		<put-attribute name="css" 			value="/WEB-INF/tiles/inc/uems/dashboardCss.jsp" />
+	</definition>
+	
+	<!-- EMS 메인 -->
+	<definition name="EmsTemplate" template="/WEB-INF/tiles/emsLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+		<put-attribute name="script" 		value="/WEB-INF/tiles/inc/ems/script.jsp" />
+		<put-attribute name="css" 			value="/WEB-INF/tiles/inc/ems/css.jsp" />
+	</definition>	
+	
+	<!-- EMS 구축 -->
+	<definition name="EmsBuildTemplate" template="/WEB-INF/tiles/emsBuildLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+		<put-attribute name="script" 		value="/WEB-INF/tiles/inc/ems/script.jsp" />
+		<put-attribute name="css" 			value="/WEB-INF/tiles/inc/ems/css.jsp" />
+	</definition>	
+    
+    <!-- 일반 팝업(css 적용)에 사용 -->
+	<definition name="PopupTemplate" template="/WEB-INF/tiles/popupLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/uems/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/uems/css.jsp" />
+	</definition>
+
+    <!-- 통합센터 -->
+	<definition name="IntegrationTemplate" template="/WEB-INF/tiles/integrationLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/uems/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/uems/integrationCss.jsp" />
+	</definition>
+
+	<!-- 웹뷰 -->
+	<definition name="MobileTemplate" template="/WEB-INF/tiles/mobileLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/mobile/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/mobile/mobileCss.jsp" />
+	</definition>
+	
+	<!-- 웹뷰 메인 -->
+	<definition name="MobileMainTemplate" template="/WEB-INF/tiles/mobileMainLayout.jsp">
+		<put-attribute name="title" 		value="관리자" />
+        <put-attribute name="script" 		value="/WEB-INF/tiles/inc/mobile/script.jsp" />
+        <put-attribute name="css" 			value="/WEB-INF/tiles/inc/mobile/mobileCss.jsp" />
+	</definition>
+	
+</tiles-definitions>

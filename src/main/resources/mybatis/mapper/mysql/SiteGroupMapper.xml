@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.site.mapper.SiteGroupMapper">
+ 
+ 	<!-- 그룹 리스트 -->
+	<select id="selectSiteGroupList" parameterType="SiteGroup" resultType="flkMap">
+		/* SiteGroupMapper.selectSiteGroupList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT ROW_NUMBER() OVER (ORDER BY sg_cd ASC) AS RNUM
+			   , sg_id
+			   , sg_cd
+			   , sg_name
+			   , sg_desc
+			   , use_flag
+		  FROM tbl_site_group
+		<where>
+		    <if test="searchKeyword != '' and searchKeyword != null">
+		    	AND sg_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="useListYn != '' and useListYn != null">
+				AND use_flag = #{useListYn}
+			</if>
+		</where>
+		ORDER BY sg_cd ASC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+		
+	</select>
+	
+	<!-- 그룹관리 상세 조회 -->	
+	<select id="selectSiteGroupView" parameterType="SiteGroup" resultType="flkMap">
+		/* SiteGroupMapper.selectSiteGroupView */
+		SELECT sg_id
+			   , sg_cd
+			   , sg_name
+			   , sg_desc
+			   , use_flag
+			   , reg_id
+			   , reg_date
+			   , update_id
+			   , update_date
+		  FROM tbl_site_group
+		 WHERE sg_id = ${sgId}		
+	</select>	
+	
+	<!-- 그룹 등록 -->
+	<insert id="insertSiteGroup" parameterType="SiteGroup">
+		/* SiteGroupMapper.insertSiteGroup */
+		INSERT INTO tbl_site_group (sg_cd, sg_name, sg_desc, use_flag, reg_id, update_id)
+		VALUES (#{sgCd}, #{sgName}, #{sgDesc}, #{useFlag}, #{regId}, #{updateId})
+	</insert>
+	
+	<!-- 그룹 수정 -->
+	<update id="updateSiteGroup" parameterType="SiteGroup">
+		/* SiteGroupMapper.updateSiteGroup */
+		UPDATE tbl_site_group
+		   SET sg_name = #{sgName}
+		       , sg_desc = #{sgDesc}
+		       , use_flag = #{useFlag}
+		       , update_id = #{updateId}
+		 WHERE sg_id = ${sgId}		 
+	</update>
+	
+	<!-- 그룹코드 중복체크 -->
+	<select id="selectSgCd" parameterType="SiteGroup" resultType="int">
+		/* SiteGroupMapper.selectSgCd */
+		SELECT count(sg_cd)
+		  FROM tbl_site_group
+	 	 WHERE sg_cd = #{sgCd}	
+	</select>
+	
+</mapper>

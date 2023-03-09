@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.trendMng.mapper.TrendMngMapper">
+
+	<!-- 지점 리스트 -->
+	<select id="selectSiteList" parameterType="TrendGroup" resultType="flkMap">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.selectSiteList */
+		SELECT	SITE_ID
+			   ,SITE_CD
+			   ,SITE_NAME
+		  FROM TBL_SITE
+		WHERE USE_FLAG = 'Y'
+		<if test="sgId != '' and sgId != null">
+	    	AND SG_ID = #{sgId}
+	    </if>
+		 ORDER BY REG_DATE DESC
+	</select>
+
+ 	<!-- 트렌드 그룹 조회 -->
+	<select id="selectTrendGroupList" parameterType="TrendGroup" resultType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.selectTrendGroupList  */
+		SELECT  TG_ID
+			   ,TG_NAME
+	 	 FROM TBL_TREND_GROUP
+	 	 <where>
+		 	 <if test="siteId != '' and siteId != null">
+		     	AND SITE_ID = #{siteId}
+		     </if>
+	     </where>
+	</select>
+	
+	<!-- 검색조건 Type에 따른 TAG_LIST -->
+	<select id="selectTagList" parameterType="TrendGroup" resultType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.selectTagList */
+		SELECT  TAG_ID
+		       ,TAG_DESC 
+		 FROM TBL_TAG
+		 WHERE TAG_KIND_CD = #{tagKindCd}
+		   AND SITE_CD = (SELECT SITE_CD FROM TBL_SITE WHERE SITE_ID = #{siteId})
+	</select>
+	
+	<!-- 트렌드그룹에 따른 태그 조회 -->
+	<select id="selectTrendTagList" parameterType="TrendGroup" resultType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.selectTrendTagList */
+		SELECT     TAG.TAG_ID
+				  ,TAG.TAG_DESC 
+  		  FROM TBL_TREND_GROUP TTG INNER JOIN TBL_TREND_GROUP_TAG TTGT ON TTG.TG_ID = TTGT.TG_ID
+  								   INNER JOIN TBL_TAG TAG ON TTGT.TAG_ID = TAG.TAG_ID
+  								   INNER JOIN TBL_SITE TS ON TTG.SITE_ID = TS.SITE_ID
+ 		 WHERE TS.SITE_CD = TAG.SITE_CD
+ 		 <if test="tgId != '' and tgId != null">
+	    	AND TTGT.TG_ID = #{tgId}
+	     </if>
+	     <if test="tgName != '' and tgName != null">
+	    	AND TTG.TG_NAME = #{tgName}
+	     </if>
+   		   
+	</select>
+	
+	<!-- 트렌드 그룹 등록 -->
+	<insert id="insertTrendGroup" parameterType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.insertTrendGroup */
+		INSERT INTO TBL_TREND_GROUP (
+			     SITE_ID
+			   , TG_NAME
+			   , REG_DATE
+			   , REG_ID
+			   , UPDATE_ID
+			   )
+		VALUES (
+				 #{siteId}
+			   , #{tgName}
+			   , NOW()
+			   , #{regId}
+			   , #{updateId}
+			   )
+	</insert>
+	
+	<!-- 트렌드별 태그 등록 -->
+	<insert id="insertTrendGroupTag" parameterType="TrendGroup" useGeneratedKeys="true" keyProperty="siteId">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.insertTrendGroupTag */
+		INSERT INTO TBL_TREND_GROUP_TAG (
+			     TG_ID
+			   , TAG_ID
+			   , REG_DATE
+			   , REG_ID
+			   )
+		SELECT   #{tgId}
+			   , TAG_ID
+			   , NOW()
+			   , #{regId}
+		  FROM TBL_TAG
+		 WHERE TAG_ID IN 
+		 <foreach collection="trendTagList" item="item" index="index" separator="," open="(" close=")">
+		 	#{item}
+		 </foreach>
+		 GROUP BY TAG_ID
+	</insert>
+	
+	<!-- 트렌드 그룹 태그 삭제 -->
+	<delete id="deleteTrendGroupTag" parameterType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.deleteTrendGroupTag */
+		DELETE FROM TBL_TREND_GROUP_TAG
+		<where>
+			<choose>
+				<when test="tgId != '' and tgId != null">
+					AND TG_ID = #{tgId}
+				</when>
+				<otherwise>
+					AND TG_ID IN (SELECT TG_ID FROM TBL_TREND_GROUP WHERE SITE_ID = #{siteId})
+				</otherwise>
+			</choose>
+			<if test="trendTagList != null">
+		     	AND TAG_ID IN 
+		     	<foreach collection="trendTagList" item="item" index="index" separator="," open="(" close=")">
+				 	#{item}
+				</foreach>
+		    </if>
+	    </where>
+	</delete>
+	
+	<!-- 트렌드 그룹 삭제 -->
+	<delete id="deleteTrendGroup" parameterType="TrendGroup">
+		/* com.flk.ems.trendMng.mapper.TrendMngMapper.deleteTrendGroup */
+		DELETE FROM TBL_TREND_GROUP
+		WHERE SITE_ID = #{siteId}
+		<if test="tgId != '' and tgId != null">
+			AND TG_NAME = #{tgId}
+		</if>
+	</delete>
+	
+</mapper>

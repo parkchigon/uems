@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link type="text/css" href="/resources/ems/js/lib/jquery/jquery-ui.css" rel="stylesheet"/>
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/lib/jquery/jquery-ui.js"></script>
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+
+function initDatePickers() {
+  // datepicker Korean option
+  $.datepicker.regional['ko'] = {
+    closeText: '닫기',
+    prevText: '이전달',
+    nextText: '다음달',
+    currentText: '오늘',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+    weekHeader: 'Wk',
+    dateFormat: 'yy-mm-dd',
+    firstDay: 0,
+    isRTL: false,
+    duration: 200,
+    showAnim: 'show',
+    showMonthAfterYear: true,
+    yearSuffix: '년'
+  };
+
+  $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+  $('#schDate').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate').val()
+  });
+  
+  $('#schDate2').datepicker({
+	    changeMonth: false,
+	    changeYear: false,
+	    defaultDate: $('#schDate2').val()
+	  });
+
+  // monthpicker and year selector start/end year (10 year ago)
+  var currentYear = (new Date()).getFullYear();
+  var startYear = currentYear - 10;
+
+  var options = {
+    startYear: startYear,
+    finalYear: currentYear,
+    pattern: 'yyyy-mm',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+  };
+
+  $('#schMonth').monthpicker(options);
+  $('#schMonth2').monthpicker(options);
+
+/*   // make year selector 
+  for (var i = currentYear; i >= startYear; i--) {
+    if ($("#schYear").attr("pathValue") == i) {
+      $("#schYear").append("<option value='" + i + "' selected>" + i + "</option>");
+    } else {
+      $('#schYear').append("<option value='" + i + "'>" + i + "</option>");
+    }
+  } */
+}
+
+$(function() {;
+  (function($) {
+
+    var methods = {
+      init: function(options) {
+        return this.each(function() {
+          var
+            $this = $(this),
+            data = $this.data('monthpicker'),
+            year = (options && options.year) ? options.year : (new Date()).getFullYear(),
+            settings = $.extend({
+              pattern: 'mm/yyyy',
+              selectedMonth: null,
+              selectedMonthName: '',
+              selectedYear: year,
+              startYear: year - 10,
+              finalYear: year + 10,
+              monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              id: "monthpicker_" + (Math.random() * Math.random()).toString().replace('.', ''),
+              openOnFocus: true,
+              disabledMonths: []
+            }, options);
+
+          settings.dateSeparator = settings.pattern.replace(/(mmm|mm|m|yyyy|yy|y)/ig, '');
+
+          // If the plugin hasn't been initialized yet for this element
+          if (!data) {
+
+            $(this).data('monthpicker', {
+              'target': $this,
+              'settings': settings
+            });
+
+            if (settings.openOnFocus === true) {
+              $this.on('focus', function() {
+                $this.monthpicker('show');
+              });
+            }
+
+            $this.monthpicker('parseInputValue', settings);
+
+            $this.monthpicker('mountWidget', settings);
+
+            $this.on('monthpicker-click-month', function(e, month, year) {
+              $this.monthpicker('setValue', settings);
+              $this.monthpicker('hide');
+            });
+
+            // hide widget when user clicks elsewhere on page
+            $this.addClass("mtz-monthpicker-widgetcontainer");
+            $(document).unbind("mousedown.mtzmonthpicker").on("mousedown.mtzmonthpicker", function(e) {
+              if (!e.target.className || e.target.className.toString().indexOf('mtz-monthpicker') < 0) {
+                $(this).monthpicker('hideAll');
+              }
+            });
+          }
+        });
+      },
+
+      show: function() {
+        $(this).monthpicker('hideAll');
+        var widget = $('#' + this.data('monthpicker').settings.id);
+        widget.css("top", this.offset().top + this.outerHeight());
+        if ($(window).width() > (widget.width() + this.offset().left)) {
+          widget.css("left", this.offset().left);
+        } else {
+          widget.css("left", this.offset().left - widget.width());
+        }
+        widget.show();
+        widget.find('select').focus();
+        this.trigger('monthpicker-show');
+      },
+
+      hide: function() {
+        var widget = $('#' + this.data('monthpicker').settings.id);
+        if (widget.is(':visible')) {
+          widget.hide();
+          this.trigger('monthpicker-hide');
+        }
+      },
+
+      hideAll: function() {
+        $(".mtz-monthpicker-widgetcontainer").each(function() {
+          if (typeof($(this).data("monthpicker")) != "undefined") {
+            $(this).monthpicker('hide');
+          }
+        });
+      },
+
+      setValue: function(settings) {
+        var
+          month = settings.selectedMonth,
+          year = settings.selectedYear;
+
+        if (settings.pattern.indexOf('mmm') >= 0) {
+          month = settings.selectedMonthName;
+        } else if (settings.pattern.indexOf('mm') >= 0 && settings.selectedMonth < 10) {
+          month = '0' + settings.selectedMonth;
+        }
+
+        if (settings.pattern.indexOf('yyyy') < 0) {
+          year = year.toString().substr(2, 2);
+        }
+
+        if (settings.pattern.indexOf('y') > settings.pattern.indexOf(settings.dateSeparator)) {
+          this.val(month + settings.dateSeparator + year);
+        } else {
+          this.val(year + settings.dateSeparator + month);
+        }
+
+        this.change();
+      },
+
+      disableMonths: function(months) {
+        var
+          settings = this.data('monthpicker').settings,
+          container = $('#' + settings.id);
+
+        settings.disabledMonths = months;
+
+        container.find('.mtz-monthpicker-month').each(function() {
+          var m = parseInt($(this).data('month'));
+          if ($.inArray(m, months) >= 0) {
+            $(this).addClass('ui-state-disabled');
+          } else {
+            $(this).removeClass('ui-state-disabled');
+          }
+        });
+      },
+
+      mountWidget: function(settings) {
+        var
+          monthpicker = this,
+          container = $('<div id="' + settings.id + '" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" />'),
+          header = $('<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all mtz-monthpicker" />'),
+          combo = $('<select class="mtz-monthpicker mtz-monthpicker-year" />'),
+          table = $('<table class="mtz-monthpicker" />'),
+          tbody = $('<tbody class="mtz-monthpicker" />'),
+          tr = $('<tr class="mtz-monthpicker" />'),
+          td = '',
+          selectedYear = settings.selectedYear,
+          option = null,
+          attrSelectedYear = $(this).data('selected-year'),
+          attrStartYear = $(this).data('start-year'),
+          attrFinalYear = $(this).data('final-year');
+
+        if (attrSelectedYear) {
+          settings.selectedYear = attrSelectedYear;
+        }
+
+        if (attrStartYear) {
+          settings.startYear = attrStartYear;
+        }
+
+        if (attrFinalYear) {
+          settings.finalYear = attrFinalYear;
+        }
+
+        container.css({
+          position: 'absolute',
+          zIndex: 999999,
+          whiteSpace: 'nowrap',
+          width: '250px',
+          overflow: 'hidden',
+          textAlign: 'center',
+          display: 'none',
+          top: monthpicker.offset().top + monthpicker.outerHeight(),
+          left: monthpicker.offset().left
+        });
+
+        combo.on('change', function() {
+          var months = $(this).parent().parent().find('td[data-month]');
+          months.removeClass('ui-state-active');
+          if ($(this).val() == settings.selectedYear) {
+            months.filter('td[data-month=' + settings.selectedMonth + ']').addClass('ui-state-active');
+          }
+          monthpicker.trigger('monthpicker-change-year', $(this).val());
+        });
+
+        // mount years combo
+        for (var i = settings.startYear; i <= settings.finalYear; i++) {
+          var option = $('<option class="mtz-monthpicker" />').attr('value', i).append(i);
+          if (settings.selectedYear == i) {
+            option.attr('selected', 'selected');
+          }
+          combo.append(option);
+        }
+        header.append(combo).appendTo(container);
+
+        // mount months table
+        for (var i = 1; i <= 12; i++) {
+          td = $('<td class="ui-state-default mtz-monthpicker mtz-monthpicker-month" style="padding:5px;cursor:default;" />').attr('data-month', i);
+          if (settings.selectedMonth == i) {
+            td.addClass('ui-state-active');
+          }
+          td.append(settings.monthNames[i - 1]);
+          tr.append(td).appendTo(tbody);
+          if (i % 3 === 0) {
+            tr = $('<tr class="mtz-monthpicker" />');
+          }
+        }
+
+        tbody.find('.mtz-monthpicker-month').on('click', function() {
+          var m = parseInt($(this).data('month'));
+          if ($.inArray(m, settings.disabledMonths) < 0) {
+            settings.selectedYear = $(this).closest('.ui-datepicker').find('.mtz-monthpicker-year').first().val();
+            settings.selectedMonth = $(this).data('month');
+            settings.selectedMonthName = $(this).text();
+            monthpicker.trigger('monthpicker-click-month', $(this).data('month'));
+            $(this).closest('table').find('.ui-state-active').removeClass('ui-state-active');
+            $(this).addClass('ui-state-active');
+          }
+        });
+
+        table.append(tbody).appendTo(container);
+
+        container.appendTo('body');
+      },
+
+      destroy: function() {
+        return this.each(function() {
+          $(this).removeClass('mtz-monthpicker-widgetcontainer').unbind('focus').removeData('monthpicker');
+        });
+      },
+
+      getDate: function() {
+        var settings = this.data('monthpicker').settings;
+        if (settings.selectedMonth && settings.selectedYear) {
+          return new Date(settings.selectedYear, settings.selectedMonth - 1);
+        } else {
+          return null;
+        }
+      },
+
+      parseInputValue: function(settings) {
+        if (this.val()) {
+          if (settings.dateSeparator) {
+            var val = this.val().toString().split(settings.dateSeparator);
+            if (settings.pattern.indexOf('m') === 0) {
+              settings.selectedMonth = val[0];
+              settings.selectedYear = val[1];
+            } else {
+              settings.selectedMonth = val[1];
+              settings.selectedYear = val[0];
+            }
+          }
+        }
+      }
+
+    };
+
+    $.fn.monthpicker = function(method) {
+      if (methods[method]) {
+        return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+      } else if (typeof method === 'object' || !method) {
+        return methods.init.apply(this, arguments);
+      } else {
+        $.error('Method ' + method + ' does not exist on jQuery.mtz.monthpicker');
+      }
+    };
+
+  })(jQuery);
+  initDatePickers();
+  
+	$(".btn_calender").click(function(){
+		$(this).prev().focus();
+	})
+  
+});
+
+//]]> 
+
+</script>
+
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2 on" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			<div class="subTab_area">
+				<ul>
+					<li><a href="#">태그 모니터링</a></li>
+					<li class="on"><a href="#">트랜드 모니터링</a></li>
+					<li><a href="#">비교 모니터링</a></li>
+				</ul>
+			</div>
+			<div class="trend_area">
+				<div class="trend_search_area">
+					<div class="trend_search_inner">
+						<select id="" name="" style="width: 100px">
+							<option value="" selected="selected" >Type</option>
+							<option value=""  >온도</option>
+							<option value=""  >열량</option>
+						</select>
+						
+						<select id="" name="" style="width: 200px">
+							<option value="" selected="selected" >TagList</option>
+							<option value=""  >측냉입구온도</option>
+							<option value=""  >측냉출구온도</option>
+						</select>
+						
+						<select id="" name="" style="width: 80px">
+							<option value=""  >기간</option>
+							<option value="" selected="selected" >실시간</option>
+							<option value=""  >5분</option>
+							<option value=""  >15분</option>
+							<option value=""  >시간별</option>
+							<option value=""  >일별</option>
+							<option value=""  >월별</option>
+						</select>
+						
+						&nbsp;
+						
+						<span class="entry_calendar">
+							<input type="text" class="datepicker" id="schDate1" name="schDate1" value="${schDate1}" style="width:90px;" ></input>
+							<a href="#" class="btn_calender"><i class="fa fa-calendar"></i></a>
+						</span>
+						
+						<select id="" name="" style="width: 80px">
+							<option value="" selected="selected" >실시간</option>
+							<option value=""  >01시</option>
+							<option value=""  >02시</option>
+							<option value=""  >03시</option>
+							<option value=""  >04시</option>
+							<option value=""  >...</option>
+						</select>
+						
+						<select id="" name="" style="width: 80px">
+							<option value="" selected="selected" >실시간</option>
+							<option value=""  >00분</option>
+							<option value=""  >01분</option>
+							<option value=""  >02분</option>
+							<option value=""  >03분</option>
+							<option value=""  >...</option>
+						</select>
+						
+						~
+						
+						<select id="" name="" style="width: 80px">
+							<option value="" selected="selected" >시간</option>
+							<option value=""  >01시</option>
+							<option value=""  >02시</option>
+							<option value=""  >03시</option>
+							<option value=""  >04시</option>
+							<option value=""  >...</option>
+						</select>
+						
+						<select id="" name="" style="width: 80px">
+							<option value="" selected="selected" >분</option>
+							<option value=""  >00분</option>
+							<option value=""  >01분</option>
+							<option value=""  >02분</option>
+							<option value=""  >03분</option>
+							<option value=""  >...</option>
+						</select>
+						
+						<span class="btn_wrap">
+							<a class="btnType btn_type02" href="#">검색</a>
+						</span>
+					</div>
+				</div>
+				
+				<div class="btn_areaR mt5">
+					<a class="btn_iconText excel" href="#">엑셀다운로드</a>
+				</div>
+				
+				<div class="trend_chart_area mt5">
+					chart
+					
+
+				</div>
+			
+			</div>
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+			
+			<div class="data_area_inner">
+				<dl>
+					<dt><span class="icon_set sys">Tag별 사용량</span></dt>
+					<dd>
+						<div  class="scroll" style="max-height:230px;">
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="40%">
+							<col width="20%">
+							<col width="20%">
+							<col width="*">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>태그명</th>
+									<th>최대값</th>
+									<th>최소값</th>
+									<th>평균값</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>####명</td>
+									<td>50</td>
+									<td>20</td>
+									<td><span class="font_yellow">35</span></td>
+								</tr>
+								<tr>
+									<th>####명</td>
+									<td>50</td>
+									<td>20</td>
+									<td><span class="font_yellow">35</span></td>
+								</tr>
+								<tr>
+									<th>####명</td>
+									<td>50</td>
+									<td>20</td>
+									<td><span class="font_yellow">35</span></td>
+								</tr>
+								<tr>
+									<th>####명</td>
+									<td>50</td>
+									<td>20</td>
+									<td><span class="font_yellow">35</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+								<tr>
+									<th>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td><span class="font_yellow">-</span></td>
+								</tr>
+							</tbody>
+						</table>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set chart">Tag별 상세사용량</span>
+						<div class="head_right">
+							<a href="#" class="reAlarm">새로고침</a>
+						</div>
+					</dt>
+					<dd>
+						<div  class="scroll" style="height:610px;">
+						<table class="data_row real_time" style="width : 1450px;"><!-- td 값에 따라 사이즈 변경요청 -->
+						<caption>caption</caption>
+						<colgroup>
+							<col width="100px">
+							<col width="150px">
+							<col width="150px">
+							<col width="150px"><!-- 100% -->
+							<col width="150px"><!-- 700px -->
+							<col width="150px"><!-- 850px -->
+							<col width="150px"><!-- 1000px -->
+							<col width="150px"><!-- 1150px -->
+							<col width="150px"><!-- 1300px -->
+							<col width="150px"><!-- 1450px -->
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>시간 (Hour)</th>
+									<th>축냉입구온도</th>
+									<th>축냉출구온도</th>
+									<th>축냉 출구온도</th>
+									<th>축냉출 구온도</th>
+									<th>축냉출구 온도온도온도온도</th>
+									<th>테이블 최대10개</th>
+									<th>- </th>
+									<th>- </th>
+									<th>- </th>
+									<th>- </th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>2015-05-12<br />00:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />00:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />01:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />02:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />03:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />04:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />05:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />06:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />07:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />08:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />09:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />10:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />11:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />12:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />13:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />14:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />15:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />16:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />17:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />18:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />19:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />20:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />21:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />2015-05-12<br />22:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />23:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />24:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<th>2015-05-12<br />01:00</td>
+									<td>31</td>
+									<td>30</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+							</tbody>
+						</table>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		<!-- e : data_area -->
+		
+		<!-- s : footer -->
+		<div id="footer" class="alarm_on"><!-- 경보시 : warning , 알람확인후 : alarm_on -->
+			<span><a href="#">경보정보 : 냉각수온도 초과</a></span>
+		</div>
+		<!-- e : footer -->
+	    
+	</div>
+	
+	
+	
+	
+	
+	
+</div>
+
+</body>
+</html>

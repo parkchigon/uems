@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+
+<div id="loading_mask"></div>
+<div class="loading"><span class="blind">로딩중...</span></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#" name="loading">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li><a href="#">지점 관리</a></li>
+					<li><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li class="on"><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+			
+			<div class="blockDiagram_area">
+			
+			<div class="build_header_sub_area"><!-- 하단 리스트 선택시 버튼 추가됨 -->
+				<strong>기타설비 선택 :</strong>
+				<a class="btnType btn_type01" href="#">냉동기A</a>
+				<a class="btnType btn_type02" href="#">냉동기B</a>
+				<a class="btnType btn_type01" href="#">열량</a>
+				<a class="btnType btn_type01" href="#">흡수식 냉동기</a>
+				<a class="btnType btn_type01" href="#">보일러</a>
+				<a class="btnType btn_type01" href="#">상온 냉동기</a>
+			</div>
+			
+			<div class="scroll" style="height:800px;">
+			
+				<div class="data_area_inner">
+					<dl>
+						<dt>냉동기 #1 경보</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="23.3%">
+								<col width="10%">
+								<col width="23.3%">
+								<col width="10%">
+								<col width="*">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>냉동기 #2 경보</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="23.3%">
+								<col width="10%">
+								<col width="23.3%">
+								<col width="10%">
+								<col width="*">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>냉동기 #3 경보</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="23.3%">
+								<col width="10%">
+								<col width="23.3%">
+								<col width="10%">
+								<col width="*">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>냉동기 #4 경보</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="23.3%">
+								<col width="10%">
+								<col width="23.3%">
+								<col width="10%">
+								<col width="*">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"><input type="text" id="" /></th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+			</div>
+			</div>
+			
+			<div class="btn_areaC mt5">
+				<a class="btnType btn_type02" href="#">저장</a>
+				<span class="fr">
+					<a class="btnType btn_type01" href="#">좌측설정</a>
+				</span>
+			</div>
+			
+			
+			
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+			<div class="data_area_inner">
+				<dl>
+					<dt><span class="icon_set danger">냉동기 #1 경보</span>
+						<div class="head_right">
+							<a href="#" class="btn_next pre"><span class="blind">이전페이지</span></a>
+							<a href="#" class="btn_next next"><span class="blind">다음페이지</span></a>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="33.3%">
+							<col width="33.3%">
+							<col width="*">
+						</colgroup>
+	
+							<tbody class="warning">
+								<tr>
+									<td class=""><a href="#">냉수입구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #1 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수입구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수출구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #2 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수출구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#1 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 입구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#1 차압 낮음 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#2 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 출구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#2 차압 낮음 이상</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set danger">냉동기 #2 경보</span>
+						<div class="head_right">
+							<a href="#" class="btn_next pre"><span class="blind">이전페이지</span></a>
+							<a href="#" class="btn_next next"><span class="blind">다음페이지</span></a>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="33.3%">
+							<col width="33.3%">
+							<col width="*">
+						</colgroup>
+	
+							<tbody class="warning">
+								<tr>
+									<td class=""><a href="#">냉수입구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #1 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수입구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수출구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #2 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수출구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#1 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 입구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#1 차압 낮음 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#2 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 출구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#2 차압 낮음 이상</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set danger">냉동기 #3 경보</span>
+						<div class="head_right">
+							<a href="#" class="btn_next pre"><span class="blind">이전페이지</span></a>
+							<a href="#" class="btn_next next"><span class="blind">다음페이지</span></a>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="33.3%">
+							<col width="33.3%">
+							<col width="*">
+						</colgroup>
+	
+							<tbody class="warning">
+								<tr>
+									<td class=""><a href="#">냉수입구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #1 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수입구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수출구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #2 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수출구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#1 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 입구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#1 차압 낮음 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#2 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 출구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#2 차압 낮음 이상</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set danger">냉동기 #4 경보</span>
+						<div class="head_right">
+							<a href="#" class="btn_next pre"><span class="blind">이전페이지</span></a>
+							<a href="#" class="btn_next next"><span class="blind">다음페이지</span></a>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="33.3%">
+							<col width="33.3%">
+							<col width="*">
+						</colgroup>
+	
+							<tbody class="warning">
+								<tr>
+									<td class=""><a href="#">냉수입구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #1 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수입구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수출구 온도센서 이상</a></td>
+									<td class=""><a href="#">압축기 #2 토출온도 높음</a></td>
+									<td class=""><a href="#">냉각수출구 온서센서 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#1 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 입구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#1 차압 낮음 이상</a></td>
+								</tr>
+								<tr>
+									<td class=""><a href="#">냉수#2 유량 저 이상</a></td>
+									<td class=""><a href="#">압축기 #1 출구온도센서 이상</a></td>
+									<td class=""><a href="#">냉매#2 차압 낮음 이상</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		<!-- e : data_area -->
+		
+	</div>
+	
+	
+</div>
+
+</body>
+</html>

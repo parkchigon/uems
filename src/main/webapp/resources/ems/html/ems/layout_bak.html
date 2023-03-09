@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>삼성 BMT업무관리 시스템</title>
+<link rel="stylesheet" type="text/css" href="../../css/admin/basic.css" />
+
+<script type="text/javascript" src="../../jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="../../jquery/html5shiv.js"></script><!-- IE 8 이하에서 HTML5 태그 지원 -->
+
+<script type="text/javascript" src="../../jquery/global_pub.js"></script>
+
+<script type="text/javascript" src="../../jquery/jquery.model.js"></script><!-- 모달팝업 -->
+
+
+</head>
+<body>
+<!-- 모달 배경 -->
+<div id="mask"></div>
+
+<div id="wrap_area">
+
+<!-- 바로가기 시작 -->
+<ul id="skipNavi">
+	<li><a href="#container">본문 바로가기</a></li>
+	<li><a href="#gnb_area">주메뉴 바로가기</a></li>
+	<li><a href="#lnb_area">메뉴 바로가기</a></li>
+</ul>
+<!-- 바로가기 끝 -->	
+
+<h1 class="hidden">삼성 BMT업무관리 시스템</h1>
+
+	<h2 class="hidden">header 영역</h2>
+    
+    <!-- header -->
+    <div id="header">
+	   	<div class="topUtil">
+	   		<ul class="topUtil_ul">
+	   			<li class="icon">
+	   				<a class="topBtn icon001" href="#"><span class="alt">홈으로<em>▲</em></span></a>
+	   				<a class="topBtn icon002" href="#"><span class="alt">공지사항<em>▲</em></span></a>
+	   				<a class="topBtn icon003" href="#"><span class="alt">공지사항<em>▲</em></span></a>
+	   				<a class="topBtn icon004" href="#"><span class="alt">공지사항<em>▲</em></span></a>
+	   				<a class="topBtn icon005" href="#"><span class="alt">옵션<em>▲</em></span></a>
+	   			</li>
+	   			<li class="select" id="gnb_area">
+	   				<dl>
+	   					<dt><a class="topBtn select001" href="#"><span class="hidden">접수관리</span></a></dt>
+	   					<dd class="option">
+	   						<a href="#">장비신청서등록</a>
+	   						<a href="#">소모품신청서</a>
+	   						<a href="#">장비보유확인서</a>
+	   						<a href="#">장비신청서등록</a>
+	   					</dd>
+	   				</dl>
+	   				<dl>
+	   					<dt><a class="topBtn select002" href="#"><span class="hidden">접수관리</span></a></dt>
+	   					<dd class="option">
+	   						<a href="#">장비신청서등록</a>
+	   						<a href="#">소모품신청서</a>
+	   						<a href="#">장비보유확인서</a>
+	   						<a href="#">장비신청서등록</a>
+	   					</dd>
+	   				</dl>
+	   				<dl>
+	   					<dt><a class="topBtn select003" href="#"><span class="hidden">접수관리</span></a></dt>
+	   					<dd class="option">
+	   						<a href="#">장비신청서등록</a>
+	   						<a href="#">소모품신청서</a>
+	   						<a href="#">장비보유확인서</a>
+	   						<a href="#">장비신청서등록</a>
+	   					</dd>
+	   				</dl>
+	   				<dl>
+	   					<dt><a class="topBtn select004" href="#"><span class="hidden">접수관리</span></a></dt>
+	   					<dd class="option">
+	   						<a href="#">장비신청서등록</a>
+	   						<a href="#">소모품신청서</a>
+	   						<a href="#">장비보유확인서</a>
+	   						<a href="#">장비신청서등록</a>
+	   					</dd>
+	   				</dl>
+	   				<dl>
+	   					<dt><a class="topBtn select005" href="#"><span class="hidden">접수관리</span></a></dt>
+	   					<dd class="option">
+	   						<a href="#">장비신청서등록</a>
+	   						<a href="#">소모품신청서</a>
+	   						<a href="#">장비보유확인서</a>
+	   						<a href="#">장비신청서등록</a>
+	   					</dd>
+	   				</dl>
+	   			</li>
+	   			<li class="login">
+	   				<img src="../../images/admin/comm/top_myimg.png" alt="사진" />
+	   				<a class="btnLogin" href="#">관리자님</a>
+	   				<div class="option">
+  						<a href="#">LOGOUT</a>
+  						<a href="#">MY PAGE</a>
+  					</div>
+	   			</li>
+	   		</ul>
+	   	</div>
+    </div>
+    <!--// header -->
+    
+	<h2 class="hidden">컨텐츠 영역</h2>
+	<div id="container">
+    	<ul>
+    		<li class="lnb"><!-- small -->
+				<!-- lnb 영역 -->
+				<h3 class="hidden">lnb 영역</h3>
+		        <div id="lnb_area">
+		        	<div class="logo"><span><em class="hidden">삼성 BMT업무관리 시스템</em></span></div>
+		        	<div class="login">
+		  				<img src="../../images/admin/comm/left_myImg.jpg" alt="사진" />
+		 				<span class="LoginName">관리자님</span>
+		 				<div class="btn_loginArea">
+							<a href="#" class="logout">LOGOUT</a>
+							<a href="#" class="mypage">MY PAGE</a>
+						</div>
+		        	</div>
+					<ul class="lnbMenu">
+						<li>
+							<dl>
+								<dt><a class="lnbBtn meun001" href="#">접수관리<em></em></a></dt>
+								<dd>
+									<a href="#">- 장비신청서 등록</a>
+									<a href="#">- 장비구매 요청서</a>
+								</dd>
+							</dl>
+						</li>
+						<li>
+							<dl>
+								<dt><a class="lnbBtn meun002" href="#">배송관리<em></em></a></dt>
+								<dd>
+									<a href="#">- 배송관리</a>
+								</dd>
+							</dl>
+						</li>
+						<li>
+							<dl>
+								<dt><a class="lnbBtn meun003" href="#">장비관리<em></em></a></dt>
+								<dd>
+									<a href="#">- 장비현황</a>
+									<a href="#">- 반출현황</a>
+								</dd>
+							</dl>
+						</li>
+						<li>
+							<dl>
+								<dt><a class="lnbBtn meun004" href="#">정산관리<em></em></a></dt>
+								<dd>
+									<a href="#">- 정산등록</a>
+									<a href="#">- 소모품관리</a>
+									<a href="#">- 실비현황</a>
+									<a href="#">- 운영현황</a>
+								</dd>
+							</dl>
+						</li>
+						<li>
+							<dl>
+								<dt><a class="lnbBtn meun005" href="#">보고서<em></em></a></dt>
+								<dd>
+									<a href="#">- 보고서</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					
+					<div style="clear:both;"></div>
+					
+					<table class="left_col mt30">
+					<caption>caption</caption>
+					<colgroup>
+						<col width="20%">
+						<col width="20%">
+						<col width="20%">
+						<col width="20%">
+						<col width="*">
+					</colgroup>
+
+						<thead>
+							<tr>
+								<th scope="col"> </th>
+								<th scope="col">it</th>
+								<th scope="col">mobile</th>
+								<th scope="col">display</th>
+								<th scope="col">DMFP</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">총대수</th>
+								<td>1</td>
+								<td>100</td>
+								<td>25</td>
+								<td> </td>
+							</tr>
+							<tr>
+								<th scope="row">대여종</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td> </td>
+							</tr>
+							<tr>
+								<th scope="row">회수</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td> </td>
+							</tr>
+						</tbody>
+					</table>
+		        </div>
+		        <!--// lnb 영역 -->
+    		</li>
+    		<li class="contents">
+				<!-- contents -->
+				<h3 class="hidden">contents 영역</h3>
+		        
+		        <!-- content -->
+		        <div class="content">
+		        
+		        
+	    			<!-- 모달팝업 -->
+	                <div id="layerPop1" class="layerPop layerType1">
+		                <p class="conTitle"><span>현재 페이지 title</span></p>
+		                
+		                
+						<div class="content_in" >
+							<!-- 검색 -->
+							<section>
+								<div class="listSearch">
+									<label class="hidden" for="">기간별</label>
+									<select id="">
+										<option selected="selected" value="">기간별</option>
+										<option value="">2014</option>
+										<option value="">2013</option>
+										<option value="">2012</option>
+									</select>
+									
+									<label class="hidden" for="">업체별</label>
+									<select id="">
+										<option selected="selected" value="">업체별</option>
+										<option value=""> </option>
+									</select>
+									
+									<label class="hidden" for="">장비별</label>
+									<select id="">
+										<option selected="selected" value="">장비별</option>
+										<option value=""> </option>
+									</select>
+									                  
+									<a class="searchBtn" href="#">검색</a>
+									
+									<div class="btn_areaIn">
+										<a class="btnType2 color1" href="#">미반납</a>
+										<a class="btnType2 color2" href="#">대여</a>
+										<a class="btnType2 color3" href="#">회수</a>
+									</div>
+									
+								</div>
+							</section>
+							<!--// 검색 -->
+						
+							<p class="list">
+								<label for="">Show</label>
+								<select id="">
+									<option selected="selected" value="">30</option>
+									<option value="">50</option>
+									<option value="">100</option>
+								</select>
+								entries
+								<span class="fr">총  100건</span>
+							</p>
+							
+			                <div class="scroll">
+			                
+								<table class="col" style="width: 120%"><!-- 테이블클경우 -->
+								<caption>caption</caption>
+								<colgroup>
+									<col width="20%">
+									<col width="20%">
+									<col width="20%">
+									<col width="20%">
+									<col width="*">
+								</colgroup>
+			
+									<thead>
+										<tr>
+											<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+											<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+											<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+											<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+											<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span class="font_red">폰트컬러</span></td>
+											<td><span class="font_green">폰트컬러</span></td>
+											<td><span class="font_purple">폰트컬러</span></td>
+											<td><span class="font_blue">폰트컬러</span></td>
+											<td>폰트컬러</td>
+										</tr>
+										<tr class="bg_red">
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+										</tr>
+										<tr class="bg_blue">
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+										</tr>
+										<tr>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+										</tr>
+										<tr>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+											<td>가로 기본테이블 입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+								
+		    				</div>
+		    			
+							<div class="paging_area">
+			    				<div class="paging">
+			    					<a class="first" href=""><span class="hidden">맨앞</span></a>
+			    					<a class="pre" href=""><span class="hidden">이전</span></a>
+			    					<!-- <span class="paging_numbers"> -->
+									<strong>1</strong>
+									<a href="">2</a>
+									<a href="">3</a>
+									<a href="">4</a>
+									<a href="">5</a>
+			    					<!-- </span> -->
+			    					<a class="next" href=""><span class="hidden">다음</span></a>
+			    					<a class="last" href=""><span class="hidden">맨뒤</span></a>
+			    				</div>
+							</div>
+						</div>
+                    
+                        <div class="btn_areaC mt30">
+                            <a href="#layerPop2" class="btnType gray" name="alert"><span>알림팝업</span></a>
+                        </div>
+                        
+	                    <a href="" class="closePop"><span class="hidden">닫기</span></a>
+	    			</div>
+	    			<!--// 모달팝업 -->
+	    			
+	    			<!-- 알림팝업 -->
+	                <div id="layerPop2" class="layerPop layerType2">
+	                    <dl>
+	                        <dt><strong>기본스타일</strong></dt>
+	                        <dd>
+	                            <p class="textC">기본스타일 입니다.</p>
+	                        
+	                            <div class="btn_areaC mt30">
+	                                <a href="" class="btnType gray"><span>예</span></a>
+	                                <a href="" class="btnType blue"><span>아니오</span></a>
+	                            </div>
+	                        </dd>
+	                    </dl>
+	                    <a href="" class="closePop"><span class="hidden">닫기</span></a>
+	    			</div>
+	    			<!--// 알림팝업 -->
+	    			
+		            
+		            <p class="Location">
+		            	<a href="#" class="btn_set lnbOpen">메뉴얼고 닫기</a>
+		            	
+		            	<a href="#" class="btn_set home">메인으로</a>
+		            	<a href="#" class="btn_nav">상단경로</a>
+		            	<span class="btn_nav bold">현재 페이지</span>
+		            	
+		            	<a href="#" class="btn_set refresh">새로고침</a>
+		            </p>
+		            
+		            <p class="conTitle"><span>현재 페이지 title</span><a href="#" class="fr">엑셀다운로드</a></p>
+		            
+					<table class="row mb20">
+					<caption>caption</caption>
+					<colgroup>
+						<col width="150px">
+						<col width="*">
+					</colgroup>
+
+						<tbody>
+							<tr>
+								<th scope="row">제목입니다</th>
+								<td>세로 기본테이블 입니다.</td>
+							</tr>
+							<tr>
+								<th scope="row">제목입니다</th>
+								<td>세로 기본테이블 입니다.</td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<div class="content_in">
+						<!-- 검색 -->
+						<section>
+							<div class="listSearch">
+								<label class="hidden" for="">기간별</label>
+								<select id="">
+									<option selected="selected" value="">기간별</option>
+									<option value="">2014</option>
+									<option value="">2013</option>
+									<option value="">2012</option>
+								</select>
+								
+								<label class="hidden" for="">업체별</label>
+								<select id="">
+									<option selected="selected" value="">업체별</option>
+									<option value=""> </option>
+								</select>
+								
+								<label class="hidden" for="">장비별</label>
+								<select id="">
+									<option selected="selected" value="">장비별</option>
+									<option value=""> </option>
+								</select>
+								                  
+								<a class="searchBtn" href="#">검색</a>
+								
+								<div class="btn_areaIn">
+									<a class="btnType2 color1" href="#">미반납</a>
+									<a class="btnType2 color2" href="#">대여</a>
+									<a class="btnType2 color3" href="#">회수</a>
+								</div>
+								
+							</div>
+							<div class="listSearch">
+								<label for="">검색</label>
+								<input type="text" class="inputTxt" style="width: 500px;" />
+								<a class="searchBtn" href="#">검색</a>
+								
+							</div>
+						</section>
+						<!--// 검색 -->
+					
+						<p class="list">
+							<label for="">Show</label>
+							<select id="">
+								<option selected="selected" value="">30</option>
+								<option value="">50</option>
+								<option value="">100</option>
+							</select>
+							entries
+							<span class="fr">총  100건</span>
+						</p>
+						
+						<div class="scroll">
+							<table class="col" style="width: 120%">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="20%">
+								<col width="20%">
+								<col width="20%">
+								<col width="20%">
+								<col width="*">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+										<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+										<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+										<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+										<th scope="col">제목<a href="#" class="up"><em class="hidden">up</em></a><a href="#" class="down"><em class="hidden">down</em></a></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><span class="font_red">폰트컬러</span></td>
+										<td><span class="font_green">폰트컬러</span></td>
+										<td><span class="font_purple">폰트컬러</span></td>
+										<td><span class="font_blue">폰트컬러</span></td>
+										<td>폰트컬러</td>
+									</tr>
+									<tr class="bg_red">
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+									</tr>
+									<tr class="bg_blue">
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+									</tr>
+									<tr>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+									</tr>
+									<tr>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td>가로 기본테이블 입니다.</td>
+										<td class="textC"><a class="btnType3 color1" href="#">검색</a></td>
+										<td class="textC"><a class="btnType3 color2" href="#">검색</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="paging_area">
+		    				<div class="paging">
+		    					<a class="first" href=""><span class="hidden">맨앞</span></a>
+		    					<a class="pre" href=""><span class="hidden">이전</span></a>
+		    					<!-- <span class="paging_numbers"> -->
+								<strong>1</strong>
+								<a href="">2</a>
+								<a href="">3</a>
+								<a href="">4</a>
+								<a href="">5</a>
+		    					<!-- </span> -->
+		    					<a class="next" href=""><span class="hidden">다음</span></a>
+		    					<a class="last" href=""><span class="hidden">맨뒤</span></a>
+		    				</div>
+						</div>
+					</div>
+					
+
+					
+					<div class="btn_areaR mt30">
+	                    <a href="#layerPop1" class="btnType gray" name="modal"><span>모달팝업</span></a>
+	                    <a href="#layerPop2" class="btnType blue" name="alert"><span>알림팝업</span></a>
+	                </div>
+		            
+		        </div>
+		        <!--// content --> 
+		        
+		        <h3 class="hidden">풋터 영역</h3>
+		        <div id="footer">
+		            <p class="copyright">
+		            	Copyright © 2015 by Ujung Information System Co.,Ltd <span>Version 1.0</span>
+		            </p>
+		        </div> 
+		        <!--// contents -->
+    		</li>
+    	</ul>
+		
+    </div>
+</div>
+
+</body>
+</html>

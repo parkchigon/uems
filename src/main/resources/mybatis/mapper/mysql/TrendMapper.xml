@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.ems.trend.mapper.TrendMapper">
+ 
+ 	<!-- 검색조건  Type 리스트 조회 -->
+	<select id="searchTypeList" parameterType="rawData" resultType="flkMap">
+		/* TrendMapper.searchTypeList  */
+		SELECT code_name
+			  ,code_use_name 
+	 	 FROM tbl_code
+	 	 WHERE code_use_name LIKE '%TAG_KIND%'
+	 	   AND code_id != 'CD_0000000000000111'
+	</select>
+	
+	<!-- 검색조건 Type에 따른 TAG_LIST -->
+	<select id="searchTagList" parameterType="rawData" resultType="flkMap">
+		/* TrendMapper.searchTagList */
+		SELECT 
+			TAG_ID
+		  , TAG_DESC
+		 FROM TBL_TAG
+		WHERE SITE_CD = #{siteCd}
+		  AND USE_FLAG = 'Y'
+		 <if test="tagType != null and tagType != ''">
+			 AND TAG_KIND_CD = #{tagType}
+		 </if>
+		 <if test="iAlarmUseFlag != null and iAlarmUseFlag != '' and iAlarmUseFlag == 'Y'.toString()">
+			 AND I_ALARM_USE_FLAG = #{iAlarmUseFlag}
+			 AND TAG_TYPE_CD = 'TAG_TYPE3'
+		 </if>
+	</select>
+	
+	<!-- 태그모니터링 실시간 추가데이터 조회  -->
+	<select id="selectTagMonitoringAddData" parameterType="rawData" resultType="flkMap">
+		SELECT stat_hour
+			   <foreach collection="tagValueArr" item="item" index="index" >
+			   , tag_id_#{index}
+			   , SUM(tag_value_avg_#{index}) AS tag_value_avg_#{index}
+		       </foreach>
+	    FROM ( 
+				SELECT  
+					  DATE_FORMAT(stat_date,'%H:%i:%s')AS stat_hour
+					  <foreach collection="tagValueArr" item="item" index="index" >
+					  	, (SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+						, CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END AS tag_value_avg_#{index}
+					  </foreach>
+				FROM tbl_raw_data_${siteCd}
+				WHERE tag_id IN 
+				 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		 </foreach>
+				AND stat_date <![CDATA[>]]> ADDTIME(NOW(),'-00:00:03')
+				AND stat_date <![CDATA[<=]]> NOW()
+			)a
+	  GROUP BY stat_hour
+	</select>
+	
+	<!-- 태그모니터링 실시간 추가데이터 조회  -->
+	<select id="selectTagMonitoringAddMinData" parameterType="rawData" resultType="flkMap">
+		SELECT CONCAT(stat_date,' ',stat_hour_temp) AS stat_hour
+			   <foreach collection="tagValueArr" item="item" index="index" >
+			   , tag_id_#{index}
+			   , SUM(tag_value_avg_#{index}) AS tag_value_avg_#{index}
+		       </foreach>
+	    FROM ( 
+				SELECT  
+					  SUBSTR(STR_TO_DATE(stats_time,'%Y%m%d'),6,10) AS stat_date
+			    	  ,stats_time    
+					  , CONCAT(SUBSTR(stats_time,9,2),':',SUBSTR(stats_time,11,2)) AS stat_hour_temp
+		     		  , SUBSTR(stats_time,9,11) AS stat_hour
+					  <foreach collection="tagValueArr" item="item" index="index" >
+					  	, (SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+						, CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END AS tag_value_avg_#{index}
+					  </foreach>
+				FROM tbl_stat_1min_${siteCd}
+				WHERE tag_id IN 
+				 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		 </foreach>
+				AND stats_time <![CDATA[>=]]> DATE_FORMAT(DATE_ADD(NOW(),INTERVAL -1 MINUTE),'%Y%m%d%H%i')
+				AND stats_time <![CDATA[<]]> DATE_FORMAT(NOW(),'%Y%m%d%H%i')
+			)a
+	  GROUP BY stat_hour
+	</select>
+	
+	<!-- 태그모니터링 시간단위 -->
+	<select id="selectTagMonitoringDataForTime" parameterType="rawData" resultType="flkMap">
+	SELECT CONCAT(stat_date,' ',stat_hour_temp) AS stat_hour
+	     , stat_date
+	       <foreach collection="tagValueArr" item="item" index="index">
+				, tag_id_#{index}
+				, sum(tag_value_avg_#{index}) AS tag_value_avg_#{index} 
+				, (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{item} AND site_cd = #{siteCd})) AS tag_unit_#{index}
+	       </foreach>
+	       <foreach collection="tagTypeValueArr" item="item" index="index">
+	       		, #{item} AS tag_type_#{index}
+	       </foreach>
+	   FROM(
+		SELECT
+			SUBSTR(STR_TO_DATE(stats_time,'%Y%m%d'),6,10) AS stat_date
+			,stats_time    
+			<foreach collection="tagValueArr" item="item" index="index">
+				,(SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+			</foreach>
+		     <if test="term == '1min' or term == '5min' or term == '15min'">
+		     	, CONCAT(SUBSTR(stats_time,9,2),':',SUBSTR(stats_time,11,2)) AS stat_hour_temp
+		     	, SUBSTR(stats_time,9,11) AS stat_hour
+		     	
+		     </if>
+		     <if test="term == 'hourly'">
+		     	, CASE WHEN SUBSTR(stats_time,9,2) = '00' THEN STR_TO_DATE(stats_time,'%Y%m%d') ELSE SUBSTR(stats_time,9,2) END stat_hour_temp
+		     	, SUBSTR(stats_time,9,2) as stat_hour
+		     </if>
+		     <foreach collection="tagValueArr" item="item" index="index">
+		     	<if test="term == '1min'">
+		     	, CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END AS tag_value_avg_#{index}
+		     	</if>
+		     	<if test="term == '5min' or term == '15min'">
+		     	, CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END AS tag_value_avg_#{index}
+		     	</if>
+		     	<if test="term == 'hourly'">
+		     	, CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END AS tag_value_avg_#{index}
+		     	</if>
+		     </foreach>
+		FROM tbl_stat_${term}_${siteCd}
+		WHERE tag_id IN
+		<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  		#{item}
+	  	</foreach>
+		<if test="term == '1min' or term == '5min' or term == '15min'">
+			<if test="startDate != null and startDate != ''">
+				AND stats_time <![CDATA[>=]]> #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stats_time <![CDATA[<=]]> #{endDate}
+			</if>
+			ORDER BY stats_time
+			)a GROUP BY stats_time
+		</if>
+		<if test="term == 'hourly'">
+			<if test="startDate != null and startDate != ''">
+				AND stats_time <![CDATA[>=]]> #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stats_time <![CDATA[<=]]> #{endDate}
+			</if>
+			ORDER BY stats_time
+			)a GROUP BY stats_time
+		</if>
+		<foreach collection="tagValueArr" item="item" index="index">
+				, tag_id_#{index} 	     
+	    </foreach>
+	    ORDER BY stat_hour
+	</select>
+	
+	<!-- 태그모니터링 일단위 -->
+	<select id="selectTagMonitoringDataForDay" parameterType="rawData" resultType="flkMap">
+		SELECT stat_hour
+		     <foreach collection="tagValueArr" item="item" index="index">
+		     , tag_id_#{index} AS tag_id_#{index}
+		     , SUM(tag_value_avg_#{index}) AS tag_value_avg_#{index}
+		     , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{item} AND site_cd = #{siteCd})) AS tag_unit_#{index}
+		     </foreach>
+		     <foreach collection="tagTypeValueArr" item="item" index="index">
+	       		, #{item} AS tag_type_#{index}
+	     	 </foreach>
+		FROM(
+			SELECT 
+				<if test="term == 'daily'">
+			      CONCAT(SUBSTRING(stat_date,5,2),'/',RIGHT(stat_date,2)) AS stat_hour
+			    </if>
+			    <if test="term == 'monthly'">
+			      CASE WHEN RIGHT(stat_month,2) = '01' THEN CONCAT(LEFT(stat_month,4),'-',RIGHT(stat_month,2)) ELSE RIGHT(stat_month,2) END stat_hour
+			    </if>
+				<foreach collection="tagValueArr" item="item" index="index">
+				 , (SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+			     , CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END AS tag_value_avg_#{index}
+				</foreach>
+			FROM tbl_stat_${term}
+			WHERE tag_id IN
+			<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+		  		#{item}
+		  	</foreach>
+			  AND site_cd = #{siteCd}
+			<if test="term == 'daily'">
+				<if test="startDate != null and startDate != ''">
+					AND stat_date <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stat_date <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+				</if>
+			</if>
+			<if test="term == 'monthly'">
+				<if test="startDate != null and startDate != ''">
+					AND stat_month <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stat_month <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+				</if>
+			</if>
+			)a
+	  GROUP BY stat_hour
+	</select>
+	
+	<!-- 태그모니터링 태그별사용량 일별월별 -->
+	<select id="selectTagUseAmountForDay" parameterType="rawData" resultType="rawData" >
+		SELECT (SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd =#{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_${term} a
+		WHERE 1=1
+		AND tag_id IN
+		<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  		#{item}
+	  	</foreach>
+	  	AND site_cd = #{siteCd}
+	  	<if test="term == 'daily'">
+			<if test="startDate != null and startDate != ''">
+				AND stat_date <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stat_date <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+			</if>
+		</if>
+		<if test="term == 'monthly'">
+			<if test="startDate != null and startDate != ''">
+				AND stat_month <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stat_month <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+			</if>
+		</if>
+		GROUP BY tag_id
+	</select>
+	
+	<!-- 태그모니터링 태그별사용량 시간별 -->
+	<select id="selectTagUseAmountForTime" parameterType="rawData" resultType="rawData" >
+		SELECT (SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd =#{siteCd})AS tag_id
+		<if test="term == '1min'">
+		      , ROUND(MAX(tag_value),1) AS max_tag_value
+		      , ROUND(MIN(tag_value),1) AS min_tag_value
+		      , ROUND(AVG(tag_value),1) AS avg_tag_value
+		</if>
+		<if test="term == '5min' or term == '15min'">
+			  , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		</if>
+		FROM tbl_stat_${term}_${siteCd} a
+		WHERE tag_id IN
+		<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  		#{item}
+	  	</foreach>
+	  	<if test="term == '1min' or term == '5min' or term == '15min'">
+			<if test="startDate != null and startDate != ''">
+				AND stats_time <![CDATA[>=]]> #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stats_time <![CDATA[<=]]> #{endDate}
+			</if>
+		</if>
+		<if test="term == 'hourly'">
+			<if test="startDate != null and startDate != ''">
+				AND stats_time <![CDATA[>=]]> #{startDate} 
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND stats_time <![CDATA[<=]]> #{endDate}
+			</if>
+		</if>
+		GROUP BY tag_id
+	</select>
+	
+	<!-- 태그모니터링 태그별사용량 실시간 -->
+	<select id="selectTagUseAmountForRealTime" parameterType="rawData" resultType="rawData" >
+		SELECT 
+			  (SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd =#{siteCd})AS tag_id
+			, ROUND(MAX(tag_value),1) AS max_tag_value
+			, ROUND(MIN(tag_value),1) AS min_tag_value
+			, ROUND(AVG(tag_value),1) AS avg_tag_value
+		
+		FROM tbl_raw_data_${siteCd} a
+		WHERE tag_id IN
+		<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  		#{item}
+	  	</foreach>
+	  	<if test='realTimeType == "Y"'>
+		  	AND stat_date <![CDATA[<=]]> NOW()
+			AND stat_date <![CDATA[>=]]> ADDTIME(NOW(),'-00:10:00')
+	  	</if>
+	  	<if test='realTimeType == "N"'>
+	  		AND stat_date <![CDATA[>=]]> #{startDate}
+			AND stat_date <![CDATA[<=]]> #{endDate}
+	  	</if>
+		GROUP BY tag_id
+	</select>
+	
+	<!-- 태그모니터링 태그별 상세사용량 일별월별-->
+	<select id="selectTagUseDetailAmountForDay" parameterType="rawData" resultType="flkMap" >
+		 SELECT stat_hour
+		 		<foreach collection="tagValueArr" item="item" index="index">
+		  			, SUM(tag_#{index}) AS tag_#{index}
+		  		 </foreach>
+		   FROM(
+			SELECT 
+				<if test="term == 'daily'">
+			      CONCAT(SUBSTRING(stat_date,5,2),'/',RIGHT(stat_date,2)) AS stat_hour
+			    </if>
+			    <if test="term == 'monthly'">
+			      CASE WHEN RIGHT(stat_month,2) = '01' THEN CONCAT(LEFT(stat_month,4),'-',RIGHT(stat_month,2)) ELSE RIGHT(stat_month,2) END stat_hour
+			    </if>
+			     <foreach collection="tagValueArr" item="item" index="index">
+		  			, CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END tag_#{index}
+		  		 </foreach>
+			FROM tbl_stat_${term} a
+			WHERE tag_id IN
+			<foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+		  		#{item}
+		  	</foreach>
+		  	AND site_cd = #{siteCd}
+	  		 <if test="term == 'daily'">
+				<if test="startDate != null and startDate != ''">
+					AND stat_date <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stat_date <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+				</if>
+				ORDER BY stat_date,stat_hour
+			</if>
+			<if test="term == 'monthly'">
+				<if test="startDate != null and startDate != ''">
+					AND stat_month <![CDATA[>=]]> REPLACE(#{startDate}, '-', '') 
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stat_month <![CDATA[<=]]> REPLACE(#{endDate}, '-', '') 
+				</if>
+				ORDER BY stat_month,stat_hour
+			</if>
+			
+			)a 
+		 GROUP BY a.stat_hour
+	</select>
+	
+	<!-- 태그모니터링 태그별 상세사용량 시간별-->
+	<select id="selectTagUseDetailAmountForTime" parameterType="rawData" resultType="flkMap" >
+		 SELECT stat_hour
+		 		<foreach collection="tagValueArr" item="item" index="index">
+		  			, SUM(tag_#{index}) AS tag_#{index}
+		  		 </foreach>
+		   FROM(
+			SELECT 
+				 <if test="term == '1min' or term == '5min' or term == '15min'">
+			     	 CONCAT(SUBSTR(STR_TO_DATE(stats_time,'%Y%m%d'),1,10),' ',SUBSTR(stats_time,9,2),':',SUBSTR(stats_time,11,2)) AS stat_hour
+			     </if>
+			     <if test="term == 'hourly'">
+			     	 CONCAT(STR_TO_DATE(stats_time,'%Y%m%d'),' ',SUBSTR(stats_time,9,2),':00') AS stat_hour
+			     </if>
+			     <foreach collection="tagValueArr" item="item" index="index">
+			     	<if test="term == '1min'">
+			     	, CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END tag_#{index}
+			     	</if>
+			     	<if test="term == '5min' or term == '15min'">
+		  			, CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END tag_#{index}
+		  			</if>
+		  			<if test="term == 'hourly'">
+		  			, CASE WHEN tag_id = #{item} THEN ROUND(tag_value_avg,1) ELSE NULL END tag_#{index}
+		  			</if>
+		  		 </foreach>
+			FROM tbl_stat_${term}_${siteCd} a
+			WHERE tag_id IN
+			 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  			#{item}
+	  		 </foreach>
+	  		 <if test="term == '1min' or term == '5min' or term == '15min'">
+				<if test="startDate != null and startDate != ''">
+					AND stats_time <![CDATA[>=]]> #{startDate}
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stats_time <![CDATA[<=]]> #{endDate}
+				</if>
+			</if>
+			<if test="term == 'hourly'">
+				<if test="startDate != null and startDate != ''">
+					AND stats_time <![CDATA[>=]]> #{startDate}
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND stats_time <![CDATA[<=]]> #{endDate}
+				</if>
+			</if>
+			ORDER BY stats_time
+			)a 
+		 GROUP BY a.stat_hour
+	</select>
+	
+	<!-- 태그모니터링 태그별 상세사용량 실시간-->
+	<select id="selectTagUseDetailAmountForRealTime" parameterType="rawData" resultType="flkMap" >
+		
+		SELECT  DATE_FORMAT(stat_hour,'%Y-%m-%d %H:%i:%s') AS stat_hour
+		      <foreach collection="tagValueArr" item="item" index="index">
+		  		, SUM(tag_#{index}) AS tag_#{index}
+		  	  </foreach>
+		FROM(
+			SELECT  stat_date AS stat_hour
+				 <foreach collection="tagValueArr" item="item" index="index">
+				  , CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END tag_#{index}
+				 </foreach> 
+			FROM tbl_raw_data_${siteCd}
+		    WHERE tag_id IN
+			 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+	  			#{item}
+	  		 </foreach> 
+	  		<if test='realTimeType == "Y"'>
+			  	AND stat_date <![CDATA[<=]]> NOW()
+				AND stat_date <![CDATA[>=]]> ADDTIME(NOW(),'-00:10:00')
+		  	</if>
+		  	<if test='realTimeType == "N"'>
+		  		AND stat_date <![CDATA[<=]]> #{startDate}
+				AND stat_date <![CDATA[>=]]> #{endDate}
+		  	</if>
+		  	<!-- AND stat_date  <![CDATA[>=]]>  '2017-05-31 11:05:49'
+	  AND stat_date  <![CDATA[<=]]>  '2017-05-31 11:06:50' -->
+	  		)a
+	  GROUP BY a.stat_hour
+	</select>
+	
+	
+	<!-- tag_id 로 tag명 조회 -->
+	<select id="selectTagName" parameterType="rawData" resultType="flkMap">
+ 		 <foreach collection="tagValueArr" item="item" index="index" >
+  		 	<if test="index != 0">
+  		 		UNION ALL
+			</if>
+		  		 SELECT tag_desc 
+				  FROM TBL_TAG
+				 WHERE tag_id = #{item}
+				 AND site_cd =#{siteCd}
+  		 </foreach>
+	</select>
+	
+	<!-- tag 모니터링 실시간데이터 조회  -->
+	<select id="selectTagMonitoringForRealTime" parameterType="rawData" resultType="flkMap">
+		SELECT stat_hour
+			   <foreach collection="tagValueArr" item="item" index="index" >
+			   	  , tag_id_#{index}
+			 	  , SUM(tag_value_avg_#{index}) AS tag_value_avg_#{index}
+			 	  , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{item} AND site_cd = #{siteCd})) AS tag_unit_#{index}
+			   </foreach>
+			   <foreach collection="tagTypeValueArr" item="item" index="index">
+		       		, #{item} AS tag_type_#{index}
+		       </foreach>
+	    FROM ( 
+				SELECT  
+					  DATE_FORMAT(stat_date,'%H:%i:%s')AS stat_hour
+					  <foreach collection="tagValueArr" item="item" index="index" >
+					  	, (SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+						, CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END AS tag_value_avg_#{index}
+					  </foreach>
+				FROM tbl_raw_data_${siteCd}
+				WHERE tag_id IN 
+				 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+		  			#{item}
+		  		 </foreach>
+				AND stat_date <![CDATA[<=]]> NOW()
+				AND stat_date <![CDATA[>=]]> ADDTIME(NOW(),'-00:10:00')
+				<!-- AND stat_date  <![CDATA[>=]]>  '2017-05-31 11:05:49'
+			    AND stat_date  <![CDATA[<=]]>  '2017-05-31 11:06:50' -->
+			)a
+	  GROUP BY stat_hour
+	</select>
+	
+	<!-- tag 모니터링 기간선택 실시간데이터 조회 -->
+	<select id="selectTagMonitoringForRealTimeN" parameterType="rawData" resultType="flkMap">
+			SELECT stat_hour
+				   <foreach collection="tagValueArr" item="item" index="index" >
+				        , tag_id_#{index}
+				        , SUM(tag_value_avg_#{index}) AS tag_value_avg_#{index}
+				   	    , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{item} AND site_cd = #{siteCd})) AS tag_unit_#{index}
+				   </foreach>
+				   <foreach collection="tagTypeValueArr" item="item" index="index">
+			       		, #{item} AS tag_type_#{index}
+			       </foreach>
+		    FROM ( 
+					SELECT 
+						  DATE_FORMAT(stat_date,'%H:%i:%s')AS stat_hour
+						  <foreach collection="tagValueArr" item="item" index="index" >
+						 	 , (SELECT tag_desc FROM TBL_TAG WHERE tag_id = #{item} AND site_cd =#{siteCd})AS tag_id_#{index}
+							 , CASE WHEN tag_id = #{item} THEN ROUND(tag_value,1) ELSE NULL END AS tag_value_avg_#{index}
+						  </foreach>
+					FROM tbl_raw_data_${siteCd}
+					WHERE tag_id IN 
+						 <foreach collection="tagValueArr" item="item" index="index" open="(" separator="," close=")">
+				  			#{item}
+				  		 </foreach> 
+				AND stat_date <![CDATA[>=]]> #{startDate}
+				AND stat_date <![CDATA[<=]]> #{endDate}
+			)a
+	  GROUP BY stat_hour
+	</select>
+	
+	
+	<!-- 태그 정보 조회 -->
+	<select id="selectTagInfo" parameterType="rawData" resultType="rawData">
+		SELECT tag_id
+			   , tag_kind_cd
+		  FROM tbl_tag
+		 WHERE tag_id = #{tagId}
+		   AND site_cd = #{siteCd}
+		   AND use_flag = 'Y'
+	</select>
+	
+	
+	<!-- 트랜드모니터링 태그그룹리스트 조회  -->
+	<select id="selectTrendGroupList" parameterType="rawData" resultType="flkMap">
+	
+		SELECT tg_id, tg_name 
+		  FROM tbl_trend_group
+		WHERE site_id = #{siteId}
+	
+	</select>
+	
+	<!-- 트랜드모니터링 태그그룹선택에 따른 해당 태그리스트 조회 -->
+	<select id="selectTrendGroupTagList" parameterType="rawData" resultType="flkMap">
+		
+		SELECT ttg.tag_id, tc.code_name
+		FROM tbl_trend_group_tag ttg
+		   , tbl_tag tg
+		   , tbl_code tc
+		WHERE ttg.tg_id = #{tgId}
+		  AND ttg.tag_id = tg.tag_id
+		  AND tg.tag_kind_cd = tc.code_use_name
+		  AND tg.site_cd = #{siteCd}
+		   
+	</select>
+	
+	<!-- 비교모니터링 일별 조회 -->
+	<select id="selectCompareMonitoringDataForDay" parameterType="rawData" resultType="flkMap">
+		SELECT  a._day AS stat_hour
+		      , CONCAT(#{firstYear},'-',#{firstMonth}) AS tag_id_0
+		      , CONCAT(#{secondYear},'-',#{secondMonth}) AS tag_id_1
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE SUM(tag_value_avg_1) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_2)='' THEN NULL ELSE SUM(tag_value_avg_2) END AS tag_value_avg_1
+		      , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{tagId} AND site_cd = #{siteCd})) AS tag_unit_0
+		      , #{tagTypeName} AS tag_type_0		
+		FROM (	 
+			 SELECT 	
+				    RIGHT(tsd.stat_date,2) AS _day	
+				  , tt.tag_desc AS tag_id		
+				  , CASE WHEN SUBSTRING(tsd.stat_date,5,2) = #{firstMonth} AND SUBSTRING(tsd.stat_date,1,4) = #{firstYear} THEN ROUND(tsd.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+				  , CASE WHEN SUBSTRING(tsd.stat_date,5,2) = #{secondMonth}  AND SUBSTRING(tsd.stat_date,1,4) = #{secondYear} THEN ROUND(tsd.tag_value_avg,1) ELSE '' END AS tag_value_avg_2
+			FROM tbl_stat_daily tsd
+			   , tbl_tag tt
+			WHERE tsd.tag_id = #{tagId}
+			AND tsd.site_cd = #{siteCd}	
+			AND tsd.tag_id = tt.tag_id
+			AND tsd.site_cd = tt.site_cd
+		)a	
+		GROUP BY a._day
+	</select>
+	<!-- 비교모니터링 월별 조회 -->
+	<select id="selectCompareMonitoringDataForMonth" parameterType="rawData" resultType="flkMap">
+		SELECT  a._month AS stat_hour
+		      , a.tag_id
+		      , #{firstYear} AS tag_id_0
+		      , #{secondYear} AS tag_id_1
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE SUM(tag_value_avg_1) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_2)='' THEN NULL ELSE SUM(tag_value_avg_2) END AS tag_value_avg_1
+			  , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{tagId} AND site_cd = #{siteCd})) AS tag_unit_0
+		      , #{tagTypeName} AS tag_type_0
+		FROM (	 
+			 SELECT 	
+				  RIGHT(tsm.stat_month,2) AS _month	
+				  ,tsm.stat_month		  	 
+				, tt.tag_desc AS tag_id			 
+				, CASE WHEN SUBSTRING(tsm.stat_month,1,4) = #{firstYear}  THEN ROUND(tsm.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+				, CASE WHEN SUBSTRING(tsm.stat_month,1,4) = #{secondYear} THEN ROUND(tsm.tag_value_avg,1) ELSE '' END AS tag_value_avg_2
+			FROM tbl_stat_monthly tsm
+			   , tbl_tag tt
+			WHERE tsm.tag_id = #{tagId}
+			AND tsm.site_cd = #{siteCd}	
+			AND tsm.tag_id = tt.tag_id
+			AND tsm.site_cd = tt.site_cd
+		)a	
+		GROUP BY a._month
+	</select>
+	<!-- 비교모니터링 시간별 조회 -->
+	<select id="selectCompareMonitoringDataForHour" parameterType="rawData" resultType="flkMap">
+		SELECT  a.stat_hour AS stat_hour
+		      , a.tag_id
+		      , #{firstDate} AS tag_id_0
+		      , #{secondDate} AS tag_id_1
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE SUM(tag_value_avg_1) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_2)='' THEN NULL ELSE SUM(tag_value_avg_2) END AS tag_value_avg_1
+			  , (SELECT code_name FROM tbl_code WHERE code_use_name = (SELECT ai_unit_cd FROM tbl_tag WHERE tag_id = #{tagId} AND site_cd = #{siteCd})) AS tag_unit_0
+		      , #{tagTypeName} AS tag_type_0
+		FROM (	 
+			 SELECT 		
+				  SUBSTR(tsh.stats_time,9,2) AS stat_hour	  	 
+				, tt.tag_desc AS tag_id	
+				, CASE WHEN tsh.stats_time <![CDATA[>=]]> #{firstDate} and tsh.stats_time <![CDATA[<=]]> #{firstLastDate} THEN ROUND(tsh.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+				, CASE WHEN tsh.stats_time <![CDATA[>=]]> #{secondDate} and tsh.stats_time <![CDATA[<=]]> #{secondLastDate} THEN ROUND(tsh.tag_value_avg,1) ELSE '' END AS tag_value_avg_2
+			FROM tbl_stat_hourly_${siteCd} tsh
+			   , tbl_tag tt
+			WHERE tsh.tag_id = #{tagId}	
+			AND tsh.tag_id = tt.tag_id
+			AND tt.site_cd = #{siteCd}
+		)a	
+		GROUP BY a.stat_hour	 
+				
+	</select>
+	<!-- 비교모니터링 일별 TAG 사용량 -->
+	<select id="selectCompareUseAmountForDay" parameterType="rawData" resultType="rawData">
+		SELECT CONCAT(#{firstYear},'년',#{firstMonth},'월') AS tag_date 
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd =#{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_daily a
+		WHERE site_cd = #{siteCd} 
+		AND tag_id = #{tagId} 
+		AND stat_date LIKE CONCAT(#{firstDate},'%')
+		UNION ALL
+		SELECT  CONCAT(#{secondYear},'년',#{secondMonth},'월') AS tag_date
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd =#{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_daily a
+		WHERE site_cd = #{siteCd} 
+		AND tag_id = #{tagId} 
+		AND stat_date LIKE CONCAT(#{secondDate},'%')
+	</select>
+	
+	<!-- 비교모니터링 일별 TAG상세사용량 -->
+	<select id="selectCompareUseDetailAmountForDay" parameterType="rawData" resultType="flkMap">
+		SELECT  a._day AS stat_hour
+		      , CASE WHEN SUM(tag_value_avg_0)='' THEN NULL ELSE ROUND(SUM(tag_value_avg_0),1) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE ROUND(SUM(tag_value_avg_1),1) END AS tag_value_avg_1	
+		      , ROUND(SUM(tag_value_avg_1) - SUM(tag_value_avg_0),1) AS tag_value_avg_2
+		      , ROUND((SUM(tag_value_avg_1) - SUM(tag_value_avg_0))/SUM(tag_value_avg_1)*100,1) AS tag_value_avg_3
+		       	
+		FROM (	 
+			 SELECT 	
+				    RIGHT(tsd.stat_date,2) AS _day	
+				  , tt.tag_desc AS tag_id		
+				  , CASE WHEN SUBSTRING(tsd.stat_date,5,2) = #{firstMonth} AND SUBSTRING(tsd.stat_date,1,4) = #{firstYear} THEN ROUND(tsd.tag_value_avg,1) ELSE '' END AS tag_value_avg_0
+				  , CASE WHEN SUBSTRING(tsd.stat_date,5,2) = #{secondMonth}  AND SUBSTRING(tsd.stat_date,1,4) = #{secondYear} THEN ROUND(tsd.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+				  , tsd.stat_date
+			FROM tbl_stat_daily tsd
+			   , tbl_tag tt
+			WHERE tsd.tag_id = #{tagId}
+			AND tsd.site_cd = #{siteCd}	
+			AND tsd.tag_id = tt.tag_id
+			AND tsd.site_cd = tt.site_cd
+		)a	
+		GROUP BY a._day
+	</select>
+	
+	<!-- 비교모니터링 월별 TAG 사용량 -->
+	<select id="selectCompareUseAmountForMonth" parameterType="rawData" resultType="rawData">
+		SELECT CONCAT(#{firstYear},'년') AS tag_date 
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd = #{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_monthly a
+		WHERE site_cd =  #{siteCd}
+		AND tag_id = #{tagId}
+		AND stat_month LIKE CONCAT(#{firstYear},'%')
+		UNION ALL
+		SELECT  CONCAT(#{secondYear},'년') AS tag_date
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd = #{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_monthly a
+		WHERE site_cd = #{siteCd}
+		AND tag_id = #{tagId}
+		AND stat_month LIKE CONCAT(#{secondYear},'%')
+	</select>
+	<!-- 비교모니터링 월별 TAG상세사용량 -->
+	<select id="selectCompareUseDetailAmountForMonth" parameterType="rawData" resultType="flkMap">
+		SELECT  a._month AS stat_hour
+		      , CASE WHEN SUM(tag_value_avg_0)='' THEN NULL ELSE SUM(tag_value_avg_0) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE SUM(tag_value_avg_1) END AS tag_value_avg_1
+		      , ROUND(SUM(tag_value_avg_1) - SUM(tag_value_avg_0),1) AS tag_value_avg_2
+		      , ROUND((SUM(tag_value_avg_1) - SUM(tag_value_avg_0))/SUM(tag_value_avg_1)*100,1) AS tag_value_avg_3
+		FROM (	 
+			 SELECT 	
+				  RIGHT(tsm.stat_month,2) AS _month	
+				  ,tsm.stat_month		  	 
+				, tt.tag_desc AS tag_id			 
+				, CASE WHEN SUBSTRING(tsm.stat_month,1,4) = #{firstYear}  THEN ROUND(tsm.tag_value_avg,1) ELSE '' END AS tag_value_avg_0
+				, CASE WHEN SUBSTRING(tsm.stat_month,1,4) = #{secondYear} THEN ROUND(tsm.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+			FROM tbl_stat_monthly tsm
+			   , tbl_tag tt
+			WHERE tsm.tag_id = #{tagId}
+			AND tsm.site_cd = #{siteCd}	
+			AND tsm.tag_id = tt.tag_id
+			AND tsm.site_cd = tt.site_cd
+		)a	
+		GROUP BY a._month
+	</select>
+	
+	<!-- 비교모니터링 시간별 TAG 사용량 -->
+	<select id="selectCompareUseAmountForHour" parameterType="rawData" resultType="rawData">
+		SELECT  CONCAT(#{firstYear},'년',#{firstMonth},'월',#{firstDay},'일') AS tag_date 
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd = #{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_hourly_${siteCd} a
+		WHERE tag_id = #{tagId}	
+		AND stats_time <![CDATA[>=]]> #{firstDate} and stats_time <![CDATA[<=]]> #{firstLastDate}
+ 		UNION ALL
+		SELECT  CONCAT(#{secondYear},'년',#{secondMonth},'월',#{secondDay},'일') AS tag_date 
+		      ,(SELECT tag_desc FROM TBL_TAG b WHERE b.tag_id = a.tag_id AND site_cd = #{siteCd})AS tag_id
+		      , ROUND(MAX(tag_value_avg),1) AS max_tag_value
+		      , ROUND(MIN(tag_value_avg),1) AS min_tag_value
+		      , ROUND(AVG(tag_value_avg),1) AS avg_tag_value
+		FROM tbl_stat_hourly_${siteCd} a
+		WHERE tag_id = #{tagId}	
+		AND stats_time <![CDATA[>=]]> #{secondDate} and stats_time <![CDATA[<=]]> #{secondLastDate}
+	</select>
+	<!-- 비교모니터링 시간별 TAG상세사용량 -->
+	<select id="selectCompareUseDetailAmountForHour" parameterType="rawData" resultType="flkMap">
+		SELECT  a.stat_hour AS stat_hour
+		      , a.tag_id
+		      , CASE WHEN SUM(tag_value_avg_0)='' THEN NULL ELSE SUM(tag_value_avg_0) END AS tag_value_avg_0
+		      , CASE WHEN SUM(tag_value_avg_1)='' THEN NULL ELSE SUM(tag_value_avg_1) END AS tag_value_avg_1
+		      , ROUND(SUM(tag_value_avg_1) - SUM(tag_value_avg_0),1) AS tag_value_avg_2
+		      , ROUND((SUM(tag_value_avg_1) - SUM(tag_value_avg_0))/SUM(tag_value_avg_1)*100,1) AS tag_value_avg_3
+		FROM (	 
+			 SELECT 		
+				  SUBSTR(tsh.stats_time,9,2) as stat_hour	  	 
+				, tt.tag_desc AS tag_id	
+				, CASE WHEN tsh.stats_time <![CDATA[>=]]> #{firstDate} and tsh.stats_time <![CDATA[<=]]> #{firstLastDate} THEN ROUND(tsh.tag_value_avg,1) ELSE '' END AS tag_value_avg_0
+				, CASE WHEN tsh.stats_time <![CDATA[>=]]> #{secondDate} and tsh.stats_time <![CDATA[<=]]> #{secondLastDate} THEN ROUND(tsh.tag_value_avg,1) ELSE '' END AS tag_value_avg_1
+			FROM tbl_stat_hourly_${siteCd} tsh
+			   , tbl_tag tt
+			WHERE tsh.tag_id = #{tagId}	
+			AND tsh.tag_id = tt.tag_id
+			AND tt.site_cd = #{siteCd}	
+		)a	
+		GROUP BY a.stat_hour
+	</select>
+	
+	<!-- 지표모니터링 지표태그리스트 조회 -->
+	<select id="selectIndicatorTagList" parameterType="rawData" resultType="rawData">
+		<!-- SELECT anal_code,anal_name,stat_type FROM tbl_anal_info WHERE anal_code <![CDATA[<]]> 25 -->
+		SELECT anal_code,anal_name,stat_type FROM tbl_anal_info
+	</select>
+	
+	<!-- 지표모니터링 1분 데이터조회 -->
+	<select id="selectIndicatorMonitoringDataForMin" parameterType="rawData" resultType="FlkMap">
+		SELECT SUBSTR(stats_time,9,2),':',SUBSTR(stats_time,11,2) AS stat_hour
+			, ROUND(tag_value,1) AS anal_value
+			, b.anal_name AS tag_id
+			, c.code_name AS tag_unit
+		FROM tbl_stat_anal_1min_${siteCd} a
+		   , tbl_anal_info b
+		   , tbl_code c
+		WHERE a.anal_code = #{tagType}
+		AND a.anal_code = b.anal_code
+		AND b.ai_unit_cd = c.code_use_name
+		AND stats_time <![CDATA[>=]]> #{startDate}
+		AND stats_time <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 시간별 데이터 조회 -->
+	<select id="selectIndicatorMonitoringDataForHour" parameterType="rawData" resultType="FlkMap">
+		SELECT     CONCAT(SUBSTRING(stats_time,5,2),'/',SUBSTR(stats_time,7,2),' ',SUBSTR(stats_time,9,2)) AS stat_hour
+				, ROUND(anal_value,1) AS anal_value
+				, b.anal_name AS tag_id
+				, c.code_name AS tag_unit
+			FROM tbl_stat_anal_hourly a
+			   , tbl_anal_info b
+			   , tbl_code c
+			WHERE a.site_cd = #{siteCd}
+			AND a.anal_code = #{tagType}
+			AND a.anal_code = b.anal_code
+			AND b.ai_unit_cd = c.code_use_name
+			AND stats_time <![CDATA[>=]]> #{startDate}
+			AND stats_time <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 일별 데이터 조회 -->
+	<select id="selectIndicatorMonitoringDataForDay" parameterType="rawData" resultType="FlkMap">
+		SELECT CONCAT(SUBSTRING(stat_date,5,2),'/',RIGHT(stat_date,2)) AS stat_hour
+		     , ROUND(anal_value,1) AS anal_value
+		     , b.anal_name AS tag_id
+			 , c.code_name AS tag_unit
+		FROM tbl_stat_anal_daily a
+		   , tbl_anal_info b
+		   , tbl_code c
+		WHERE a.site_cd = #{siteCd}
+		AND a.anal_code = #{tagType}
+		AND a.anal_code = b.anal_code
+		AND b.ai_unit_cd = c.code_use_name
+		AND stat_date <![CDATA[>=]]> #{startDate}
+		AND stat_date <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 월별 데이터 조회 -->
+	<select id="selectIndicatorMonitoringDataForMonth" parameterType="rawData" resultType="FlkMap">
+		SELECT stat_month AS stat_hour
+		     , ROUND(anal_value,1) AS anal_value
+		     , b.anal_name AS tag_id
+			 , c.code_name AS tag_unit
+		FROM tbl_stat_anal_monthly a
+			, tbl_anal_info b
+           	, tbl_code c
+		WHERE site_cd = #{siteCd}
+		AND a.anal_code = #{tagType}
+		AND a.anal_code = b.anal_code
+		AND b.ai_unit_cd = c.code_use_name
+		AND stat_month <![CDATA[>=]]> #{startDate}
+		AND stat_month <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 TAG별 분별 사용량  -->
+	<select id="selectIndicatorUseAmountForMin" parameterType="rawData" resultType="rawData">
+		SELECT  (SELECT anal_name FROM tbl_anal_info b WHERE b.anal_code = a.anal_code AND anal_code =#{tagType})AS tag_id
+				, ROUND(MAX(tag_value),1) AS max_tag_value
+				, ROUND(MIN(tag_value),1) AS min_tag_value
+				, ROUND(AVG(tag_value),1) AS avg_tag_value
+			FROM tbl_stat_anal_1min_${siteCd} a
+			WHERE anal_code = #{tagType}
+			AND stats_time <![CDATA[>=]]> #{startDate}
+			AND stats_time <![CDATA[<]]>  #{endDate}
+			GROUP BY tag_id
+	</select>
+	<!-- 지표모니터링 TAG별 시간별 사용량  -->
+	<select id="selectIndicatorUseAmountForHour" parameterType="rawData" resultType="rawData">
+		SELECT    (SELECT anal_name FROM tbl_anal_info b WHERE b.anal_code = a.anal_code AND anal_code =#{tagType})AS tag_id
+				, ROUND(MAX(anal_value),1) AS max_tag_value
+				, ROUND(MIN(anal_value),1) AS min_tag_value
+				, ROUND(AVG(anal_value),1) AS avg_tag_value
+			FROM tbl_stat_anal_hourly a
+			WHERE site_cd = #{siteCd}
+			AND anal_code = #{tagType}
+			AND stats_time <![CDATA[>=]]> #{startDate}
+			AND stats_time <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 TAG별 일별 사용량  -->
+	<select id="selectIndicatorUseAmountForDay" parameterType="rawData" resultType="rawData">
+		SELECT 	 (SELECT anal_name FROM tbl_anal_info b WHERE b.anal_code = a.anal_code AND anal_code =#{tagType})AS tag_id
+				, ROUND(MAX(anal_value),1) AS max_tag_value
+				, ROUND(MIN(anal_value),1) AS min_tag_value
+				, ROUND(AVG(anal_value),1) AS avg_tag_value
+		FROM tbl_stat_anal_daily a
+		WHERE site_cd = #{siteCd}
+		AND anal_code = #{tagType}
+		AND stat_date <![CDATA[>=]]> #{startDate}
+		AND stat_date <![CDATA[<]]>  #{endDate}
+	</select>
+	<!-- 지표모니터링 TAG별 월별 사용량  -->
+	<select id="selectIndicatorUseAmountForMonth" parameterType="rawData" resultType="rawData">
+		SELECT (SELECT anal_name FROM tbl_anal_info b WHERE b.anal_code = a.anal_code AND anal_code =#{tagType})AS tag_id
+				, ROUND(MAX(anal_value),1) AS max_tag_value
+				, ROUND(MIN(anal_value),1) AS min_tag_value
+				, ROUND(AVG(anal_value),1) AS avg_tag_value
+		FROM tbl_stat_anal_monthly a
+		WHERE site_cd = #{siteCd}
+		AND anal_code = #{tagType}
+		AND stat_month <![CDATA[>=]]> #{startDate}
+		AND stat_month <![CDATA[<]]>  #{endDate}
+	</select>
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.system.code.mapper.CodeMapper">
+	
+	<!-- 코드목록조회 -->
+	<select id="selectCodeList" parameterType="Code" resultType="FlkMap">
+		/* CodeMapper.selectCodeList */
+		SELECT
+				CODE_ID
+			  , CODE_USE_NAME
+			  , CODE_DETAIL_DIVISION
+			  , CODE_NAME
+			  , CODE_CONTENT
+			  , PARENT_CODE_ID
+			  , SYSTEM_CODE_YN
+			  , USE_YN
+			  , SORT_NUM
+		FROM
+			TBL_CODE
+		WHERE
+			DELETE_YN = 'N'
+		AND USE_YN = 'Y'
+		<if test="parentCodeId != null and parentCodeId != ''">
+		AND	PARENT_CODE_ID = #{parentCodeId}
+		</if>
+		<if test="codeUseName != null and codeUseName != ''">
+		AND PARENT_CODE_ID = ( SELECT CODE_ID FROM TBL_CODE WHERE CODE_USE_NAME = #{codeUseName} )
+		</if>
+		<if test="codeDetailDivision != null and codeDetailDivision != '' ">
+		AND CODE_DETAIL_DIVISION LIKE CONCAT('%', #{codeDetailDivision}, '%')
+		</if>
+		ORDER BY SORT_NUM
+	</select>
+	
+	<!-- 코드삭제 -->
+	<update id="deleteCode" parameterType="Code">
+		/* CodeMapper.deleteCode */
+		<![CDATA[
+		UPDATE TBL_CODE
+		SET	DELETE_YN = 'Y'
+		  , USE_YN = 'N'
+		  , UPDATE_ID = #{updateId}
+		  , UPDATE_DATE = NOW()
+		WHERE CODE_ID = #{codeId}
+		]]>
+	</update>
+	
+	<!-- 코드리스트조회 connectBy -->
+	<select id="selectCodeListConnectBy" parameterType="Code" resultType="FlkMap">
+		/* CodeMapper.selectCodeListConnectBy */
+		SELECT 
+				CODE_ID
+			  , CODE_USE_NAME
+			  , CODE_DETAIL_DIVISION
+			  , CODE_NAME
+			  , CODE_CONTENT
+			  , SORT_NUM
+			  , PARENT_CODE_ID 
+			  , SYSTEM_CODE_YN
+			  , USE_YN
+			  , func.level
+		FROM
+			( 
+				SELECT fn_code_connect_by() AS id , @level AS level, @ROWNUM := @ROWNUM + 1 AS ROWNUM
+				FROM
+					( SELECT @start_with:=#{parentCodeId}, @id:=@start_with, @level:=0, @ROWNUM := 0 ) vars join TBL_CODE
+				WHERE @id IS NOT NULL
+			) func JOIN TBL_CODE d ON func.id = d.CODE_ID
+		WHERE DELETE_YN = 'N'
+		ORDER BY ROWNUM ASC
+	</select>
+	
+	<!-- 코드등록 -->
+	<insert id="insertCode" parameterType="Code">
+		/* CodeMapper.insertCode */
+		<![CDATA[
+		INSERT INTO TBL_CODE 
+			( 
+			    CODE_ID
+			  , CODE_USE_NAME
+			  , CODE_DETAIL_DIVISION
+			  , CODE_NAME
+			  , CODE_CONTENT
+			  , SORT_NUM
+			  , SYSTEM_CODE_YN
+			  , USE_YN
+			  , DELETE_YN
+			  , REG_DATE
+			  , UPDATE_DATE
+			  , REG_ID
+			  , UPDATE_ID
+			  , PARENT_CODE_ID
+			)
+		VALUES
+			( 
+			    #{codeId}
+			  , IF(#{codeUseName} IS NULL or #{codeUseName} = '', #{codeId}, #{codeUseName})
+			  , #{codeDetailDivision}
+			  , #{codeName}
+			  , #{codeContent}
+			  , #{sortNum}
+			  , #{systemCodeYn}
+			  , #{useYn}
+			  , 'N'
+			  , NOW()
+			  , NOW()
+			  , #{regId}
+			  , #{regId}
+			  , #{parentCodeId}
+			)
+		]]>
+	</insert>
+	
+	<!-- 코드수정 -->
+	<update id="updateCode" parameterType="Code">
+		/* CodeMapper.updateCode */
+		<![CDATA[
+		UPDATE 
+			TBL_CODE
+		SET 
+		    SORT_NUM = #{sortNum}
+		  , CODE_USE_NAME = #{codeUseName}
+		  , CODE_DETAIL_DIVISION = #{codeDetailDivision}
+		  , CODE_NAME = #{codeName}
+		  , CODE_CONTENT = #{codeContent}
+		  , SYSTEM_CODE_YN = #{systemCodeYn}
+		  , USE_YN = #{useYn}
+		  , UPDATE_DATE = NOW()
+		  , UPDATE_ID = #{updateId}
+		WHERE 
+			CODE_ID=#{codeId}
+		]]>
+	</update>
+	
+	<!-- 코드순서변경 -->
+	<update id="updateCodeOrder" parameterType="Code">
+		/* CodeMapper.updateCodeOrder */
+		UPDATE TBL_CODE
+		SET     SORT_NUM      = #{sortNum}		/* 정렬 번호 */
+		<if test="parentCodeId != null and parentCodeId != ''">
+			  , PARENT_CODE_ID = #{parentCodeId}		/* 부모코드 아이디 */
+		</if>
+			  , UPDATE_ID        = #{updateId}		/* 수정 아이디 */
+			  , UPDATE_DATE        = NOW()			/* 수정 일시 */
+		WHERE	CODE_ID         = #{codeId}
+	</update>
+	
+	<!--  기존데이터순서가 틀릴 경우 순서 자동 변경 -->
+	<update id="updateCodeOrderAuto">
+		/* CodeMapper.updateCodeOrderAuto */
+		<![CDATA[
+		UPDATE TBL_CODE A INNER JOIN 
+		(
+			SELECT CODE_ID , @RANK := @RANK + 1 AS RANK  FROM 
+			TBL_CODE A , ( SELECT @RANK := 0  ) B 
+			WHERE PARENT_CODE_ID = #{parentCodeId}
+			ORDER BY SORT_NUM , UPDATE_DATE DESC
+		) B ON A.CODE_ID = B.CODE_ID
+		SET A.SORT_NUM = B.RANK
+		]]>
+	</update>
+	
+	<!-- 코드상세 -->
+	<select id="selectCodeDetail" parameterType="Code" resultType="FlkMap">
+		/* CodeMapper.selectCodeDetail */
+		SELECT
+			    CODE_ID
+			  , CODE_USE_NAME
+			  , CODE_DETAIL_DIVISION
+			  , CODE_NAME
+			  , CODE_CONTENT
+			  , PARENT_CODE_ID
+			  , SYSTEM_CODE_YN
+			  , USE_YN
+			  , SORT_NUM
+		FROM
+			TBL_CODE
+		<where>
+			AND DELETE_YN = 'N'
+			AND USE_YN = 'Y'
+		<if test="codeUseName != null and codeUseName != ''">
+			AND CODE_USE_NAME = #{codeUseName}
+		</if>
+		</where>
+		LIMIT 1
+	</select>
+</mapper>

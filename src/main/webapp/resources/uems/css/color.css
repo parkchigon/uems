@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+.header_container{background:#6789ca;}
+.gnb_wrap ul{background:#6789ca;}
+.gnb_wrap li a{color:#ecf2f7;}
+.gnb_wrap li a:hover,
+.gnb_wrap li a.on {border-bottom:3px solid #1f4182; color:#fff;}
+
+.location_wrap strong {color:#6789ca;}
+
+.body_container .inner_content {background:#f1f1f1; }
+.left_content{border-top:0px;}
+.lnb_wrap .tit {color:#2f2f2f;}
+
+.lnb_wrap > ul {border-top: 1px solid #dcdcdc;} 
+.lnb_wrap > ul > li {border-bottom: 1px solid #dcdcdc;} 
+.lnb_wrap > ul > li > a {background:rgba(236, 242, 247, 0.4);} 
+.lnb_wrap > ul > li > ul > li > a {background: rgba(236, 242, 247, 0.7); } 
+.lnb_wrap > ul > li > ul > li.on a {background: #ecf2f7;} 
+.lnb_wrap > ul > li > ul > li > ul >li.on a {background: #ecf2f7;} 
+.lnb_wrap > ul > li > ul li ul { background: #ecf2f7;} 
+.lnb_wrap > ul > li > ul li li a {background: #ecf2f7;} 
+
+.btn_type02 a {background:#6789ca; color:#fff;}
+.tab_wrap {position:relative; height:35px; margin:10px 0; border-bottom:1px solid #6789ca; }
+.tab_wrap li.on {border:1px solid #6789ca; border-bottom:0px;}
+.tab_wrap li.on a {color:#6789ca; font-weight:bold;}
+
+.userlogin_form .detail .btn_login{background:#6789ca;}
+
+.search_form_wrap {border-top:2px solid #6789ca;}
+.table_wrap{border-top:2px solid #6789ca;}

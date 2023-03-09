@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.miniDiagram.mapper.MiniDiagramMapper">
+ 
+ 	<!-- 미니계통도 관리 조회 -->
+	<select id="selectMiniDiagramList" parameterType="MiniDiagram" resultType="flkMap">
+		/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.selectMiniDiagramList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+		SELECT 
+			ROW_NUMBER() OVER (ORDER BY S.SITE_CD ASC) AS RNUM,
+			S.SG_NAME,
+			S.SITE_NAME,
+			S.SITE_ID,
+			S.SITE_CD,
+			IFNULL((SELECT MNG_NAME FROM TBL_MNG WHERE MNG_ID = C.UPDATE_ID), '-') AS UPDATE_ID,
+			IFNULL(C.UPDATE_DATE, '-') AS UPDATE_DATE,
+			C.TEMPLATE_ID,
+			IFNULL(C.TEMPLATE_TYPE, '-') AS TEMPLATE_TYPE,
+			C.TEMPLATE_DESC
+		FROM (
+		SELECT 
+					TTSS.TEMPLATE_ID,
+					TSG.SG_NAME,
+					TS.SITE_ID,
+					TS.SITE_CD,
+					TS.SITE_NAME
+		FROM 		
+			TBL_SITE TS	LEFT OUTER JOIN TBL_TOC_SYSTEM_SITE TTSS
+			 ON TS.SITE_ID = TTSS.SITE_ID,
+			TBL_SITE_GROUP TSG			
+		WHERE 
+			TS.SG_ID = TSG.SG_ID 
+		AND 
+			TS.USE_FLAG = 'Y' 		
+			) S
+		LEFT OUTER JOIN (			
+				SELECT 
+					T.TEMPLATE_ID,
+					TTST.TEMPLATE_TYPE,
+					TTST.TEMPLATE_DESC,
+					T.UPDATE_ID,
+					T.UPDATE_DATE
+				FROM 
+					TBL_TOC_SYSTEM_TEMPLATE TTST
+				LEFT OUTER JOIN (		
+						SELECT 
+							UPDATE_ID,
+							UPDATE_DATE,
+							TEMPLATE_ID
+						FROM 
+							TBL_TOC_SYSTEM_TAG_MAPPING
+					) T ON TTST.TEMPLATE_ID = T.TEMPLATE_ID	
+					GROUP BY T.TEMPLATE_ID
+		) C ON S.TEMPLATE_ID = C.TEMPLATE_ID	
+		WHERE 1=1 
+		<if test="!@org.springframework.util.StringUtils@isEmpty(searchCondition2)">
+	    	AND S.SITE_ID = #{searchCondition2}
+	    </if>	
+		ORDER BY S.SITE_CD ASC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />	
+	</select>
+	
+	<!-- 미니 계통도 컴퍼넌트 조회 -->
+	<select id="selectComponentNameList" parameterType="MiniDiagram" resultType="flkMap">
+		/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.selectComponentNameList */
+		SELECT 
+			TST.TEMPLATE_ID
+			,TST.TEMPLATE_TYPE
+			,TST.TEMPLATE_FILE_PATH
+			,TST.THUMNAIL_FILE_PATH
+			,TST.TEMPLATE_DESC
+			,TST.USE_FLAG
+			,TSTC.GROUP_ID
+			,TSTC.COMPONENT_ID
+			,TSTC.COMPONENT_NAME
+			,TSTC.GROUP_NAME
+			,TSTC.VIEW_NO
+			,TSTC.TAG_TYPE_CD
+		FROM 
+			TBL_TOC_SYSTEM_TEMPLATE TST INNER JOIN TBL_TOC_SYSTEM_TEMPLATE_COMPONENT TSTC ON TST.TEMPLATE_ID = TSTC.TEMPLATE_ID
+		WHERE
+			TST.TEMPLATE_ID = #{templateId}
+		ORDER BY TSTC.VIEW_NO		
+	</select>
+	
+	<!-- 태그 리스트 조회 -->
+ 	<select id="selectTagList" parameterType="Tag" resultType="FlkMap">
+		/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.selectTagList */
+		SELECT site_cd
+			   , tag_id
+			   , tag_type_cd
+			   , IFNULL((SELECT code_name FROM tbl_code WHERE code_use_name = tag_type_cd), '') AS tag_type_cd_name
+			   , tag_kind_cd
+			   , tag_desc
+			   , tag_conn_type_cd
+			   , IFNULL(i_plcscan_address, '') AS i_plcscan_address
+			   , i_scan_time
+			   , ai_memtype_cd
+			   , ai_unit_cd
+			   , ai_display_format
+			   , ai_calc_filter_cd
+			   , a_convert_base
+			   , a_convert_full
+			   , a_convert_plcbase
+			   , a_convert_plcfull
+			   , ai_calc_script
+			   , a_cutover_value_cd
+			   , d_on_description
+			   , d_off_description
+			   , i_alarm_use_flag
+			   , ai_alarm_high
+			   , ai_alarm_low
+			   , ai_alarm_type_cd
+			   , di_alarm_type_cd
+			   , i_alarm_img_cd
+			   , i_alarm_wav_cd
+			   , ai_alarm_protect_percent
+			   , ai_alarm_protect_second
+			   , i_alarm_priority_cd
+			   , i_data_save_flag
+			   , i_output_use_flag
+			   , IFNULL(o_plcscan_station, '') AS o_plcscan_station
+			   , IFNULL(o_plcscan_address, '') AS o_plcscan_address
+			   , IFNULL(o_plcscan_extra1, '') AS o_plcscan_extra1
+			   , o_plcscan_extra2
+			   , ao_calc_filter_cd
+			   , ao_calc_script
+			   , do_relay_type_cd
+			   , do_relay_pulse_sec
+			   , do_delay_on_sec
+			   , do_delay_off_sec
+			   , use_flag
+			   , update_id
+			   , update_date
+			   , reg_id
+			   , reg_date
+		  FROM tbl_tag
+		 WHERE site_cd = #{siteCd}
+		 AND use_flag = 'Y'
+ 	</select>
+ 	
+	<!-- 태그 매핑 조회 -->
+	<select id="selectSystemTagMapping" parameterType="MiniDiagram" resultType="FlkMap">
+	/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.selectSystemTagMapping */
+		SELECT 
+				SITE_ID
+			   , TEMPLATE_ID
+			   , GROUP_ID
+			   , COMPONENT_ID
+			   , TAG_ID
+			   , SET_FLAG
+			   , UPDATE_ID
+			   , UPDATE_DATE
+			   , REG_ID
+			   , REG_DATE
+		  FROM TBL_TOC_SYSTEM_TAG_MAPPING
+		 WHERE SITE_ID = #{siteId}
+		   AND TEMPLATE_ID = #{templateId}
+		   AND SET_FLAG = 'Y' 
+	</select>
+	
+	<!-- 미니계통도 기존 태그 삭제 -->
+	<delete id="deleteMiniDiagramTagMapping" parameterType = "MiniDiagram">
+	/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.deleteMiniDiagramTagMapping */
+		DELETE FROM TBL_TOC_SYSTEM_TAG_MAPPING
+		WHERE SITE_ID = #{siteId}
+	</delete>
+	
+	<!-- 미니계통도 태그 매핑 -->
+	<insert id="insertMiniDiagramTagMapping" parameterType="MiniDiagram">
+	/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.insertMiniDiagramTagMapping */
+		INSERT INTO TBL_TOC_SYSTEM_TAG_MAPPING	(
+			SITE_ID
+			, TEMPLATE_ID
+			, GROUP_ID
+			, COMPONENT_ID
+			, TAG_ID
+			, SET_FLAG
+			, UPDATE_ID
+			, UPDATE_DATE
+			, REG_ID
+			, REG_DATE
+			)
+		VALUES 
+		<foreach collection="mappingList" item="item" index="index" open="(" separator="),(" close=")">
+			#{item.siteId}
+			, #{item.templateId}
+			, #{item.groupId}
+			, #{item.componentId}
+			, #{item.tagId}
+			, #{item.setFlag}
+			, #{item.updateId}
+			, now()
+			, #{item.regId}
+			, now()
+		</foreach>		
+	</insert>
+	
+	<!-- 미니계통도 매핑 사이트 정보 업데이트 -->
+	<insert id="insertMiniDiagramSystemSite" parameterType="MiniDiagram">
+	/* com.flk.mng.miniDiagram.mapper.MiniDiagramMapper.insertMiniDiagramSystemSite */
+		INSERT INTO TBL_TOC_SYSTEM_SITE	(
+			SITE_ID
+			, TEMPLATE_ID
+			, REG_ID
+			, REG_DATE
+			)
+		VALUES 
+		(
+			#{siteId}
+			, #{templateId}
+			, #{regId}
+			, now() 
+		)	
+		ON DUPLICATE KEY
+		UPDATE 
+			SITE_ID     = #{siteId},
+			TEMPLATE_ID = #{templateId}
+	</insert>
+	
+</mapper>

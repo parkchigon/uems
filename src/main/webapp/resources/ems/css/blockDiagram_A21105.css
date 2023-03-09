@@ -1,0 +1,166 @@
+@charset "utf-8";
+
+/* Block Diagram
+.blockDiagram_area::BEFORE	{position:absolute;top:0px;left:0px;content:"";width:100%;height:100%;background: url(/resources/ems/images/temp/ems_A11205.png) 0 0 no-repeat;opacity:0.2; }
+ */
+
+/* HW */
+.coolingtower.no1 {top:40px;left:166px;}
+.coolingtower.no2 {top:40px;left:250px;}
+.coolingtower .one_inner {margin-top:25px !important;}
+
+.hw .coolpump.No1 {top:221px;left:425px;}
+.hw .coolpump_area .text_info {top:234px;left:372px;}
+
+.pipe_hw_ud.pipe001 {height: 303px;top:68px;left:46px;}
+.pipe_hw_ud.pipe002 {height: 93px;top:68px;left:289px;}
+.pipe_hw_ud.pipe003 {height: 203px;top:170px;left:436px;}
+.pipe_hw_ud.pipe003 em {top:75% !important;}
+.pipe_hw_ud.pipe004 {height: 93px;top:68px;left:208px;}
+
+.pipe_hw_lr.pipe001 {width: 125px;top:61px;left:55px;}
+.pipe_hw_lr.pipe002 {width: 135px;top:164px;left:298px;}
+.pipe_hw_lr.pipe003 {width: 380px;top:373px;left:55px;}
+.pipe_hw_lr.pipe003 em {left:75% !important;}
+.pipe_hw_lr.pipe004 {width: 70px;top:164px;left:218px;}
+
+.pipe_hw_corner_dl.corner001 {top:365px;left:429px;}
+
+.pipe_hw_corner_dr.corner001 {top:156px;left:207px;}
+.pipe_hw_corner_dr.corner002 {top:365px;left:45px;}
+.pipe_hw_corner_dr.corner003 {top:365px;left:45px;}
+
+.pipe_hw_corner_ul.corner001 {top:163px;left:429px;}
+
+.pipe_hw_corner_ur.corner001 {top:60px;left:45px;}
+
+.pipe_hw_t_lru.corner001 {top:156px;left:282px;}
+
+.hw .sensor_u_temperature.sensor001 {top:358px;left:80px;}
+.hw .sensor_u_temperature.sensor002 {top:358px;left:262px;}
+.hw .sensor_u_temperature.sensor001 em,
+.hw .sensor_u_temperature.sensor002 em {bottom:15px;left:50%;margin-left:-50px;text-align: center;}
+	
+/* CHW */
+.pipe_chw_ud.pipe001 {height: 362px;top:395px;left:46px;}
+.pipe_chw_ud.pipe002 {height: 48px;top:395px;left:307px;}
+.pipe_chw_ud.pipe003 {height: 30px;top:450px;left:307px;}
+.pipe_chw_ud.pipe004 {height: 30px;top:450px;left:463px;}
+.pipe_chw_ud.pipe005 {height: 308px;top:450px;left:562px;}
+.pipe_chw_ud.pipe006 {height: 33px;top:726px;left:720px;}
+.pipe_chw_ud.pipe007 {height: 33px;top:726px;left:878px;}
+.pipe_chw_ud.pipe008 {height: 112px;top:451px;left:940px;}
+.pipe_chw_ud.pipe009 {height: 126px;top:631px;left:940px;}
+
+.pipe_chw_lr.pipe001 {width: 253px;top:386px;left:55px;}
+.pipe_chw_lr.pipe002 {width: 150px;top:443px;left:313px;}
+.pipe_chw_lr.pipe003 {width: 93px;top:443px;left:470px;}
+.pipe_chw_lr.pipe004 {width: 367px;top:443px;left:573px;}
+.pipe_chw_lr.pipe005 {width: 145px;top:484px;left:313px;}
+.pipe_chw_lr.pipe006 {width: 507px;top:759px;left:55px;}
+.pipe_chw_lr.pipe007 {width: 150px;top:759px;left:570px;}
+.pipe_chw_lr.pipe008 {width: 150px;top:720px;left:727px;}
+.pipe_chw_lr.pipe009 {width: 150px;top:759px;left:727px;}
+.pipe_chw_lr.pipe010 {width: 53px;top:759px;left:883px;}
+.pipe_chw_lr.pipe011 {width: 63px;top:562px;left:948px;}
+.pipe_chw_lr.pipe012 {width: 63px;top:624px;left:948px;}
+
+.pipe_chw_corner_dl.corner001 {top:476px;left:456px;}
+.pipe_chw_corner_dl.corner002 {top:751px;left:933px;}
+
+.pipe_chw_corner_dr.corner001 {top:476px;left:306px;}
+.pipe_chw_corner_dr.corner002 {top:751px;left:45px;}
+.pipe_chw_corner_dr.corner003 {top:554px;left:939px;}
+
+.pipe_chw_corner_ul.corner001 {top:385px;left:300px;}
+.pipe_chw_corner_ul.corner002 {top:442px;left:933px;}
+.pipe_chw_corner_ul.corner003 {top:719px;left:871px;}
+
+.pipe_chw_corner_ur.corner001 {top:385px;left:45px;}
+.pipe_chw_corner_ur.corner002 {top:719px;left:720px;}
+.pipe_chw_corner_ur.corner003 {top:623px;left:939px;}
+
+.pipe_chw_t_udr.corner001 {top:436px;left:306px;}
+
+.pipe_chw_t_lru.corner001 {top:751px;left:555px;}
+.pipe_chw_t_lru.corner002 {top:751px;left:713px;}
+.pipe_chw_t_lru.corner003 {top:751px;left:871px;}
+
+.pipe_chw_t_lrd.corner001 {top:442px;left:456px;}
+.pipe_chw_t_lrd.corner002 {top:442px;left:555px;}
+
+.chw .sensor_d_temperature.sensor001 {top:393px;left:80px;}
+.chw .sensor_d_temperature.sensor002 {top:393px;left:262px;}
+.chw .sensor_d_temperature.sensor001 em,
+.chw .sensor_d_temperature.sensor002 em {top:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.chw .sensor_r_temperature.sensor001 {top:470px;left:570px;}
+.chw .sensor_r_temperature.sensor002 {top:720px;left:570px;}
+.chw .sensor_r_temperature.sensor001 em,
+.chw .sensor_r_temperature.sensor002 em {top:0px;left:20px;text-align: left;}
+
+.chw .sensor_l_temperature.sensor001 {top:540px;left:925px;}
+.chw .sensor_l_temperature.sensor002 {top:640px;left:925px;}
+.chw .sensor_l_temperature.sensor001 em,
+.chw .sensor_l_temperature.sensor002 em {top:0px;right:20px;text-align: right;}
+
+.chw .symbol.No1 {top:421px;left:836px;}
+.chw .symbol.No2 {top:737px;left:408px;}
+
+.chw .vv-016k {top:367px;left:690px;}
+.chw .vv-016k .icon_direct {top:35px;left:-40px;}
+
+.chw .heat_storaging_tank {top:497px;left:496px;height:200px;}
+
+.centrifugal {top:337px;left:115px;}
+.centrifugal .power.no1 {top:40px;left:10px;}
+.centrifugal .power.no2 {top:40px;left:67px;}
+.centrifugal .icon_direct.no1 {top:5px;left:10px;}
+.centrifugal .icon_direct.no2 {top:5px;left:67px;}
+.centrifugal .text.no1 {bottom:-5px;left:10px;}
+.centrifugal .text.no2 {bottom:-5px;left:67px;}
+.centrifugal_area .text_info {top:424px;left:155px;}
+
+.chw .coolpump.No1 {top:432px;left:360px;}
+.chw .coolpump.No2 {top:473px;left:360px;}
+.chw .coolpump_area .text_info.no1 {top:407px;left:386px;width: 120px;margin-left:-60px;text-align: center;}
+.chw .coolpump_area .text_info.no2 {top:511px;left:358px;}
+
+.chw .coolpump.No3 {top:708px;left:771px;}
+.chw .coolpump.No4 {top:748px;left:771px;}
+.chw .coolpump_area .text_info.no3 {top:682px;left:805px;width: 120px;margin-left:-60px;text-align: center;}
+.chw .coolpump_area .text_info.no4 {top:786px;left:773px;}
+	
+
+/* GLYCOL */
+.glycol .hx_plate_v {top:522px;left:983px;}
+
+.pipe_glycol_ud.pipe001 {height: 300px;top:260px;left:1133px;}
+.pipe_glycol_ud.pipe001 em {top:170px !important;left:-19px !important;}
+.pipe_glycol_ud.pipe002 {height: 495px;top:127px;left:1160px;}
+.pipe_glycol_ud.pipe002 em {top:303px !important;}
+
+.pipe_glycol_lr.pipe001 {width: 360px;top:119px;left:795px;}
+.pipe_glycol_lr.pipe001 em {left:100px !important;}
+.pipe_glycol_lr.pipe002 {width: 337px;top:249px;left:795px;}
+.pipe_glycol_lr.pipe002 em {bottom:-19px !important;left:100px !important;}
+.pipe_glycol_lr.pipe003 {width: 87px;top:562px;left:1046px;}
+.pipe_glycol_lr.pipe004 {width: 113px;top:624px;left:1046px;}
+
+.pipe_glycol_corner_ul.corner001 {top:248px;left:1126px;}
+.pipe_glycol_corner_ul.corner002 {top:118px;left:1153px;}
+.pipe_glycol_corner_dl.corner001 {top:554px;left:1126px;}
+.pipe_glycol_corner_dl.corner002 {top:616px;left:1153px;}
+
+.glycol .sensor_u_temperature.sensor001 {top:546px;left:1075px;}
+.glycol .sensor_u_temperature.sensor001 em {bottom:15px;left:50%;margin-left:-50px;text-align: center;}
+.glycol .sensor_d_temperature.sensor002 {top:631px;left:1075px;}
+.glycol .sensor_d_temperature.sensor002 em {top:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.glycol  .coolpump {top:238px;left:952px;}
+.glycol .coolpump_area .text_info {top:214px;left:950px;}
+
+.glycol .header.No1 {top:58px;left:757px;}
+.glycol .header.No2 {top:192px;left:757px;}
+
+

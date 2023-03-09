@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.HeatExcMapper">
+	
+	<!--열교환기 리스트조회  -->
+	<select id ="selectHeatExcList" parameterType="HeatExc" resultType="flkMap">
+	/*HeatExcMapper.selectHeatExcList*/
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY FHM.REG_DATE DESC) AS RNUM
+				,FHM.FHM_ID
+				,FHM.SITE_ID
+				,FHM.HEATEXC_NAME
+				,FHM.MODEL_NO
+				,FHM.FORM
+				,S.SG_ID
+				,S.SITE_DESC
+				,FHM.REG_DATE	
+			FROM TBL_FACILITY_HEATEXC_MASTER FHM INNER JOIN TBL_SITE S
+			ON FHM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FHM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FHM.HEATEXC_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FHM.FORM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FHM.MODEL_NO LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    AND FHM.USE_FLAG = 'Y'
+		    ORDER BY FHM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!--열교환기 상세정보  -->
+	<select id ="selectHeatExcInfo" parameterType="HeatExc" resultType="flkMap">
+	/*HeatExcMapper.selectHeatExcInfo*/
+		SELECT
+	  	   FHM.FHM_ID
+			,FHM.SITE_ID
+			,FHM.HEATEXC_NAME
+			,FHM.ADDRESS
+			,FHM.PHONE
+			,FHM.TEST_RUN_DATE	
+			,DATE_FORMAT(FHM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FHM.POWER_SUPPLY
+			,FHM.FORM
+			,FHM.MODEL_NO
+			,FHM.SALES_INFO
+			,FHM.AS_INFO
+			,FHM.VOLUMN_CW
+			,FHM.VOLUMN_BI
+			,FHM.HEATAREA_CW
+			,FHM.HEATAREA_BI
+			,FHM.TEMP_CW_1
+			,FHM.TEMP_CW_2
+			,FHM.TEMP_BI_1
+			,FHM.TEMP_BI_2
+			,FHM.PLATE_THICKNESS
+			,FHM.PLATE_COUNT
+			,FHM.FLOW_CW_1
+			,FHM.FLOW_CW_2
+			,FHM.FLOW_BI_1
+			,FHM.FLOW_BI_2
+			,FHM.PLATE_MATERIAL
+			,FHM.PLATE_TYPE
+			,FHM.FLUID_CW_MATERIAL
+			,FHM.FLUID_CW_PERCENT
+			,FHM.FLUID_BI_MATERIAL
+			,FHM.FLUID_BI_PERCENT
+			,FHM.LMTD
+			,FHM.LOSS_CW
+			,FHM.LOSS_BI
+			,FHM.GASKET
+			,FHM.WEIGHT_CW_NAME
+			,FHM.WEIGHT_CW_VOL
+			,FHM.WEIGHT_BI_NAME
+			,FHM.WEIGHT_BI_VOL
+			,FHM.SIZE_W  
+			,FHM.SIZE_L
+			,FHM.SIZE_H
+			,FHM.PRESS_CW
+			,FHM.PRESS_BI
+			,FHM.PIPE_DIAM_CW
+			,FHM.PIPE_DIAM_BI
+			,S.SG_ID
+		FROM TBL_FACILITY_HEATEXC_MASTER FHM INNER JOIN TBL_SITE S
+		ON FHM.SITE_ID = S.SITE_ID
+		WHERE FHM_ID = #{fhmId}
+	</select>
+	
+	<!--열교환기 정보등록  -->
+	<insert id="insertHeatExcInfo" parameterType="HeatExc" useGeneratedKeys="true" keyProperty="fhmId">
+	/*HeatExcMapper.insertHeatExcInfo*/
+		INSERT INTO TBL_FACILITY_HEATEXC_MASTER
+		(
+			SITE_ID
+			,HEATEXC_NAME
+			,ADDRESS
+			,PHONE
+			,TEST_RUN_DATE	
+			,POWER_SUPPLY
+			,FORM
+			,MODEL_NO
+			,SALES_INFO
+			,AS_INFO
+			,VOLUMN_CW
+			,VOLUMN_BI
+			,HEATAREA_CW
+			,HEATAREA_BI
+			,TEMP_CW_1
+			,TEMP_CW_2
+			,TEMP_BI_1
+			,TEMP_BI_2
+			,PLATE_THICKNESS
+			,PLATE_COUNT
+			,FLOW_CW_1
+			,FLOW_CW_2
+			,FLOW_BI_1
+			,FLOW_BI_2
+			,PLATE_MATERIAL
+			,PLATE_TYPE
+			,FLUID_CW_MATERIAL
+			,FLUID_CW_PERCENT
+			,FLUID_BI_MATERIAL
+			,FLUID_BI_PERCENT
+			,LMTD
+			,LOSS_CW
+			,LOSS_BI
+			,GASKET
+			,WEIGHT_CW_NAME
+			,WEIGHT_CW_VOL
+			,WEIGHT_BI_NAME
+			,WEIGHT_BI_VOL
+			,SIZE_W  
+			,SIZE_L 
+			,SIZE_H
+			,PRESS_CW
+			,PRESS_BI
+			,PIPE_DIAM_CW
+			,PIPE_DIAM_BI
+			,REG_ID
+			,REG_DATE
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{siteId}
+			,#{heatexcName}
+			,#{address}
+			,#{phone}
+			,#{testRunDate}
+			,#{powerSupply}
+			,#{form}
+			,#{modelNo}
+			,#{salesInfo}
+			,#{asInfo}
+			,#{volumnCw}
+			,#{volumnBi}
+			,#{heatareaCw}
+			,#{heatareaBi}
+			,#{tempCw1}
+			,#{tempCw2}
+			,#{tempBi1}
+			,#{tempBi2}
+			,#{plateThickness}
+			,#{plateCount}
+			,#{flowCw1}
+			,#{flowCw2}
+			,#{flowBi1}
+			,#{flowBi2}
+			,#{plateMaterial}
+			,#{plateType}
+			,#{fluidCwMaterial}
+			,#{fluidCwPercent}
+			,#{fluidBiMaterial}
+			,#{fluidBiPercent}
+			,#{lmtd}
+			,#{lossCw}
+			,#{lossBi}
+			,#{gasket}
+			,#{weightCwName}
+			,#{weightCwVol}
+			,#{weightBiName}
+			,#{weightBiVol}
+			,#{sizeW} 
+			,#{sizeL}  
+			,#{sizeH}
+			,#{pressCw}
+			,#{pressBi}
+			,#{pipeDiamCw}
+			,#{pipeDiamBi}
+			,#{regId}
+			,now()
+			,#{updateId}
+			,now()
+		)
+	</insert>
+	
+	<!-- 열교환기 정보수정  -->
+	<update id= "updateHeatExcInfo" parameterType="HeatExc">
+	/*HeatExcMapper.updateHeatExcInfo*/
+		UPDATE TBL_FACILITY_HEATEXC_MASTER
+		SET SITE_ID 	     =  #{siteId}    
+			,HEATEXC_NAME 	 =	#{heatexcName}
+			,ADDRESS   		 =  #{address}
+			,PHONE	 		 =	#{phone}
+			,TEST_RUN_DATE   = 	#{testRunDate}
+			,POWER_SUPPLY    = 	#{powerSupply}
+			,FORM            =	#{form}
+			,MODEL_NO        =	#{modelNo}
+			,SALES_INFO  	 =	#{salesInfo}
+			,AS_INFO   		 =  #{asInfo}  
+			,VOLUMN_CW   	 =	#{volumnCw}
+			,VOLUMN_BI  	 =	#{volumnBi}
+			,HEATAREA_CW  	 =	#{heatareaCw}
+			,HEATAREA_BI   	 =  #{heatareaBi}
+			,TEMP_CW_1  	 =	#{tempCw1}
+			,TEMP_CW_2  	 =	#{tempCw2}
+			,TEMP_BI_1  	 =	#{tempBi1}
+			,TEMP_BI_2  	 =	#{tempBi2}
+			,PLATE_THICKNESS = 	#{plateThickness}
+			,PLATE_COUNT  	 =	#{plateCount}  
+			,FLOW_CW_1  	 =	#{flowCw1}
+			,FLOW_CW_2 		 =  #{flowCw2}
+			,FLOW_BI_1  	 =	#{flowBi1}
+			,FLOW_BI_2 		 =  #{flowBi2}
+			,PLATE_MATERIAL  = 	#{plateMaterial}
+			,PLATE_TYPE      =	#{plateType}
+			,FLUID_CW_MATERIAL= #{fluidCwMaterial}
+			,FLUID_CW_PERCENT = #{fluidCwPercent}
+			,FLUID_BI_MATERIAL= #{fluidBiMaterial}
+			,FLUID_BI_PERCENT = #{fluidBiPercent} 
+			,LMTD  			 =  #{lmtd}
+			,LOSS_CW  		 =	#{lossCw}
+			,LOSS_BI  		 = 	#{lossBi}
+			,GASKET  		 =	#{gasket}
+			,WEIGHT_CW_NAME  = 	#{weightCwName}
+			,WEIGHT_CW_VOL   = 	#{weightCwVol}
+			,WEIGHT_BI_NAME  = 	#{weightBiName}
+			,WEIGHT_BI_VOL   = 	#{weightBiVol}
+			,SIZE_W    		 =  #{sizeW} 
+			,SIZE_L    	 	 =  #{sizeL}  
+			,SIZE_H  	     =	#{sizeH}
+			,PRESS_CW  		 =  #{pressCw}
+			,PRESS_BI  		 =  #{pressBi}
+			,PIPE_DIAM_CW  	 =  #{pipeDiamCw}
+			,PIPE_DIAM_BI  	 =  #{pipeDiamBi}
+			,UPDATE_ID 		 =	#{updateId}
+			,UPDATE_DATE     =  now()
+		WHERE FHM_ID = #{fhmId}
+	</update>
+	
+	<!--열교환기 삭제  -->
+	<update id ="updateUseFlag" parameterType="HeatExc">
+	/*HeatExcMapper.updateUseFlag*/
+	UPDATE TBL_FACILITY_HEATEXC_MASTER
+	SET 
+		USE_FLAG = 'N'
+		,UPDATE_ID 	 =	#{updateId}
+		,UPDATE_DATE     =  now()
+	WHERE FHM_ID = #{fhmId}
+	</update>
+	
+	<!-- 장비등록시 tbl_maintenance_site 테이블 정보 등록 -->
+	<insert id="insertEquipInfoForMaintenance" parameterType="Maintenance" useGeneratedKeys="true" keyProperty="msId">
+		INSERT INTO
+		tbl_maintenance_site
+		(site_id, facility_kind, facility_id, use_flag, update_id, reg_id)
+		VALUES
+		(#{siteId}, #{facilityKind}, #{facilityId}, 'Y',#{regId}, #{regId})
+	
+	</insert>
+	
+	<!--장비삭제시-->
+	<update id="updateEquipMaintenance" parameterType="Maintenance">
+		UPDATE tbl_maintenance_site 
+		SET 
+			USE_FLAG = 'N'
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE facility_id = #{facilityId}
+	</update>
+	
+	<!--장비엡데이트시-->
+	<update id="updateMaintenance" parameterType="Maintenance">
+		UPDATE tbl_maintenance_site 
+		SET 
+			site_id = #{siteId}
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE ms_id = #{facilityId}
+	</update>
+	
+	<!-- tbl_maintenance_comm_que : mcq_id 조회 -->
+	<select id="selectCommMcpIdList" parameterType="Maintenance" resultType="Maintenance">
+		SELECT mcq_id 
+		  FROM tbl_maintenance_comm_que
+		WHERE facility_kind = #{facilityKind}
+	</select>
+	
+	<!-- tbl_maintenance_site 등록시 해당 관리 항목 테이블 공통값 insert  -->
+	<insert id="insertMaintenanceDefaultQue" parameterType="Maintenance" useGeneratedKeys="true" keyProperty="msqId">
+	 	INSERT INTO tbl_maintenance_site_que
+		(question, apply_date, sort_no, designed_code, use_flag, update_id, reg_id, ms_id)
+		SELECT question, DATE_FORMAT(NOW(),'%Y%m%d%H%i'), sort_no, designed_code, use_flag, #{regId}, #{regId}, #{msId}
+		FROM tbl_maintenance_comm_que
+		WHERE mcq_id = #{mcqId}
+	</insert>
+	
+	<!-- tbl_maintenance_site 등록시 해당 관리 상세항목 테이블 공통값 insert  -->
+	<insert id="insertMaintenanceDefaultAns" parameterType="Maintenance">
+	 	INSERT INTO tbl_maintenance_site_ans
+		(answer, apply_date, check_type_flag, sort_no, use_flag, update_id, reg_id, msq_id)
+		SELECT answer, DATE_FORMAT(NOW(),'%Y%m%d%H%i'), check_type_flag, sort_no, use_flag, #{regId}, #{regId}, #{msqId}
+		FROM tbl_maintenance_comm_ans
+		WHERE mcq_id = #{mcqId}
+	</insert>
+</mapper>

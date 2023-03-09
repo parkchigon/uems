@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-4.3.xsd">
+
+	<!-- env properties -->
+	<util:properties id="config" location="classpath:/config/${spring.profiles.active}/config.properties"/>
+    <util:properties id="code" location="classpath:/config/${spring.profiles.active}/code.properties"/>
+    <util:properties id="comm" location="classpath:/config/${spring.profiles.active}/common.properties"/>
+	<context:property-placeholder properties-ref="comm"  />
+	
+	<bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+        <constructor-arg ref="messageSource" />
+    </bean>
+  
+    <bean id="message" class="com.flk.common.utility.MessageAccessUtil">
+        <property name="messageSourceAccessor" ref="messageSourceAccessor"/>
+    </bean>
+    
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- @Aspect Annotation이 적용된 빈을 Aspect(자동으로 Advice를 적용)로 사용 -->
+	<aop:aspectj-autoproxy />
+	
+	<!--
+		스프링 컨테이너에 의해 생성되는 Object가 아닌 경우에도 AOP 적용하여 AspectJ의 Aspect 를 사용하기 위한 설정
+		클래스 작성, 빈 생성 후 빈과 spring 연동 
+	 -->
+    <context:spring-configured />
+	
+	<!-- @MVC & binding convert -->
+	<!-- Annotation으로 Controller를 구현해서 사용하고자 할때 필요한 Class들을 자동으로 Bean으로 등록 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<ref bean="stringConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 맵핑 정보 중에서 스프링이 처리할 수 없는 요청은 서블릿 컨테이너가 제공하는 디폴트 서블릿에게 위임 -->	
+	<mvc:default-servlet-handler/>
+
+	<!--
+		[스프링에서 <context>전용태그를 이용해 객체를 DI하는 방법 2.]
+		context:annotation-config의 기능을 포함하여 스테레오타입으로 선언된 빈을 컨텍스트에 등록
+		스테레오타입 어노테이션 (@Component, @Controller, @Service, @Repository)
+		기본적으로 @Component, @Controller, @Service, @Repository는 설정하지 않아도 동작한다.
+	 -->
+	<context:component-scan base-package="com.flk" />
+	<!--
+		인터셉터 설정
+		*.do 요청에 대하여 com.skt.common.interceptor.RequestInterceptor 에서 전후 처리를 하며
+		exclude 된 url에 대하여는 전후 처리를 하지 않는다.
+	 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do"/>
+			<bean class="com.flk.common.interceptor.CeWebInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+ 	
+ 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" />
+ 	
+ 	<bean id="urlBasedViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+        <property name="order" value="0" />
+    </bean>
+    
+	<!-- Tiles -->
+ 	<bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>classpath:/tiles/*.xml</value>
+			</list>
+		</property>
+	</bean>
+     	
+	<!-- 
+		mapping url & view
+		스프링 설정 파일에 RequestToViewNameTranslator 빈이 존재 하지 않을 경우 
+		기본적으로 DefaultRequestToViewNameTranslator를 사용하는데 
+		이 클래스는 요청 URI로부터 맨 앞의 슬래시와 확장자를 제외한 나머지 부분을 뷰 이름으로 사용 한다.
+	 -->
+	<bean id="viewNameTranslator" class="org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator" />
+
+	<!-- 
+		view resolver ordering
+		어플리케이션 컨텍스트로부터 ModelAndView 객체의 논리적 뷰 이름과 일치하는 빈을 찾아 View 결정
+		빈의 이름이 논리적인 뷰 이름이라고 가정하고 어플리케이션 컨텍스트에서 view 인터페이스를 구현한 빈을 lookup.
+	 -->
+	<bean id="beanNameviewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"	p:order="1" />	
+
+	<!-- ContentNegotiatingViewResolver: 뷰 리졸버를 결정해주는 리졸버 -->
+	<bean id="contentNegotiatingViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="2" >
+		<!-- 1. 사용자의 요청정보로부터 사용자가 요청한 미디어 타입정보 추출 (URL 확장자 사용)-->
+		<!-- <property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+			</map>
+		</property> -->
+		<!-- 2. 뷰 리졸버 위임을 통한 후보 뷰 선정 -->		
+		<property name="viewResolvers">
+			<list>
+				<!-- 
+					뷰 이름에 해당하는 실제 파일을 찾는 방법으로 뷰를 찾는다. 
+					이때 뷰 이름 앞과 뒤에 공통적으로 사용할 문자열이 있다면 prefix와 suffix 옵션을 사용
+					View 객체의 논리적인 뷰의 이름을 사용하여 view 결정.
+				 -->
+				<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/WEB-INF/views/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
+			</list>
+		</property>
+		
+		<!-- 디폴트 뷰는 뷰 리졸버의 조회 결과에 상관없이 무조건 후보 뷰 목록에 추가 -->
+		<property name="defaultViews">
+			<list>
+				<!--Json 처리할 뷰-->
+   				<ref bean="jsonView"/>
+			</list>
+		</property>
+	</bean>
+	
+   <!-- locale scope -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	 
+	<!-- max 10mb -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="500000000" />
+	</bean>
+
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+    	<property name="contentType" value="application/json;charset=UTF-8" />
+    </bean>
+    
+	<!--
+		인코딩 설정 
+	 -->
+	<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+			 	<value>text/plain; charset=UTF-8</value>
+			 	<value>text/xml; charset=UTF-8</value>
+			 	<value>text/html; charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- <task:annotation-driven /> -->
+	
+	<bean id="schedulerBatchTask" class="com.flk.batch.scheduler.BatchTask" />
+		<task:scheduler id="bemsScheduler" pool-size="10" />
+		<task:executor id="bemsSchedulerExec" pool-size="10" />
+	<task:annotation-driven executor="bemsSchedulerExec" scheduler="bemsScheduler" />
+	
+</beans>

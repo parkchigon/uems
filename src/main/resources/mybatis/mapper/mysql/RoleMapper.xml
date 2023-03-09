@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.system.role.mapper.RoleMapper">
+
+	<!-- 권한 등록 -->
+	<insert id="insertRole" parameterType="Role">
+		/* RoleMapper.insertRole */
+		<![CDATA[
+			INSERT INTO TBL_ROLE ( 
+					ROLE_ID
+				  , ROLE_NAME
+				  , CONTENT
+				  , SORT_NUM
+				  , USE_YN
+				  , REG_ID
+				  , REG_DATE
+				  , UPDATE_ID
+				  , UPDATE_DATE
+			) VALUES ( 
+					#{roleId}
+				  , #{roleName}
+				  , #{content}
+				  , #{sortNum}
+				  , #{useYn}
+				  , #{regId}
+				  , NOW()
+				  , #{updateId}
+				  , NOW() 
+			]]>		   
+			<![CDATA[
+			)
+			]]>
+	</insert>
+	
+	<!-- 권한 수정 -->
+	<update id="updateRole" parameterType="Role">
+		/* RoleMapper.updateRole */
+			UPDATE TBL_ROLE
+			SET ROLE_NAME 		= #{roleName}
+				, CONTENT 		= #{content}
+				, UPDATE_ID 	= #{updateId}
+				, UPDATE_DATE 	= #{updateDate}
+				, SORT_NUM 		= #{sortNum}
+				, USE_YN 		= #{useYn}
+			WHERE ROLE_ID = #{roleId}
+	</update>
+	
+	<!-- 권한 삭제 -->
+	<delete id="deleteRole">
+		/* RoleMapper.deleteRole */
+			DELETE FROM TBL_ROLE
+			WHERE ROLE_ID = #{roleId}
+	</delete>
+	
+	<!-- 프로그램 권한 삭제 -->
+	<delete id="deleteRoleProgram" parameterType="Role">
+		/* RoleMapper.deleteRoleProgram */
+		DELETE FROM TBL_ROLE_PROGRAM
+		WHERE 1=1
+		<if test="roleId != null and roleId != ''">
+			AND ROLE_ID = #{roleId}
+		</if>
+		<if test="menuId != null and menuId != ''">
+			AND PROGRAM_ID IN ( SELECT PROGRAM_ID FROM TBL_PROGRAM WHERE MENU_ID = #{menuId} )
+		</if>
+	</delete>
+	
+	<!-- 프로그램 메뉴 삭제 -->
+	<delete id="deleteRoleMenu" parameterType="Role">
+		/* RoleMapper.deleteRoleMenu */
+		DELETE FROM TBL_ROLE_MENU
+		WHERE 1 = 1
+		<if test="roleId != null and roleId != ''">
+			AND ROLE_ID = #{roleId}
+		</if>
+		<if test="menuId != null and menuId != ''">
+			AND MENU_ID = #{menuId}
+		</if>
+	</delete>
+	
+	<!-- 권한 조회 -->
+	<select id="selectRoleView" resultType="Role">
+		/* RoleMapper.roleView */
+			SELECT
+					ROLE_ID
+				  , ROLE_NAME
+				  , CONTENT
+				  , USE_YN
+				  , PARENT_ROLE_ID
+				  , REG_DATE
+				  , REG_ID
+				  , UPDATE_DATE
+				  , UPDATE_ID
+				  , SORT_NUM
+			FROM TBL_ROLE
+			WHERE ROLE_ID = #{roleId}
+	</select>
+		
+	<!-- 권한 리스트 조회 (페이징) -->
+	<select id="selectRoleList" parameterType="Role" resultType="flkMap">
+		/* RoleMapper.selectRoleList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+            SELECT
+               	ROW_NUMBER() OVER (ORDER BY SORT_NUM ASC) AS RNUM
+               	, ROLE_ID
+                , ROLE_NAME
+                , REG_DATE
+                , UPDATE_DATE
+                , USE_YN
+                , SORT_NUM
+                , PARENT_ROLE_ID
+            FROM TBL_ROLE
+            WHERE 1=1
+			<if test="masterYn != null and masterYn != '' and masterYn == 'N'.toString()">
+				AND ROLE_ID != 'ROL_9999999999999999'
+			</if>
+			ORDER BY SORT_NUM ASC            
+        <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!-- 메뉴 권한 리스트 조회 -->
+	<select id="selectRoleMenuList" parameterType="Role" resultType="flkMap">
+		/* RoleMapper.selectRoleMenuList */
+		<![CDATA[
+			SELECT
+					A.*
+				  , IF( ISNULL(B.MENU_ID), 'N', 'Y') AS ROLE_YN
+				  , B.ROLE_ID
+			FROM
+				(
+					SELECT 
+							TM.MENU_ID
+						  , TM.MENU_NAME
+						  , TM.PARENTMENU_ID
+						  , TM.SORT_NUM
+						  , TM.USE_YN
+						  , (SELECT IF(COUNT(1) <= 0, 'Y', 'N') FROM TBL_MENU TM2 WHERE TM2.PARENTMENU_ID = TM.MENU_ID) LEAF_YN
+					FROM
+						(
+							SELECT fn_menu_connect_by() AS id , @level AS level
+							FROM
+							( SELECT @start_with:=#{parentmenuId}, @id:=@start_with, @level:=0 , @order_num:=0 ) vars join TBL_MENU
+							WHERE @id IS NOT NULL
+						) func JOIN TBL_MENU TM ON func.id = TM.MENU_ID
+				) A
+			LEFT OUTER JOIN TBL_ROLE_MENU B
+				ON A.MENU_ID = B.MENU_ID AND B.ROLE_ID = #{roleId}
+			WHERE USE_YN = 'Y'
+			ORDER BY A.SORT_NUM ASC
+		]]>
+	</select>
+	
+	<!-- roleId로 메뉴 권한 리스트 조회 -->
+	<select id="selectRoleMenuListByRole" parameterType="Role" resultType="flkMap">
+		/* RoleMapper.selectRoleMenuListByRole */
+		<![CDATA[
+			SELECT TEMP.*, TRM.ROLE_ID
+			FROM (
+					SELECT 
+							TM.MENU_ID
+						  , TM.MENU_NAME
+						  , TM.PARENTMENU_ID
+						  , TM.MENU_DEPTH
+						  , TM.SORT_NUM
+						  , TM.USE_YN
+					FROM
+						( SELECT fn_menu_connect_by() AS id , @level AS level
+						  FROM
+						  	( SELECT @start_with:=#{parentmenuId}, @id:=@start_with, @level:=0 , @order_num:=0 ) vars join TBL_MENU
+						  WHERE @id IS NOT NULL
+						) func JOIN TBL_MENU TM ON func.id = TM.MENU_ID
+			) TEMP, TBL_ROLE_MENU TRM
+			WHERE TEMP.MENU_ID = TRM.MENU_ID
+			AND TRM.ROLE_ID = #{roleId}
+			ORDER BY TEMP.SORT_NUM ASC
+		]]>
+	</select>
+	
+	<!-- 메뉴 권한 등록 -->
+	<insert id="insertRoleMenu" parameterType="Role">
+		/* RoleMapper.insertRoleMenu */
+		INSERT INTO TBL_ROLE_MENU (ROLE_ID, MENU_ID)
+		VALUES
+		<foreach item="menuId" index="index" collection="menuIds" separator=",">
+			(#{roleId}, #{menuId})
+		</foreach>
+	</insert>
+	
+	<!-- 프로그램 권한 리스트 조회 -->
+	<select id="selectRoleProgramList" parameterType="Role" resultType="flkMap">
+		/* RoleMapper.selectRoleProgramList */
+		SELECT TP_TEMP.*, IF( ISNULL(TRP_TEMP.ROLE_ID), 'N', 'Y') ROLE_PROGRAM_YN
+		FROM
+			( 
+				SELECT TP.PROGRAM_ID		/* 프로그램 아이디    */
+					 , TP.PROGRAM_NAME		/* 프로그램 명        */
+					 , TP.PROGRAM_URL		/* 프로그램 URL       */
+					 , TP.START_PROGRAM_YN		/* 시작 프로그램 여부 */
+					 , TP.REG_DATE			/* 등록 일시          */
+					 , TP.UPDATE_ID			/* 수정 아이디        */
+					 , TP.UPDATE_DATE		/* 수정 일시          */
+					 , TP.REG_ID			/* 등록 아이디        */
+					 , TP.MENU_ID			/* 메뉴 아이디        */
+					 , TP.USE_YN			/* 사용 여부          */
+				FROM TBL_PROGRAM TP
+				WHERE 1=1
+				AND TP.MENU_ID = #{menuId} 
+			) TP_TEMP
+		LEFT OUTER JOIN
+			(
+				SELECT TRP.ROLE_ID, TRP.PROGRAM_ID
+				FROM TBL_ROLE_PROGRAM TRP
+				WHERE 1 = 1
+				AND ROLE_ID = #{roleId}
+			) TRP_TEMP
+		ON TP_TEMP.PROGRAM_ID = TRP_TEMP.PROGRAM_ID
+		ORDER BY TP_TEMP.PROGRAM_ID
+	</select>
+	
+	<!-- 프로그램 권한 등록 -->
+	<insert id="insertRoleProgram" parameterType="Role">
+		/* RoleMapper.insertRoleProgram */
+		INSERT INTO TBL_ROLE_PROGRAM (ROLE_ID, PROGRAM_ID)
+		VALUES
+		<foreach item="role" index="index" collection="list" separator=",">
+			(#{role.roleId}, #{role.programId})
+		</foreach>
+	</insert>
+	
+	<!-- 프로그램 권한 삭제 (Not in) -->
+	<delete id="deleteRoleProgramNotIn" parameterType="Role">
+		/* RoleMapper.roleProgramDeleteNotIn */
+		DELETE FROM TBL_ROLE_PROGRAM
+		WHERE 1 = 1
+		AND ROLE_ID = #{roleId}
+		AND PROGRAM_ID IN 
+			(
+				SELECT PROGRAM_ID 
+				FROM TBL_PROGRAM 
+				WHERE MENU_ID NOT IN
+				<foreach item="menuId" index="index" collection="menuIds" separator="," open="(" close=")">
+					#{menuId}
+				</foreach>
+			)
+		
+	</delete>
+	
+	<!-- 권한 순서 수정 -->
+	<update id="updateRoleOrderNo" parameterType="Role">
+		/* RoleMapper.updateRoleOrderNo */
+		UPDATE TBL_ROLE
+		SET    SORT_NUM  = (SORT_NUM + 1)
+		WHERE  SORT_NUM >= #{sortNum}
+		AND
+		       (SELECT SUB.CNT
+		               FROM    (SELECT COUNT(SORT_NUM) AS CNT
+		                       FROM    TBL_ROLE
+		                       WHERE   SORT_NUM = #{sortNum}
+							   AND 	   ROLE_ID != #{roleId}		
+		                       )
+		                       AS SUB
+		       ) > 0 
+		 AND   ROLE_ID != #{roleId}	
+	</update>
+	
+ </mapper>

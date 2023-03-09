@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.batch.mapper.BatchTaskMapper">
+	
+	<!-- 지점 별 동네예보 등록 -->
+	<insert id="insertWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.insertWeather */
+		INSERT INTO tbl_weather (
+					date
+					, hour
+					, pop
+					, pty
+					, rin_cd
+					, reh
+					, snw_cd
+					, sky
+					, teh
+					, tmn
+					, tmx
+					, reg_id
+					, update_id
+					, site_id
+					)
+		VALUES 
+		<foreach collection="weatherList" item="item" index="index" open="(" separator="),(" close=")">
+			#{item.date}
+			, #{item.hour}
+			, #{item.pop}
+			, #{item.pty}
+			, CONCAT('RIN', #{item.r06})
+			, #{item.reh}
+			, CONCAT('SNW', #{item.s06})
+			, #{item.sky}
+			, #{item.t3h}
+			, #{item.tmn}
+			, #{item.tmx}
+			, #{regId}
+			, #{updateId}
+			, #{siteId}
+		</foreach>
+	</insert>
+	
+			
+	<!-- 지점 별 동네예보 삭제 -->
+	<delete id="deleteWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.deleteWeather */
+		DELETE FROM tbl_weather
+		 WHERE site_id = #{siteId}
+		   AND (date <![CDATA[>]]> #{baseDate} || (date = #{baseDate} AND hour <![CDATA[>]]> #{baseTime}) )
+	</delete>
+	
+	
+	<!-- 동네예보 낮 최고기온 수정 -->
+	<update id="updateTmxWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.updateTmxWeather */
+		UPDATE tbl_weather A
+		 INNER JOIN tbl_weather B
+		    ON A.site_id = B.site_id
+		   AND A.date = B.date
+		   AND B.hour = '15'
+		   SET A.tmx = B.tmx
+		   	   , A.update_id = #{updateId}
+		 WHERE A.date <![CDATA[>=]]> #{baseDate} 
+		   AND A.tmx IS NULL
+	</update>
+
+	<!-- 동네예보 아침 최저기온 수정 -->
+	<update id="updateTmnWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.updateTmnWeather */
+		UPDATE tbl_weather A 
+		 INNER JOIN tbl_weather B
+		    ON A.site_id = B.site_id
+		   AND A.date = B.date
+		   AND B.hour = '06'
+		   SET A.tmn = B.tmn
+		   	   , A.update_id = #{updateId}
+		 WHERE A.date <![CDATA[>=]]> #{baseDate}
+		   AND A.tmn IS NULL
+	</update>
+	
+	<!-- 동네예보 6시간 강수량/신적설 수정 -->
+	<update id="updateRinSnwWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.updateRinSnwWeather */
+		UPDATE tbl_weather A 
+		 INNER JOIN tbl_weather B
+		    ON A.site_id = B.site_id
+		   AND A.date = B.date
+		   AND B.rin_cd IS NOT NULL
+		   AND B.snw_cd IS NOT NULL
+		   AND A.hour = B.hour + 3 
+		   SET A.rin_cd = B.rin_cd
+		   	   , A.snw_cd = B.snw_cd
+		   	   , A.update_id = #{updateId}
+		 WHERE A.date <![CDATA[>=]]> #{baseDate}	
+		   AND A.rin_cd IS NULL
+		   AND A.snw_cd IS NULL	
+	</update>
+	
+	<!-- 지점별 초단기실황예보 수정 -->
+	<update id="updateWeather" parameterType="java.util.Map">
+		/* BatchTaskMapper.updateWeather */
+		UPDATE tbl_weather
+		   SET update_id = #{updateId}
+			<if test="weatherInfo.pty != '' and weatherInfo.pty != null">		   
+				, pty = #{weatherInfo.pty}
+			</if>
+			<if test="weatherInfo.rn1 != '' and weatherInfo.rn1 != null">		   
+				, rin_cd = CONCAT('RIN', #{weatherInfo.rn1})
+			</if>
+			<if test="weatherInfo.reh != '' and weatherInfo.reh != null">		   
+				, reh = #{weatherInfo.reh}
+			</if>
+			<if test="weatherInfo.sky != '' and weatherInfo.sky != null">		   
+				, sky = #{weatherInfo.sky}
+			</if>
+			<if test="weatherInfo.t1h != '' and weatherInfo.t1h != null">		   
+				, teh = #{weatherInfo.t1h}
+			</if>
+		 WHERE site_id = #{siteId}
+		   AND date = #{baseDate}
+		   AND hour = #{baseTime}
+	</update>
+	
+	<!-- 보고서 생성용 데이터 조회 -->
+	<select id="selectReportData" parameterType="Map" resultType="FlkMap">
+		SELECT	LEFT(STATS_TIME, 8) AS STAT_DATE
+				,RIGHT(STATS_TIME, 4) AS STAT_TIME
+				,STATS_TIME AS STAT_DATE_TIME
+				,TAG_ID
+				,TAG_VALUE
+				,REPROC_FLAG
+				,REG_DATE
+		  FROM	TBL_STAT_1MIN_${buildingId}
+		  WHERE tag_id IN 
+		 <foreach collection="tagMinIdList" item="item" index="index" separator="," open="(" close=")">
+		 	#{item}
+		 </foreach>
+		<![CDATA[
+		   AND	STATS_TIME >= #{startDate}
+		   AND	STATS_TIME <= #{endDate}
+		 ]]>
+		 ORDER	BY STATS_TIME ASC, TAG_ID ASC
+	</select>
+	
+	<!-- 보고서 등록 여부 체크 -->
+	<select id="checkReport" parameterType="Map" resultType="Int">
+		SELECT	COUNT(RF_ID)
+		  FROM	TBL_REPORT_FILES
+		 WHERE	RT_ID = #{rtId}		  
+		   AND	REPORT_START_DATE = #{startDateForCheck}
+		   AND	REPORT_END_DATE = #{endDateForCheck} 
+	</select>
+	
+	<!-- 보고서 등록 -->
+	<insert id="insertReport" parameterType="Map" useGeneratedKeys="true" keyProperty="rfId">
+		INSERT
+		  INTO	TBL_REPORT_FILES (
+		  			REPORT_NAME
+		  			,REPORT_START_DATE
+		  			,REPORT_END_DATE
+		  			,REPORT_FILE_PATH
+		  			,REPORT_FILE_NAME
+		  			,REPORT_FILE_SIZE
+		  			,REG_DATE
+		  			,SITE_ID
+		  			,RT_ID
+		  		) VALUES (
+		  			#{reportName}
+		  			,#{reportStartDate}
+		  			,#{reportEndDate}
+		  			,#{reportFilePath}
+		  			,#{reportFileName}
+		  			,#{reportFileSize}
+		  			,NOW()
+		  			,#{siteId}
+		  			,#{rtId}
+		  		)
+	</insert>
+	
+	<!-- 상황일지 리스트 조회 - 엑셀파일 생성 -->
+	<select id="selectDailyRecordExcelList" parameterType="Map" resultType="flkMap">
+		/* com.flk.batch.mapper.BatchTaskMapper.selectDailyRecordExcelList */
+		SELECT    TDR.DR_ID
+				 ,DATE_FORMAT(STR_TO_DATE(TDR.DATE, '%Y%m%d'),'%m.%d') AS DATE
+				 ,CONCAT(LEFT(TDR.TIME,2),':',RIGHT(TDR.TIME,2)) AS TIME
+				 ,TDR.RECORD_TYPE
+				 ,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TDR.RECORD_TYPE) AS RECORD_TYPE_NM
+				 ,TDR.RECORD_NAME
+				 ,IFNULL(TDR.REASON,'') AS REASON
+				 ,IFNULL(TDR.RESULT,'') AS RESULT
+				 ,IFNULL(TDR.ETC,'') AS ETC
+				 ,TDR.MANUALLY_FLAG
+				 ,TDR.USE_FLAG
+				 ,TDR.SITE_ID
+				 ,TS.SITE_NAME
+		  FROM TBL_DAILY_RECORD TDR INNER JOIN TBL_SITE TS ON TDR.SITE_ID = TS.SITE_ID
+		 WHERE TDR.SITE_ID = (SELECT SITE_ID FROM TBL_SITE WHERE SITE_CD = #{buildingId})
+		   <![CDATA[
+			   AND STR_TO_DATE(TDR.DATE, '%Y%m%d') >= STR_TO_DATE(#{startDate}, '%Y%m%d')
+	  		   AND STR_TO_DATE(TDR.DATE, '%Y%m%d') <= STR_TO_DATE(#{endDate}, '%Y%m%d')
+  		   ]]>
+		   AND TDR.USE_FLAG = 'Y'
+		 ORDER BY TDR.DATE, TDR.TIME
+	</select>
+	
+	<!-- 월별운영데이터 조회 -->
+	<select id="selectManageData" parameterType="Map" resultType="flkMap">
+		SELECT TMD.site_id
+			   , RIGHT(month, 2) AS month
+		 	   , prev_cool_charge
+		 	   , pres_cool_charge
+		 	   , prev_energy_amount
+		 	   , pres_energy_amount
+		 	   , prev_tco_amount
+		 	   , pres_tco_amount
+		 	   , cooling_load_amount
+		 	   , nightelec_day_amount
+		 	   , nightelec_night_amount
+		 	   , elec_powerfactor_charge
+		 	   , elec_discount_charge
+		 	   , charge_apply_power
+		 	   , gas_average_calorie
+		 	   , dayelec_amount
+		  FROM tbl_manage_data TMD, tbl_site TS
+		 WHERE TMD.site_id = TS.site_id
+		   AND LEFT(TMD.MONTH, 4) = LEFT(#{endDate}, 4)
+		   AND TS.site_cd = #{buildingId}
+	</select>
+	
+	<!-- 공통 단가 > 일반전기요금 조회 -->
+	<select id="selectCommPriceData" parameterType="Map" resultType="flkMap">
+		SELECT TPCI.energy_type
+			   , CAST(TPCI.pci_id AS CHAR) AS pci_id
+			   , CAST(data_01 AS DECIMAL(8,2)) AS data_01
+			   , CAST(data_02 AS DECIMAL(8,2)) AS data_02
+			   , CAST(data_03 AS DECIMAL(8,2)) AS data_03
+			   , CAST(data_04 AS DECIMAL(8,2)) AS data_04
+			   , CAST(data_05 AS DECIMAL(8,2)) AS data_05
+			   , CAST(data_06 AS DECIMAL(8,2)) AS data_06
+			   , CAST(data_07 AS DECIMAL(8,2)) AS data_07
+			   , CAST(data_08 AS DECIMAL(8,2)) AS data_08
+			   , CAST(data_09 AS DECIMAL(8,2)) AS data_09
+			   , CAST(data_10 AS DECIMAL(8,2)) AS data_10
+		  FROM tbl_price_common_info TPCI
+			   , (SELECT pci_id, max(apply_date) AS apply_date
+			        FROM tbl_price_common_data 
+			       WHERE apply_date <![CDATA[<]]> LEFT(#{endDate}, 8)
+             		 AND pci_id IN (1, 2, 3)
+			       GROUP BY pci_id) A, tbl_price_common_data TPCD
+		 WHERE TPCI.use_flag = 'Y'
+    	   AND A.pci_id = TPCI.pci_id
+		   AND TPCI.pci_id = TPCD.pci_id
+	       AND TPCI.energy_type = '01'
+	       AND A.apply_date = TPCD.apply_date
+	</select>
+	
+	<!-- 지점단가 조회 -->
+	<select id="selectSitePriceData" parameterType="Map" resultType="flkMap">
+		SELECT TPM.energy_type
+			   , A.apply_date
+			   , TPM.elec_power
+			   , CAST(TPM.pci_id AS CHAR) AS pci_id
+			   , price_name
+			   , CAST(data_01 AS DECIMAL(8,2)) AS data_01
+			   , CAST(data_02 AS DECIMAL(8,2)) AS data_02
+			   , CAST(data_03 AS DECIMAL(8,2)) AS data_03
+			   , CAST(data_04 AS DECIMAL(8,2)) AS data_04
+			   , CAST(data_05 AS DECIMAL(8,2)) AS data_05
+		  FROM tbl_price_mapping TPM, tbl_price_common_info TPCI
+			   , (SELECT pci_id, max(apply_date) AS apply_date
+			        FROM tbl_price_common_data 
+					<where>
+						<choose>
+							<when test="searchMonth != '' and searchMonth != null">			         
+								AND apply_date <![CDATA[<]]> DATE_FORMAT(LAST_DAY(#{searchMonth}),'%Y%m%d')
+							</when>
+							<otherwise>
+								AND apply_date <![CDATA[<]]> LEFT(#{endDate}, 8)
+							</otherwise>
+						</choose>
+					</where>
+			       GROUP BY pci_id) A
+			   , tbl_price_common_data TPCD
+		 WHERE site_cd = #{buildingId}
+		   AND TPM.use_flag = 'Y'
+		   AND TPM.pci_id = TPCI.pci_id
+		   AND TPM.energy_type = #{energyType}
+		   AND TPM.energy_type = TPCI.energy_type
+		   AND TPCI.use_flag = 'Y'
+		   AND TPCI.pci_id = A.pci_id
+		   AND A.pci_id = TPCD.pci_id
+	       AND A.apply_date = TPCD.apply_date
+	</select>
+	
+	<!-- 보고서 항목 Rate 조회 -->
+	<select id="selectFacilityRateData" parameterType="Map" resultType="flkMap">
+		SELECT ROUND(absor_load_rate_05/100,2) AS 'N134'
+			   , ROUND(absor_load_rate_06/100,2)  AS 'N137'
+			   , ROUND(absor_load_rate_07/100,2)  AS 'N140'
+			   , ROUND(absor_load_rate_08/100,2)  AS 'N143'
+			   , ROUND(absor_load_rate_09/100,2)  AS 'N146'
+			   , ROUND(absor_load_rate_10/100,2)  AS 'N149'
+			   , ROUND(turbo_load_rate_05/100,2)  AS 'N135'
+			   , ROUND(turbo_load_rate_06/100,2)  AS 'N138'
+			   , ROUND(turbo_load_rate_07/100,2)  AS 'N141'
+			   , ROUND(turbo_load_rate_08/100,2)  AS 'N144'
+			   , ROUND(turbo_load_rate_09/100,2)  AS 'N147'
+			   , ROUND(turbo_load_rate_10/100,2)  AS 'N150'
+			   , ROUND(absor_work_rate_05/100,2)  AS 'N152'
+			   , ROUND(absor_work_rate_06/100,2)  AS 'N153'
+			   , ROUND(absor_work_rate_07/100,2)  AS 'N154'
+			   , ROUND(absor_work_rate_08/100,2)  AS 'N155'
+			   , ROUND(absor_work_rate_09/100,2)  AS 'N156'
+			   , ROUND(absor_work_rate_10/100,2)  AS 'N157'
+			   , ROUND(absor_heat_eff_rate/100,2) AS 'N151'
+			   , ROUND(absor_asst_eff_rate/100,2) AS 'N158'
+			   , absor_open_day      AS 'N159'
+			   , absor_work_hour     AS 'N160'
+			   , ROUND(turbo_work_rate_05/100,2)  AS 'N162'
+			   , ROUND(turbo_work_rate_06/100,2)  AS 'N163'
+			   , ROUND(turbo_work_rate_07/100,2)  AS 'N164'
+			   , ROUND(turbo_work_rate_08/100,2)  AS 'N165'
+			   , ROUND(turbo_work_rate_09/100,2)  AS 'N166'
+			   , ROUND(turbo_work_rate_10/100,2)  AS 'N167'
+			   , ROUND(turbo_heat_eff_rate/100,2) AS 'N161'
+			   , ROUND(turbo_asst_eff_rate/100,2) AS 'N168'
+			   , turbo_open_day      AS 'N169'
+			   , turbo_work_hour     AS 'N170'
+			   , reduction_elec      AS 'N202'
+		  FROM tbl_manage_facility_rate TMFR, tbl_site TS
+		 WHERE TMFR.site_id = TS.site_id
+		   AND site_cd = #{buildingId}
+		   AND TMFR.use_flag = 'Y'   
+		   AND TS.use_flag = 'Y'
+	</select>
+	
+	<!-- 보고서 항목 Spec 조회 -->
+	<select id="selectFacilitySpecData" parameterType="Map" resultType="flkMap">
+		SELECT chillerheater_cnt AS 'N90'
+			   , chillerheater_vol     AS 'N91'
+			   , chillerheater_ele     AS 'N92'
+			   , chillerheater_gas     AS 'N93'
+			   , absor_tower_cnt       AS 'N94'
+			   , absor_tower_vol       AS 'N95'
+			   , absor_tower_ele       AS 'N96'
+			   , absor_pump_cnt        AS 'N97'
+			   , absor_pump_vol        AS 'N98'
+			   , absor_pump_ele        AS 'N99'
+			   , turbo_chiller_cnt     AS 'N100'
+			   , turbo_chiller_vol     AS 'N101'
+			   , turbo_chiller_ele     AS 'N102'
+			   , turbo_tower_cnt       AS 'N103'
+			   , turbo_tower_vol       AS 'N104'
+			   , turbo_tower_ele       AS 'N105'
+			   , turbo_pump_cnt        AS 'N106'
+			   , turbo_pump_vol        AS 'N107'
+			   , turbo_pump_ele        AS 'N108'
+			   , low_chiller_cnt       AS 'N109'
+			   , low_chiller_day_vol   AS 'N110'
+			   , low_chiller_day_ele   AS 'N111'
+			   , low_chiller_night_vol AS 'N112'
+			   , low_chiller_night_ele AS 'N113'
+			   , icethermal_tower_cnt  AS 'N114'
+			   , icethermal_tower_vol  AS 'N115'
+			   , icethermal_tower_ele  AS 'N116'
+			   , thermal_storage_cnt   AS 'N117'
+			   , thermal_storage_vol   AS 'N118'
+			   , heat_exchanger_cnt    AS 'N119'
+			   , heat_exchanger_vol    AS 'N120'
+			   , coolstorage_pump_cnt  AS 'N121'
+			   , coolstorage_pump_vol  AS 'N122'
+			   , coolstorage_pump_ele  AS 'N123'
+			   , relestorage_pump_cnt  AS 'N124'
+			   , relestorage_pump_vol  AS 'N125'
+			   , relestorage_pump_ele  AS 'N126'
+			   , brine_pump_cnt        AS 'N127'
+			   , brine_pump_vol        AS 'N128'
+			   , brine_pump_ele        AS 'N129'
+			   , cooling_pump_cnt      AS 'N130'
+			   , cooling_pump_vol      AS 'N131'
+			   , cooling_pump_ele      AS 'N132'
+		  FROM tbl_manage_facility_spec TMFS, tbl_site TS
+		 WHERE TMFS.site_id = TS.site_id
+		   AND site_cd = #{buildingId}
+		   AND TMFS.use_flag = 'Y'   
+		   AND TS.use_flag = 'Y'	
+	</select>
+	
+	<!-- 1분 실시간 통계 가동현황 데이터 -->
+	<select id="selectRunStatData" parameterType="Map" resultType="flkMap">
+		select tag_id, ROUND((count(case when tag_value > 0 then 1 end)/60),1) AS data
+		from(
+		SELECT stats_time
+		      ,tag_id
+		      ,tag_value
+		      ,case when substr(stats_time,9,2) = '23' then 1 
+		            when substr(stats_time,9,2) = '00' then 1
+		            when substr(stats_time,9,2) = '01' then 1 
+		            when substr(stats_time,9,2) = '02' then 1 
+		            when substr(stats_time,9,2) = '03' then 1 
+		            when substr(stats_time,9,2) = '04' then 1 
+		            when substr(stats_time,9,2) = '05' then 1 
+		            when substr(stats_time,9,2) = '06' then 1 
+		            when substr(stats_time,9,2) = '07' then 1 
+		            when substr(stats_time,9,2) = '08' then 1 
+		      else 2 end 
+		      as dayflg
+		  FROM tbl_stat_1min_${buildingId}
+		 WHERE 1=1
+		 <if test="tagIdList.size()!=0">
+		   AND tag_id IN 
+			 <foreach collection="tagIdList" item="item" index="index" separator="," open="(" close=")">
+			 	#{item}
+			 </foreach>
+		 </if>
+		   AND stats_time <![CDATA[>=]]> #{startDate}
+		   AND stats_time <![CDATA[<=]]> #{endDate}
+		   ) as a
+		 where dayflg = 2
+		 group by tag_id	
+	</select>
+	
+	<!-- 1분 실시간 통계 가동현황 데이터 -->
+	<select id="selectRunNightStatData" parameterType="Map" resultType="flkMap">
+		select tag_id, ROUND((count(case when tag_value > 0 then 1 end)/60),1) AS data
+		from(
+		SELECT stats_time
+		      ,tag_id
+		      ,tag_value
+		      ,case when substr(stats_time,9,2) = '23' then 1 
+		            when substr(stats_time,9,2) = '00' then 1
+		            when substr(stats_time,9,2) = '01' then 1 
+		            when substr(stats_time,9,2) = '02' then 1 
+		            when substr(stats_time,9,2) = '03' then 1 
+		            when substr(stats_time,9,2) = '04' then 1 
+		            when substr(stats_time,9,2) = '05' then 1 
+		            when substr(stats_time,9,2) = '06' then 1 
+		            when substr(stats_time,9,2) = '07' then 1 
+		            when substr(stats_time,9,2) = '08' then 1 
+		      else 2 end 
+		      as dayflg
+		  FROM tbl_stat_1min_${buildingId}
+		 WHERE 1=1
+		 <if test="tagIdList.size()!=0"> 
+		   AND tag_id IN 
+		 	<foreach collection="tagIdList" item="item" index="index" separator="," open="(" close=")">
+		 		#{item}
+		 	</foreach>
+		 </if>
+		   AND stats_time <![CDATA[>=]]> #{startDate}
+		   AND stats_time <![CDATA[<=]]> #{endDate}
+		   ) as a
+		 where dayflg = 1
+		 group by tag_id	
+	</select>
+</mapper>

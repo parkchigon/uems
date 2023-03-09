@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area" class="screen_all">
+		
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li><a href="#">지점 관리</a></li>
+					<li class="on"><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+		
+			<div class="build_all_area">
+				
+				<table class="data_row">
+				<caption>caption</caption>
+				<colgroup>
+					<col width="100px">
+					<col width="200px">
+					<col width="*">
+					<col width="150px">
+					<col width="200px">
+					<col width="200px">
+					<col width="200px">
+					<col width="200px">
+				</colgroup>
+
+					<thead>
+						<tr>
+							<th><a href="#" class="lineUp listUp">종류</a></th><!-- 오름차순 : listUp, 내림차순 : listDown -->
+							<th><a href="#" class="lineUp">태그</a></th>
+							<th><a href="#" class="lineUp">설명</a></th>
+							<th><a href="#" class="lineUp">사용</a></th>
+							<th><a href="#" class="lineUp">Station</a></th>
+							<th><a href="#" class="lineUp">Addr_In</a></th>
+							<th><a href="#" class="lineUp">Addr_Out</a></th>
+							<th><a href="#" class="lineUp">Extra1</a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" checked="checked" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" id="" name="build_chak1" /><label for="">DI</label></td>
+							<td>DI_0000</td>
+							<td>축냉운전</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0.0</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+			
+			<div class="btn_areaR mt20">
+				<span class="fl">
+					<a class="btnType btn_type02" href="#layerPop_type1" name="modal">AI추가</a>
+					<a class="btnType btn_type02" href="#layerPop_type2" name="modal">AO추가</a>
+					<a class="btnType btn_type02" href="#layerPop_type3" name="modal">DI추가</a>
+					<a class="btnType btn_type02" href="#layerPop_type4" name="modal">DO추가</a>
+				</span>
+				<div class="filebox"> <label for="ex_fileUp" class="btnType btn_type01">엑셀가져오기</label> <input type="file" id="ex_fileUp" /> </div>
+				<div class="filebox"> <label for="ex_fileDown" class="btnType btn_type01">엑셀내보내기</label> <input type="file" id="ex_fileDown" /> </div>
+				<!-- <a class="btnType btn_type01" href="#">엑셀내보내기</a> -->
+				<a class="btnType btn_type01" href="#">태그 삭제</a>
+			</div>
+			
+		</div>
+		<!-- e : content_area -->
+		
+	</div>
+	
+	
+	
+	
+	
+	<!-- s : popup container -->
+	<div class="popup_container ai" id="layerPop_type1">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>AI추가</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: pop wrap-->
+						<div class="build_content">
+							<div class="build_layer_inner">
+								<table class="build_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="60px">
+									<col width="*">
+								</colgroup>
+				
+									<tbody>
+										<tr>
+											<th><label for="">사용</label></th>
+											<td>
+												<input type="checkbox" id="" name="chak1" checked="checked" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">이름</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">설명</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">메모리종류</p>
+									<input type="radio" id="" name="build_chak1" checked="checked" /><label for="">WORD</label><br />
+									<input type="radio" id="" name="build_chak1" /><label for="">DWORD</label><br />
+									<input type="radio" id="" name="build_chak1" /><label for="">int</label><br />
+									<input type="radio" id="" name="build_chak1" /><label for="">word HL</label><br />
+									<input type="radio" id="" name="build_chak1" /><label for="">word LH</label>
+								</div>
+							</div>
+							
+							<div class="build_layer_area layer01">
+								<p class="title">AI</p>
+								
+								<div class="dp_ib">
+									<div class="build_layer"  style="height : 90px">
+										<p class="build_layer_title">PLC_SCAN</p>
+										
+										<table class="build_row">
+										<caption>caption</caption>
+										<colgroup>
+											<col width="60px">
+											<col width="*">
+										</colgroup>
+						
+											<tbody>
+												<tr>
+													<th><label for="">주소</label></th>
+													<td>
+														<input type="text" id=""  />
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									
+									<table class="build_row mt10">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">단위</label></th>
+												<td>
+													<select id="" name="" style="width: 202px">
+														<option value="" selected="selected" >℃</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">표시형식</label></th>
+												<td>
+													<input type="text" id=""  style="width: 200px" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<p class="list_tit">검색시간</p>
+									<p><input type="text" id=""  style="width: 200px" /> 밀리초</p>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">계산필터</p>
+									
+									<p class="list"><input type="radio" id="" name="build_chak2" checked="checked" /><label for="">비례적</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2" /><label for="">계측기 값</label></p>
+									<p class="list">
+										<input type="radio" id="" name="build_chak2" /><label for="">스크립트</label><br />
+										<input type="text" id=""  />
+									</p>
+									
+									<p class="list_tit">계산범위 초과시</p>
+									<p class="list"><input type="radio" id="" name="build_chak2-1" /><label for="">그대로 표시</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2-2" /><label for="">초과시 자름</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2-3" /><label for="">값 취소</label></p>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">변환값</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">Full</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Base</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">PlcFull</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">PlcBase</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+							<div class="build_layer_area layer02">
+								<p class="title">AIO</p>
+								
+								<p class="mb10"><input type="checkbox" id="" name="build_chak3" /><label for="">출력으로 사용</label></p>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">PLC_SCAN</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">스테이션</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">주소</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra1</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra2</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer mt20">
+									<p class="build_layer_title">계산필터</p>
+									
+									<p class="list"><input type="radio" id="" name="build_chak2" checked="checked" /><label for="">비례적</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2" /><label for="">계측기 값</label></p>
+									<p class="list">
+										<input type="radio" id="" name="build_chak2" /><label for="">스크립트</label><br />
+										<input type="text" id=""  />
+									</p>
+								</div>
+							</div>
+							
+							<div class="build_layer_area layer03">
+								<p class="title">경보</p>
+								
+								<div class="build_layer2">
+									<p class="mb10">
+										<input type="checkbox" id="" name="build_chak4" /><label for="">경보 사용</label>
+										<input type="checkbox" id="" name="build_chak4" /><label for="">통계자료저장</label>
+									</p>
+								
+									<table class="build_row mt10">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="120px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">경보조건</label></th>
+												<td>
+													<select id="" name="" style="width: 162px">
+														<option value="" selected="selected" >HiHi이상</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">우선순위</label></th>
+												<td>
+													<select id="" name="" style="width: 162px">
+														<option value="" selected="selected" >Level0</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">경보음성파일</label></th>
+												<td>
+													<input type="file" id=""  style="width: 250px" />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">경보그래픽파일</label></th>
+												<td>
+													<input type="file" id=""  style="width: 250px" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">경보레벨</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">HiHi</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">High</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Low</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">LoLo</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer2 ml20">
+									<p class="list_tit">과변화시 경보지연</p>
+									<p><input type="text" id=""  style="width: 200px" /> % 변화시</p>
+									<p><input type="text" id=""  style="width: 200px" /> 초간 지연</p>
+								</div>
+							</div>
+							
+						
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">확인</a>
+							<a class="pop_btn btn_type01 closePop" href="#">취소</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container ao" id="layerPop_type2">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>AO추가</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: pop wrap-->
+						<div class="build_content">
+							<div class="build_layer_inner">
+								<table class="build_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="60px">
+									<col width="*">
+								</colgroup>
+				
+									<tbody>
+										<tr>
+											<th><label for="">사용</label></th>
+											<td>
+												<input type="checkbox" id="" name="chak1" checked="checked" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">이름</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">설명</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								
+							</div>
+							
+							<div class="build_layer_area layer01">
+								<p class="title">AO</p>
+								
+								<div class="dp_ib">
+									<div class="build_layer"  style="height : 208px">
+										<p class="build_layer_title">PLC_SCAN</p>
+										
+										<table class="build_row">
+										<caption>caption</caption>
+										<colgroup>
+											<col width="60px">
+											<col width="*">
+										</colgroup>
+						
+											<tbody>
+												<tr>
+												<th><label for="">스테이션</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">주소</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra1</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra2</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									
+									<table class="build_row mt10">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">단위</label></th>
+												<td>
+													<select id="" name="" style="width: 202px">
+														<option value="" selected="selected" >℃</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">계산필터</p>
+									
+									<p class="list"><input type="radio" id="" name="build_chak2" checked="checked" /><label for="">비례적</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2" /><label for="">계측기 값</label></p>
+									<p class="list">
+										<input type="radio" id="" name="build_chak2" /><label for="">스크립트</label><br />
+										<input type="text" id=""  />
+									</p>
+									
+									<p class="list_tit">계산범위 초과시</p>
+									<p class="list"><input type="radio" id="" name="build_chak2-1" /><label for="">그대로 표시</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2-2" /><label for="">초과시 자름</label></p>
+									<p class="list"><input type="radio" id="" name="build_chak2-3" /><label for="">값 취소</label></p>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">변환값</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">Full</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Base</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">PlcFull</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">PlcBase</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">확인</a>
+							<a class="pop_btn btn_type01 closePop" href="#">취소</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container di" id="layerPop_type3">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>DI추가</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: pop wrap-->
+						<div class="build_content">
+							<div class="build_layer_inner">
+								<table class="build_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="60px">
+									<col width="*">
+								</colgroup>
+				
+									<tbody>
+										<tr>
+											<th><label for="">사용</label></th>
+											<td>
+												<input type="checkbox" id="" name="chak1" checked="checked" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">이름</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">설명</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="build_layer_area layer01">
+								<p class="title">DI</p>
+								
+								<div class="dp_ib">
+									<div class="build_layer"  style="height : 90px">
+										<p class="build_layer_title">PLC_SCAN</p>
+										
+										<table class="build_row">
+										<caption>caption</caption>
+										<colgroup>
+											<col width="60px">
+											<col width="*">
+										</colgroup>
+						
+											<tbody>
+												<tr>
+													<th><label for="">주소</label></th>
+													<td>
+														<input type="text" id=""  />
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									
+									<table class="build_row mt10">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="80px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">ON 설명</label></th>
+												<td>
+													<input type="text" id=""  style="width: 200px" />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">OFF 설명</label></th>
+												<td>
+													<input type="text" id=""  style="width: 200px" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<p class="list_tit">검색시간</p>
+									<p><input type="text" id=""  style="width: 200px" /> 밀리초</p>
+								</div>
+							</div>
+							
+							<div class="build_layer_area layer02">
+								<p class="title">DIO</p>
+								
+								<p class="mb10"><input type="checkbox" id="" name="build_chak3" /><label for="">출력으로 사용</label></p>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">PLC_SCAN</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="60px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">스테이션</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">주소</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra1</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra2</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer mt20">
+									<p class="build_layer_title">릴레이 종류</p>
+									
+									<p class="list"><input type="radio" id="" name="build_chak2" checked="checked" /><label for="">래치</label></p>
+									<p class="list">
+										<label for="" class="label">ON지연</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+									<p class="list">
+										<label for="" class="label">OFF지연</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+									<p class="list"><input type="radio" id="" name="build_chak2" /><label for="">펄스</label></p>
+									<p class="list">
+										<label for="" class="label">펄스시간</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+								</div>
+							</div>
+							
+							<div class="build_layer_area layer03">
+								<p class="title">경보</p>
+								
+								<div class="build_layer2">
+									<p class="mb10">
+										<input type="checkbox" id="" name="build_chak4" /><label for="">경보 사용</label>
+										<input type="checkbox" id="" name="build_chak4" /><label for="">통계자료저장</label>
+									</p>
+								
+									<table class="build_row mt10">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="120px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">경보조건</label></th>
+												<td>
+													<select id="" name="" style="width: 162px">
+														<option value="" selected="selected" >HiHi이상</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">우선순위</label></th>
+												<td>
+													<select id="" name="" style="width: 162px">
+														<option value="" selected="selected" >Level0</option>
+														<option value=""  >...</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">경보음성파일</label></th>
+												<td>
+													<input type="file" id=""  style="width: 250px" />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">경보그래픽파일</label></th>
+												<td>
+													<input type="file" id=""  style="width: 250px" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+						
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">확인</a>
+							<a class="pop_btn btn_type01 closePop" href="#">취소</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container do" id="layerPop_type4">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>DO추가</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: pop wrap-->
+						<div class="build_content">
+							<div class="build_layer_inner">
+								<table class="build_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="60px">
+									<col width="*">
+								</colgroup>
+				
+									<tbody>
+										<tr>
+											<th><label for="">사용</label></th>
+											<td>
+												<input type="checkbox" id="" name="chak1" checked="checked" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">이름</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+										<tr>
+											<th><label for="">설명</label></th>
+											<td>
+												<input type="text" id="" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="build_layer_area layer01">
+								<p class="title">DO</p>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">PLC_SCAN</p>
+									
+									<table class="build_row">
+									<caption>caption</caption>
+									<colgroup>
+										<col width="80px">
+										<col width="*">
+									</colgroup>
+					
+										<tbody>
+											<tr>
+												<th><label for="">스테이션</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">주소</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra1</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">Extra2</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">ON 설명</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+											<tr>
+												<th><label for="">OFF 설명</label></th>
+												<td>
+													<input type="text" id=""  />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="build_layer">
+									<p class="build_layer_title">릴레이 종류</p>
+									
+									<p class="list"><input type="radio" id="" name="build_chak2" checked="checked" /><label for="">래치</label></p>
+									<p class="list">
+										<label for="" class="label">ON지연</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+									<p class="list">
+										<label for="" class="label">OFF지연</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+									<p class="list"><input type="radio" id="" name="build_chak2" /><label for="">펄스</label></p>
+									<p class="list">
+										<label for="" class="label">펄스시간</label>
+										<input type="text" id="" style="width: 150px" /> 초
+									</p>
+								</div>
+							</div>
+							
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">확인</a>
+							<a class="pop_btn btn_type01 closePop" href="#">취소</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- e: popup container -->
+	
+</div>
+
+</body>
+</html>

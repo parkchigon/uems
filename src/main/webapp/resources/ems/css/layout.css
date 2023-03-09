@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/* CSS Document */
+body	{background: #191b22;overflow: hidden; font-family: '나눔고딕',NanumGothic;}
+
+#wrap_area	{position:relative;width:1920px;height:1030px;color:#fff;font-size: 15px;overflow: hidden;}
+#wrap_pop	{padding:15px 30px;font-size: 13px;}
+
+#header	{position:relative;height: 39px;border-bottom: 1px solid #22242b;}
+#header .topUtil	{position:absolute;top:12px;right:28px;}
+
+#container	{position:relative;padding-left:57px;width:1863px;}
+
+#lnb	{position:absolute;top:0;left:0;width:57px;height:100%;background: #2c3039;}
+
+#content_area	{margin-left:25px;width:1213px;height:960px;}
+#content_area.screen_all {/* padding-top:70px; */margin-right:25px;width:auto;}
+
+#data_area	{position:absolute;top:10px;right:0;margin-right:25px;width:575px;}
+#container.build #data_area {top:50px;}
+
+
+/* footer 영역 */
+#footer	{position:absolute;bottom:0;left:85px;width:1810px;}
+/* #data_area + #footer	{width:1210px;} */
+	
+	
+
+	
+	

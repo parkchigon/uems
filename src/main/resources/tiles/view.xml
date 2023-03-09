@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- 로그인 레이아웃 -->
+    <definition name="/login/login" extends="LoginTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/login/login.jsp" />
+    </definition>
+    
+    <!-- UEMS 메인화면 레이아웃 -->
+    <definition name="/main/*" extends="UemsTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/main/{1}.jsp" />
+    </definition>
+    
+	<!-- 통합센터 -->
+	<definition name="/uems/integration/miniDiagramType/*" extends="IntegrationTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/uems/integration/miniDiagramType/{1}.jsp" />
+	</definition>
+	
+	<!-- 통합센터 -->
+	<definition name="/uems/integration/*" extends="IntegrationTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/uems/integration/{1}.jsp" />
+	</definition>
+
+    <definition name="/uems/*/*" extends="DefaultTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/uems/{1}/{2}.jsp" />
+    </definition>
+
+	<definition name="/uems/*/*/*" extends="DefaultTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/uems/{1}/{2}/{3}.jsp" />
+    </definition>
+
+    <!-- EMS 구축 레이아웃 -->
+    <definition name="/ems/build/*" extends="EmsBuildTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/ems/build/{1}.jsp" />
+    </definition>    
+    
+    <!-- EMS 메인 레이아웃 -->
+	<definition name="/ems/*/*" extends="EmsTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/ems/{1}/{2}.jsp" />
+    </definition>    
+
+	<definition name="/ems/*/*/*" extends="EmsTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/ems/{1}/{2}/{3}.jsp" />
+    </definition>    
+        
+    <!-- 첨부파일 레이아웃 -->
+	<definition name="/common/attachfile/attachfileRegist" extends="PopupTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/common/attachfile/attachfileRegist.jsp" />
+	</definition>
+	
+	<!-- 모바일 레이아웃 -->
+	<definition name="/mobile/*" extends="MobileTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/mobile/{1}.jsp" />
+    </definition> 
+    
+	<definition name="/mobile/*/*" extends="MobileTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/mobile/{1}/{2}.jsp" />
+    </definition> 
+    
+    <!-- 모바일 메인 레이아웃 -->
+	<definition name="/mobileMain/*" extends="MobileMainTemplate">
+        <put-attribute name="content" 	value="/WEB-INF/views/mobileMain/{1}.jsp" />
+    </definition> 
+
+</tiles-definitions>

@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/blockDiagram_A21106.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+
+<div id="loading_mask"></div>
+<div class="loading"><span class="blind">로딩중...</span></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>목포지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#" name="loading">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li><a href="#">지점 관리</a></li>
+					<li><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li class="on"><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+			
+			<div class="blockDiagram_area typeA">
+			
+				<div class="hw">
+					<span class="pipe_hw_ud up pipe001 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_ud down pipe002 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_ud down pipe003 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_ud down pipe004 on" name="pipe8"><em></em></span>
+					
+					<span class="pipe_hw_lr right pipe001 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_lr right pipe002 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_lr left pipe003 on" name="pipe8"><em></em></span>
+					<span class="pipe_hw_lr right pipe004 on" name="pipe8"><em></em></span>
+					
+					<span class="pipe_hw_corner_dl corner001"></span>
+					
+					<span class="pipe_hw_corner_dr corner001"></span>
+					<span class="pipe_hw_corner_dr corner002"></span>
+					<span class="pipe_hw_corner_dr corner003"></span>
+					
+					<span class="pipe_hw_corner_ul corner001"></span>
+					
+					<span class="pipe_hw_corner_ur corner001"></span>
+					
+					<span class="pipe_hw_t_lru corner001"></span>
+					
+					<span class="sensor_u_temperature sensor001"><em id="fridge_cool_out_temp">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor002"><em id="fridge_cool_in_temp">12345678 ℃</em></span>
+					
+					<div class="coolingtower no1" id="cooltower1">
+						<div class="one_inner">
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a><!-- 모달팝업 -->
+							<strong class="text_info font_yellow textR" id="cooltower1_inv_frequency">12345678.0 Hz</strong>
+							<span class="icon_direct direct"></span><!-- 자동일경우 none -->
+						</div>
+						<strong class="name">냉각탑</strong>
+					</div>
+					
+					<div class="coolingtower no2" id="cooltower2">
+						<div class="one_inner">
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a><!-- 모달팝업 -->
+							<strong class="text_info font_yellow textL" id="cooltower2_inv_frequency">12345678.0 Hz</strong>
+							<span class="icon_direct direct"></span><!-- 자동일경우 none -->
+						</div>
+					</div>
+					
+					<div class="coolpump_area">
+						<a class="coolpump ud No1" href="#" id="coolpump_main">
+							<span class="fan on"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info">냉각수<br />펌프</strong>
+					</div>
+				</div>
+				
+				<div class="chw">
+					<span class="pipe_chw_ud down pipe001 on" name="pipe3"><em></em></span>
+					<span class="pipe_chw_ud up pipe002 on" name="pipe3"></span>
+					<span class="pipe_chw_ud up pipe003 on" name="pipe5"></span>
+					<span class="pipe_chw_ud down pipe004 on" name="pipe5"></span>
+					<span class="pipe_chw_ud up pipe005 on" name="pipe9"></span><!-- 테그네임이 2개임 -->
+					<span class="pipe_chw_ud up pipe006 on" name="pipe6"></span>
+					<span class="pipe_chw_ud down pipe007 on" name="pipe6"></span>
+					<span class="pipe_chw_ud up pipe008 on" name="pipe2"><em></em></span>
+					<span class="pipe_chw_ud up pipe009 on" name="pipe2"><em></em></span>
+					
+					<span class="pipe_chw_lr left pipe001 on" name="pipe3"></span>
+					<span class="pipe_chw_lr left pipe002 on" name="pipe4"></span>
+					<span class="pipe_chw_lr left pipe003 on" name="pipe3"></span>
+					<span class="pipe_chw_lr left pipe004 on" name="pipe2"><em></em></span>
+					<span class="pipe_chw_lr left pipe005 on" name="pipe5"></span>
+					<span class="pipe_chw_lr right pipe006 on" name="pipe3"><em></em></span>
+					<span class="pipe_chw_lr right pipe007 on" name="pipe2"><em></em></span>
+					<span class="pipe_chw_lr right pipe008 on" name="pipe6"></span>
+					<span class="pipe_chw_lr right pipe009 on" name="pipe7"></span>
+					<span class="pipe_chw_lr right pipe010 on" name="pipe2"></span>
+					<span class="pipe_chw_lr left pipe011 on" name="pipe2"></span>
+					<span class="pipe_chw_lr right pipe012 on" name="pipe2"></span>
+					
+					<span class="pipe_chw_corner_dl corner001"></span>
+					<span class="pipe_chw_corner_dl corner002"></span>
+					
+					<span class="pipe_chw_corner_dr corner001"></span>
+					<span class="pipe_chw_corner_dr corner002"></span>
+					<span class="pipe_chw_corner_dr corner003"></span>
+					
+					<span class="pipe_chw_corner_ul corner001"></span>
+					<span class="pipe_chw_corner_ul corner002"></span>
+					<span class="pipe_chw_corner_ul corner003"></span>
+					
+					<span class="pipe_chw_corner_ur corner001"></span>
+					<span class="pipe_chw_corner_ur corner002"></span>
+					<span class="pipe_chw_corner_ur corner003"></span>
+					
+					<span class="pipe_chw_t_udr corner001"></span>
+					<span class="pipe_chw_t_lru corner001"></span>
+					<span class="pipe_chw_t_lru corner002"></span>
+					<span class="pipe_chw_t_lru corner003"></span>
+					
+					<span class="pipe_chw_t_lrd corner001"></span>
+					<span class="pipe_chw_t_lrd corner002"></span>
+					
+					<span class="sensor_d_temperature sensor001"><em class="font_sky" id="fridge_storagetank_out_temp">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor002"><em class="font_sky" id="fridge_storagetank_in_temp">12345678 ℃</em></span>
+					
+					<span class="sensor_r_temperature sensor001"><em class="font_sky" id="storagetank_high_temp">12345678 ℃</em></span>
+					<span class="sensor_r_temperature sensor002"><em class="font_sky" id="storagetank_low_temp">12345678 ℃</em></span>
+					
+					<span class="sensor_l_temperature sensor001"><em class="font_sky" id="icestorage_out_temp">12345678 ℃</em></span>
+					<span class="sensor_l_temperature sensor002"><em class="font_sky" id="icestorage_in_temp">12345678 ℃</em></span>
+					
+					<div class="symbol No1" id="radiant_heat_inspect_flux"><em>유량:158 ㎡/h</em></div>
+					<div class="symbol No2" id="heatstorage_inspect_flux"><em>유량:158 ㎡/h</em></div>
+					
+					<div class="vv-016k off">
+						<a href="#layerPop_type8" class="power" name="modal">닫힘</a>
+						<strong class="name">MV1</strong>
+						<span class="icon_direct direct"></span>
+					</div>
+					
+					<div class="vv-011k up">
+						<a class="btn" href="#layerPop_type2" name="modal"></a>
+						<strong class="name">MV2</strong>
+						<span class="icon_direct direct"></span>
+					</div>
+					
+					<div class="heat_storaging_tank" id="storagetank_set">
+						<span class="bg" style="height:50%;"></span>
+						<strong class="text">50%</strong>
+						<strong class="text2 up">축냉시</strong>
+						<strong class="text2 down">방냉시</strong>
+					</div>
+					
+					<div class="centrifugal_area">
+						<div class="centrifugal No1" id="fridge">
+							<a href="#layerPop_type7" class="power no1 on" name="modal">가동</a>
+							<span class="icon_direct no1 direct"></span>
+							
+							<a href="#layerPop_type7" class="power no2 on" name="modal">가동</a>
+							<span class="icon_direct no2 direct"></span>
+						</div>
+						<strong class="text_info">냉동기</strong>
+					</div>
+					
+					<div class="coolpump_area">
+						<a class="coolpump No1" href="#" id="storagetankpump_main">
+							<span class="fan on"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No2" href="#" id="storagetankpump_pre">
+							<span class="fan off"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info no2">축냉 펌프</strong>
+					</div>
+					
+					<div class="coolpump_area">
+						<strong class="text_info no3 font_yellow" id="icestoragepump_inv_frequency">12345678.0 Hz</strong>
+						<a class="coolpump No3" href="#" id="icestoragepump_main">
+							<span class="fan on"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No4" href="#" id="icestoragepump_pre">
+							<span class="fan off"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info no4">방냉 펌프</strong>
+					</div>
+				</div>
+				
+				<div class="glycol">
+					<div class="hx_plate_v"></div>
+					
+					<span class="pipe_glycol_ud down pipe001 on" name="pipe1"><em></em></span>
+					<span class="pipe_glycol_ud up pipe002 on" name="pipe1"><em></em></span>
+					
+					<span class="pipe_glycol_lr left pipe001 on" name="pipe1"><em></em></span>
+					<span class="pipe_glycol_lr right pipe002 on" name="pipe1"><em></em></span>
+					<span class="pipe_glycol_lr left pipe003 on" name="pipe1"></span>
+					<span class="pipe_glycol_lr right pipe004 on" name="pipe1"></span>
+					
+					<span class="pipe_glycol_corner_ul corner001"></span>
+					<span class="pipe_glycol_corner_ul corner002"></span>
+					<span class="pipe_glycol_corner_dl corner001"></span>
+					<span class="pipe_glycol_corner_dl corner002"></span>
+					
+					<span class="sensor_u_temperature sensor001"><em class="font_yellow" id="coolwater_in_temp">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor002"><em class="font_yellow" id="coolwater_out_temp">12345678 ℃</em></span>
+					
+					<div class="coolpump_area">
+						<a class="coolpump no1" href="#" id="coolwaterpump_main">
+							<span class="fan off"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump no2" href="#" id="coolwaterpump_pre">
+							<span class="fan off"></span>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info">냉수 펌프</strong>
+					</div>
+					
+					<div class="header No1">공<br />급<br />헤<br />더<em></em></div>
+					<div class="header No2">환<br />수<br />헤<br />더<em></em></div>
+				</div>
+				
+			</div>
+			
+			<div class="btn_areaC mt5">
+				<a class="btnType btn_type02" href="#">확인</a>
+			</div>
+			
+			
+			
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+		<div class="scroll" style="height:870px;">
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉각수 펌프<a href="#coolpump_main" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉각탑 #1<a href="#cooltower1" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#cooltower1_inv_frequency" class="underline" name="buildChak">인버터 주파수</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">인버터 주파수설정</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉각탑 #2<a href="#cooltower2" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#cooltower2_inv_frequency" class="underline" name="buildChak">인버터 주파수</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">인버터 주파수설정</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉수펌프 메인<a href="#coolwaterpump_main" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기<a href="#fridge" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">COMP#1 RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">COMP#2 RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">COMP#1 수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">COMP#2 수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">COMP#1 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">COMP#2 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">COMP#1 제빙선택 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">COMP#2 제빙선택 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">COMP#1 냉방선택 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">COMP#2 냉방선택 기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>온도</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row"><a href="#coolwater_in_temp" class="underline" name="buildChak">냉수 입구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#coolwater_out_temp" class="underline" name="buildChak">냉수 출구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#fridge_cool_in_temp" class="underline" name="buildChak">냉동기 냉각수 입구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#fridge_cool_out_temp" class="underline" name="buildChak">냉동기 냉각수 출구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#fridge_storagetank_in_temp" class="underline" name="buildChak">냉동기 축냉 입구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#fridge_storagetank_out_temp" class="underline" name="buildChak">냉동기 축냉 출구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#icestorage_in_temp" class="underline" name="buildChak">방냉입구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#icestorage_out_temp" class="underline" name="buildChak">방냉출구온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>방냉 펌프 메인<a href="#icestoragepump_main" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN(INV)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">수동/자동(INV)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">인버터 수동주파수설정</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#icestoragepump_inv_frequency" class="underline" name="buildChak">INV 주파수</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>방냉펌프 예비<a href="#icestoragepump_pre" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>순시유량</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row"><a href="#heatstorage_inspect_flux" class="underline" name="buildChak">축열순시유량</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#radiant_heat_inspect_flux" class="underline" name="buildChak">방열순시유량</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>MV1</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">MV1</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">열림/닫힘</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>MV2</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">MV2 개도</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>배관</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe1',1)" onmouseout="pipeChak('pipe1',0)" class="underline">배관1</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe2',1)" onmouseout="pipeChak('pipe2',0)" class="underline">배관2</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe3',1)" onmouseout="pipeChak('pipe3',0)" class="underline">배관3</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe4',1)" onmouseout="pipeChak('pipe4',0)" class="underline">배관4</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe5',1)" onmouseout="pipeChak('pipe5',0)" class="underline">배관5</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe6',1)" onmouseout="pipeChak('pipe6',0)" class="underline">배관6</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe7',1)" onmouseout="pipeChak('pipe7',0)" class="underline">배관7</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe8',1)" onmouseout="pipeChak('pipe8',0)" class="underline">배관8</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe9',1)" onmouseout="pipeChak('pipe9',0)" class="underline">배관9(우)</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#" onmouseover="pipeChak('pipe9',1)" onmouseout="pipeChak('pipe9',0)" class="underline">배관10(좌)</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>축냉펌프 메인<a href="#storagetankpump_main" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN(INV)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>축냉펌프 예비<a href="#storagetankpump_pre" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">RUN</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">수동/자동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">기동/정지</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>축열조 설정<a href="#storagetank_set" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="20%">
+							<col width="*">
+							<col width="20%">
+							<col width="30%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">축열조 축열량</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"><a href="#storagetank_high_temp" class="underline" name="buildChak">축열조 상부온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><a href="#storagetank_low_temp" class="underline" name="buildChak">축열조 하부온도</a></th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		</div>
+		<!-- e : data_area -->
+		
+	</div>
+	
+	
+</div>
+
+</body>
+</html>

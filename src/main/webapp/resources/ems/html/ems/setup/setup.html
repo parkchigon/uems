@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/blockDiagram_C64401.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4 on" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<div class="subTitle_area">
+				설정관리
+			</div>
+			
+			<div class="blockDiagram_area typeH">
+				
+				<div class="hw">
+					<span class="pipe_hw_ud down pipe001" name="DI_0168"></span>
+					<span class="pipe_hw_ud down pipe002" name="DI_0167"></span>
+					<span class="pipe_hw_ud down pipe003 on" name="DI_0166"></span>
+					<span class="pipe_hw_ud up pipe004" name="DI_0168"></span>
+					<span class="pipe_hw_ud up pipe005" name="DI_0167"></span>
+					<span class="pipe_hw_ud up pipe006 on" name="DI_0166"></span>
+					<span class="pipe_hw_ud down pipe007 on" name="DI_0166"></span>
+					<span class="pipe_hw_ud down pipe008" name="DI_0167"></span>
+					<span class="pipe_hw_ud up pipe009" name="DI_0163"></span>
+					<span class="pipe_hw_ud up pipe010" name="DI_0165"></span>
+					<span class="pipe_hw_ud up pipe011" name="DI_0164"></span>
+					<span class="pipe_hw_ud down pipe012" name="DI_0163"></span>
+					<span class="pipe_hw_ud down pipe013" name="DI_0165"></span>
+					<span class="pipe_hw_ud down pipe014" name="DI_0164"></span>
+					<!-- <span class="pipe_hw_ud pipe015" name=""></span> -->
+					<!-- <span class="pipe_hw_ud pipe016" name=""></span> -->
+					<span class="pipe_hw_ud down pipe017 on" name="DI_0166"></span>
+					<span class="pipe_hw_ud down pipe018" name="DI_0167"></span>
+					<span class="pipe_hw_ud down pipe019" name="DI_0168"></span>
+					
+					<span class="pipe_hw_lr right pipe001" name="DI_0168"></span>
+					<span class="pipe_hw_lr right pipe002" name="DI_0167"></span>
+					<span class="pipe_hw_lr right pipe003 on" name="DI_0166"></span>
+					<span class="pipe_hw_lr right pipe004" name="DI_0168"></span>
+					<span class="pipe_hw_lr right pipe005" name="DI_0167"></span>
+					<span class="pipe_hw_lr right pipe006 on" name="DI_0166"></span>
+					<span class="pipe_hw_lr right pipe007" name="DI_0163"></span>
+					<span class="pipe_hw_lr right pipe008" name="DI_0162"></span>
+					<span class="pipe_hw_lr right pipe009" name="DI_0161"></span>
+					<span class="pipe_hw_lr right pipe010 on" name="DI_0160"></span>
+					<span class="pipe_hw_lr right pipe011" name="DI_0168"></span>
+					<span class="pipe_hw_lr right pipe012" name="DI_0167"></span>
+					<span class="pipe_hw_lr right pipe013 on" name="DI_0166"></span>
+					<span class="pipe_hw_lr left pipe014 on" name="DI_0166"></span>
+					<span class="pipe_hw_lr left pipe015" name="DI_0167"></span>
+					<span class="pipe_hw_lr left pipe016" name="DI_0168"></span>
+					
+					<span class="pipe_hw_corner_dl corner001"></span>
+					<span class="pipe_hw_corner_dl corner002"></span>
+					<span class="pipe_hw_corner_dl corner003"></span>
+					<span class="pipe_hw_corner_dr corner001"></span>
+					<span class="pipe_hw_corner_dr corner002"></span>
+					<span class="pipe_hw_corner_dr corner003"></span>
+					<span class="pipe_hw_corner_dr corner004"></span>
+					<span class="pipe_hw_corner_dr corner005"></span>
+					<span class="pipe_hw_corner_ul corner001"></span>
+					<span class="pipe_hw_corner_ul corner002"></span>
+					<span class="pipe_hw_corner_ul corner003"></span>
+					<span class="pipe_hw_corner_ul corner004"></span>
+					<span class="pipe_hw_corner_ul corner005"></span>
+					<span class="pipe_hw_corner_ul corner006"></span>
+					<span class="pipe_hw_corner_ul corner007"></span>
+					<span class="pipe_hw_corner_ur corner001"></span>
+					<span class="pipe_hw_corner_ur corner002"></span>
+					<span class="pipe_hw_corner_ur corner003"></span>
+					<span class="pipe_hw_corner_ur corner004"></span>
+					<span class="pipe_hw_t_x corner001"></span>
+					<span class="pipe_hw_t_x corner002"></span>
+					<span class="pipe_hw_t_x corner003"></span>
+					<span class="pipe_hw_t_x corner004"></span>
+					<span class="pipe_hw_t_lru corner001"></span>
+					<span class="pipe_hw_t_lru corner002"></span>
+					
+					<span class="sensor_u_temperature sensor001"><em>12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor002"><em>12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor003"><em>12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor004"><em>12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor005"><em>12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor006"><em>12345678 ℃</em></span>
+					
+					<div class="coolpump_area">
+						<a class="coolpump No4" href="#">
+							<span class="fan off"></span>
+							<strong class="name">SB</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No3" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#3</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No2" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#2</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No1" href="#">
+							<span class="fan on"></span>
+							<strong class="name">#1</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info">냉각수펌프</strong>
+					</div>
+					
+					<div class="coolingtower duo No1">
+						<div class="duo_inner">
+							<span class="text">1-1</span>
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a><!-- 모달팝업 -->
+							<span class="icon_direct auto"></span><!-- 자동일경우 none -->
+						</div>
+						<div class="duo_inner">
+							<span class="text">1-2</span>
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+					</div>
+					<div class="coolingtower duo No2">
+						<div class="duo_inner">
+							<span class="text">2-1</span>
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+						<div class="duo_inner">
+							<span class="text">2-2</span>
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+					</div>
+					<div class="coolingtower duo No3">
+						<div class="duo_inner">
+							<span class="text">3-1</span>
+							<a href="#layerPop_type1" class="power on" name="modal">가동</a>
+							<span class="icon_direct direct"></span>
+						</div>
+						<div class="duo_inner">
+							<span class="text">3-2</span>
+							<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="chw">
+					<span class="pipe_chw_ud down pipe001" name="DI_0135"></span>
+					<span class="pipe_chw_ud down pipe002" name="DI_0140"></span>
+					<span class="pipe_chw_ud up pipe003" name="DI_0131"></span>
+					<span class="pipe_chw_ud up pipe004" name="DI_0132"></span>
+					<span class="pipe_chw_ud down pipe005" name="DI_0130"></span>
+					<span class="pipe_chw_ud down pipe006" name="DI_0131"></span>
+					<span class="pipe_chw_ud down pipe007" name="DI_0133"></span>
+					<span class="pipe_chw_ud down pipe008" name="DI_0134"></span>
+					
+					<span class="pipe_chw_lr left pipe001" name="DI_0135"></span>
+					<span class="pipe_chw_lr left pipe002" name="DI_0136"></span>
+					<span class="pipe_chw_lr left pipe003" name="DI_0137"></span>
+					<span class="pipe_chw_lr right pipe004" name="DI_0140"></span>
+					<span class="pipe_chw_lr right pipe005" name="DI_0141"></span>
+					<span class="pipe_chw_lr right pipe006" name="DI_0139"></span>
+					<span class="pipe_chw_lr right pipe007" name="DI_0131"></span>
+					<span class="pipe_chw_lr right pipe008" name="DI_0128"></span>
+					<span class="pipe_chw_lr right pipe009" name="DI_0129"></span>
+					<span class="pipe_chw_lr right pipe010" name="DI_0130"></span>
+					<span class="pipe_chw_lr right pipe011" name="DI_0135"></span>
+					<span class="pipe_chw_lr right pipe012" name="DI_0136"></span>
+					<span class="pipe_chw_lr right pipe013" name="DI_0137"></span>
+					<span class="pipe_chw_lr left pipe014" name="DI_0144"></span>
+					<span class="pipe_chw_lr right pipe015" name="DI_0144"></span>
+					<span class="pipe_chw_lr left pipe016" name="DI_0146"></span>
+					<span class="pipe_chw_lr right pipe017" name="DI_0146"></span>
+					<span class="pipe_chw_lr left pipe018" name="DI_0148"></span>
+					<span class="pipe_chw_lr right pipe019" name="DI_0148"></span>
+					
+					<span class="pipe_chw_ud up pipe009" name=""></span>
+					<span class="pipe_chw_ud up pipe010" name=""></span>
+					<span class="pipe_chw_ud up pipe011" name=""></span>
+					
+					<span class="pipe_chw_corner_ur corner001"></span>
+					<span class="pipe_chw_corner_ur corner002"></span>
+					
+					<span class="pipe_chw_corner_ul corner001"></span>
+					<span class="pipe_chw_corner_ul corner002"></span>
+					<span class="pipe_chw_corner_ul corner003"></span>
+					<span class="pipe_chw_corner_ul corner004"></span>
+					<span class="pipe_chw_corner_ul corner005"></span>
+					
+					<span class="pipe_chw_corner_dr corner001"></span>
+					<span class="pipe_chw_corner_dr corner002"></span>
+					
+					<span class="pipe_chw_corner_dl corner001"></span>
+					<span class="pipe_chw_corner_dl corner002"></span>
+					
+					<span class="pipe_chw_t_x corner001"></span>
+					<span class="pipe_chw_t_x corner002"></span>
+					<span class="pipe_chw_t_x corner003"></span>
+					
+					<span class="pipe_chw_t_udr corner001"></span>
+					<span class="pipe_chw_t_udr corner002"></span>
+					<span class="pipe_chw_t_udr corner003"></span>
+					<span class="pipe_chw_t_udr corner004"></span>
+					<span class="pipe_chw_t_udr corner005"></span>
+					<span class="pipe_chw_t_lru corner001"></span>
+					<span class="pipe_chw_t_lru corner002"></span>
+					<span class="pipe_chw_t_lru corner003"></span>
+					
+					<span class="sensor_d_temperature sensor001"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor002"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor003"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor004"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor005"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor006"><em class="font_sky">12345678 ℃</em></span>
+					
+					<span class="sensor_l_temperature sensor001"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_l_temperature sensor002"><em class="font_sky">12345678 ℃</em></span>
+					
+					<span class="sensor_d_temperature sensor007"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor008"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor009"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor010"><em class="font_sky">12345678 ℃</em></span>
+					
+					<span class="sensor_u_temperature sensor001"><em class="font_sky">12345678 ℃</em></span>
+					<strong class="temperature t001">12345678<em class="font_yellow"> ℃</em></strong>
+					<span class="sensor_u_temperature sensor002"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor003"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor004"><em class="font_sky">12345678 ℃</em></span>
+					
+					<div class="centrifugal_area">
+						<div class="centrifugal No1">
+							<strong class="name">#1</strong>
+							<a href="#layerPop_type7" class="power on" name="modal">가동</a>
+							<span class="icon_direct direct"></span>
+						</div>
+						<div class="centrifugal No2">
+							<strong class="name">#2</strong>
+							<a href="#layerPop_type7" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+						<div class="centrifugal No3">
+							<strong class="name">#3</strong>
+							<a href="#layerPop_type7" class="power off" name="modal">정지</a>
+							<span class="icon_direct direct"></span>
+						</div>
+						<strong class="text_info">냉동기</strong>
+					</div>
+					
+					<div class="avg_temperature_area">
+						평균온도
+						<span class="text_info font_sky">12345678 ℃</span>
+					</div>
+					
+					<div class="coolpump_area">
+						<a class="coolpump No4" href="#">
+							<span class="fan on"></span>
+							<strong class="name">SB</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No1" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#1</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No2" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#2</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No3" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#3</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info">브라인펌프</strong>
+					</div>
+					
+					<div class="vv-011k No1">
+						<a class="btn" href="#layerPop_type2" name="modal"></a>
+						<strong class="name">MV2</strong>
+						<span class="text_inner text01">100%</span>
+						<span class="text_inner text02">50%</span>
+						<span class="icon_direct direct"></span>
+					</div>
+					<div class="vv-011k No2">
+						<a class="btn" href="#layerPop_type2" name="modal"></a>
+						<strong class="name">MV1A</strong>
+						<span class="text_inner text01">100%</span>
+						<span class="text_inner text02">50%</span>
+						<span class="icon_direct direct"></span>
+					</div>
+					<div class="vv-011k No3">
+						<a class="btn" href="#layerPop_type2" name="modal"></a>
+						<strong class="name">MV1B</strong>
+						<span class="text_inner text01">100%</span>
+						<span class="text_inner text02">50%</span>
+						<span class="icon_direct direct"></span>
+					</div>
+					<div class="vv-011k No4">
+						<a class="btn" href="#layerPop_type2" name="modal"></a>
+						<strong class="name">MV1C</strong>
+						<span class="text_inner text01">100%</span>
+						<span class="text_inner text02">50%</span>
+						<span class="icon_direct direct"></span>
+					</div>
+					
+					<div class="heat_storaging_tank">
+						<span class="bg" style="height:50%;"></span>
+						<strong class="text">50%</strong>
+					</div>
+				</div>
+				
+				<div class="glycol">
+					<div class="hx_plate_v No1">
+						<strong class="name">#1</strong>
+					</div>
+					<div class="hx_plate_v No2">
+						<strong class="name">#2</strong>
+					</div>
+					<div class="hx_plate_v No3">
+						<strong class="name">#3</strong>
+					</div>
+					
+					<span class="pipe_glycol_lr left pipe001" name="DI_0120"></span>
+					<span class="pipe_glycol_lr left pipe002" name="DI_0119"></span>
+					<span class="pipe_glycol_lr left pipe003" name="DI_0118"></span>
+					<span class="pipe_glycol_lr right pipe004" name="DI_0120"></span>
+					<span class="pipe_glycol_lr right pipe005" name="DI_0114"></span>
+					<span class="pipe_glycol_lr right pipe006" name="DI_0120"></span>
+					<span class="pipe_glycol_lr right pipe007" name="DI_0119"></span>
+					<span class="pipe_glycol_lr right pipe008" name="DI_0113"></span>
+					<span class="pipe_glycol_lr right pipe009" name="DI_0119"></span>
+					<span class="pipe_glycol_lr right pipe010" name="DI_0118"></span>
+					<span class="pipe_glycol_lr right pipe011" name="DI_0112"></span>
+					<span class="pipe_glycol_lr right pipe012" name="DI_0118"></span>
+					<span class="pipe_glycol_lr right pipe013" name="DI_0115"></span>
+					<span class="pipe_glycol_lr left pipe014" name="DI_0118"></span>
+					<span class="pipe_glycol_lr right pipe015" name="DI_0118"></span>
+					<span class="pipe_glycol_lr left pipe016" name="DI_0119"></span>
+					<span class="pipe_glycol_lr right pipe017" name="DI_0119"></span>
+					<span class="pipe_glycol_lr left pipe018" name="DI_0120"></span>
+					<span class="pipe_glycol_lr right pipe019" name="DI_0120"></span>
+					
+					<span class="pipe_glycol_ud down pipe001" name="DI_0117"></span>
+					<span class="pipe_glycol_ud down pipe002" name="DI_0116"></span>
+					<span class="pipe_glycol_ud down pipe003" name="DI_0115"></span>
+					<span class="pipe_glycol_ud up pipe004" name="DI_0117"></span>
+					<span class="pipe_glycol_ud up pipe005" name="DI_0116"></span>
+					<span class="pipe_glycol_ud up pipe006" name="DI_0115"></span>
+					<span class="pipe_glycol_ud down pipe007" name="DI_0118"></span>
+					<span class="pipe_glycol_ud down pipe008" name="DI_0119"></span>
+					<span class="pipe_glycol_ud down pipe009" name="DI_0120"></span>
+					<span class="pipe_glycol_ud up pipe010" name="DI_0118"></span>
+					<span class="pipe_glycol_ud up pipe011" name="DI_0119"></span>
+					<span class="pipe_glycol_ud up pipe012" name="DI_0120"></span>
+					
+					<span class="pipe_glycol_corner_ul corner001"></span>
+					<span class="pipe_glycol_corner_ul corner002"></span>
+					<span class="pipe_glycol_corner_ul corner003"></span>
+					<span class="pipe_glycol_corner_ul corner004"></span>
+					<span class="pipe_glycol_corner_ul corner005"></span>
+					<span class="pipe_glycol_corner_ul corner006"></span>
+					
+					<span class="pipe_glycol_corner_dr corner001"></span>
+					
+					<span class="pipe_glycol_corner_dl corner001"></span>
+					<span class="pipe_glycol_corner_dl corner002"></span>
+					<span class="pipe_glycol_corner_dl corner003"></span>
+					<span class="pipe_glycol_corner_dl corner004"></span>
+					<span class="pipe_glycol_corner_dl corner005"></span>
+					<span class="pipe_glycol_corner_dl corner006"></span>
+					<span class="pipe_glycol_corner_dl corner007"></span>
+					
+					<span class="pipe_glycol_t_x corner001"></span>
+					<span class="pipe_glycol_t_x corner002"></span>
+					<span class="pipe_glycol_t_x corner003"></span>
+					<span class="pipe_glycol_t_x corner004"></span>
+					
+					<span class="pipe_glycol_t_lrd corner001"></span>
+					<span class="pipe_glycol_t_lrd corner002"></span>
+					
+					<div class="symbol No1">158 ㎡/h</div>
+					<div class="symbol No2">158 ㎡/h</div>
+					<div class="symbol No3">158 ㎡/h</div>
+					
+					<span class="sensor_u_temperature sensor001"><em class="font_yellow">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor002"><em class="font_yellow">12345678 ℃</em></span>
+					<strong class="temperature t002">12345678<em class="font_yellow"> ℃</em></strong>
+					<span class="sensor_u_temperature sensor003"><em class="font_yellow">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor004"><em class="font_yellow">12345678 ℃</em></span>
+					<strong class="temperature t003">12345678<em class="font_yellow"> ℃</em></strong>
+					<span class="sensor_u_temperature sensor005"><em class="font_yellow">12345678 ℃</em></span>
+					<span class="sensor_u_temperature sensor006"><em class="font_yellow">12345678 ℃</em></span>
+					<strong class="temperature t004">12345678<em class="font_yellow"> ℃</em></strong>
+					
+					<div class="coolpump_area">
+						<a class="coolpump No3" href="#">
+							<span class="fan on"></span>
+							<strong class="name">#3</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No2" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#2</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No1" href="#">
+							<span class="fan off"></span>
+							<strong class="name">#1</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<a class="coolpump No4" href="#">
+							<span class="fan off"></span>
+							<strong class="name">SB</strong>
+							<span class="icon_direct direct"></span>
+						</a>
+						<strong class="text_info">냉수펌프</strong>
+					</div>
+					
+					<div class="header No1">공<br />급<br />헤<br />더<em></em></div>
+					<div class="header No2">환<br />수<br />헤<br />더<em></em></div>
+				</div>
+				
+				
+				
+			</div>
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+			<div class="data_area_inner">
+				<dl>
+					<dt>냉동기 기동/정지 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="22%">
+							<col width="11.3%">
+							<col width="22%">
+							<col width="11.3%">
+							<col width="22%">
+							<col width="11.3%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기 1 기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2 기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 3 기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기 1 정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2 정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 3 정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기 제어 온도 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="22%">
+							<col width="11.3%">
+							<col width="22%">
+							<col width="11.3%">
+							<col width="22%">
+							<col width="11.3%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기 1 축냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2 축냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 3 축냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기 1 동시</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2 동시</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 3 동시</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기 1 냉단</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2 냉단</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 3 냉단</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동시운전 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">방냉종료 시간설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">시</span></td>
+									<th scope="row">방냉종료 축열량설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">%</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동파방지 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">동파방지 기동온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">동파방지 정지온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">동파방지 기동시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">분</span></td>
+									<th scope="row">동파방지 정지시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">분</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>알람 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">동파방지 경보온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각수 입구고온</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">브라인 출구 과냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>시간 제어설정
+						<div class="head_right">
+							<div class="switch on">
+								<span class="stop">정지</span>
+								<span class="start">가동</span>
+								<em></em>
+							</div>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">브라인펌프 정지지연</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉각펌프 정지지연</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉수펌프 정지지연</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">초</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set chart">적산 관리</span>
+						<div class="head_right">
+							<a href="#layerPop_type4" class="btn_use" name="modal">순번1번</a>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기 1대 정지온도 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기 2대 정지온도 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		<!-- e : data_area -->
+		
+		<!-- s : footer -->
+		<div id="footer" class=""><!-- 경보시 : warning , 알람확인후 : alarm_on -->
+			<span><a href="#">경보정보 : 냉각수온도 초과</a></span>
+		</div>
+		<!-- e : footer -->
+	    
+	</div>
+	
+	
+	
+	
+	
+	<!-- s : popup container -->
+	<div class="popup_container type2" id="layerPop_type3">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>설정값</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="*" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th>설정값 입력</th>
+									</tr>
+									<tr>
+										<td><input type="text" id="" name="" value="" /></td>
+									</tr>
+									<tr>
+										<td class="textL">
+											<p>ㆍ입력최소값 : -10</p>
+											<p>ㆍ입력최대값 : 120</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#layerPop2" name="alert">저장</a>
+							<a class="pop_btn btn_type01 closePop" href="">닫기</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container type2" id="layerPop_type4">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>태그ID</h2><a class="pop_btn btn_popup_header" href="#">트랜드보기</a></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="50%" />
+									<col width="*" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th colspan="2">냉동기 축냉 대수제어 교번사용</th>
+									</tr>
+									<tr>
+										<td><input type="radio" id="" name="chak4" checked="checked" /><label for="">선택</label></td>
+										<td><input type="radio" id="" name="chak4" /><label for="">미선택</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							<a class="pop_btn btn_type01 closePop" href="#">닫기</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- e: popup container -->
+	
+</div>
+
+</body>
+</html>

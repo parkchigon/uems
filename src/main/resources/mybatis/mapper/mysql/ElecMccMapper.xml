@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.ElecMccMapper">
+	<!--심야전기MCC리스트조회  -->
+	<select id="selectElecMccList" parameterType="ElecMcc" resultType="flkMap">
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY FEM.REG_DATE DESC) AS RNUM
+				,FEM.FEM_ID
+				,FEM.SITE_ID
+				,FEM.ELECMCC_NAME
+				,FEM.MCC_TYPE
+				,FEM.REFRIG_TYPE
+				,FEM.INVERTER_MAKER
+				,FEM.WATTMETER_MAKER
+				,S.SG_ID
+				,S.SITE_DESC
+			FROM TBL_FACILITY_ELECMCC_MASTER FEM INNER JOIN TBL_SITE S
+			ON FEM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			AND FEM.USE_FLAG = 'Y'
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FEM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FEM.ELECMCC_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FEM.MCC_TYPE LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FEM.REFRIG_TYPE LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FEM.INVERTER_MAKER LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FEM.WATTMETER_MAKER LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    ORDER BY FEM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!--심야전기MCC 상세정보  -->
+	<select id="selectElecMccInfo" parameterType="ElecMcc" resultType="flkMap">
+		SELECT
+			FEM.FEM_ID
+			,FEM.SITE_ID
+			,FEM.ELECMCC_NAME
+			,FEM.ADDRESS
+			,FEM.PHONE
+			,FEM.TEST_RUN_DATE
+			,DATE_FORMAT(FEM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FEM.SALES_INFO
+			,FEM.MCC_TYPE
+			,FEM.MCC_MAKER
+			,FEM.REFRIG_TYPE
+			,FEM.REFRIG_INTERNET
+			,FEM.INVERTER_STORAGE
+			,FEM.INVERTER_RELEASE
+			,FEM.INVERTER_MAKER
+			,FEM.WATTMETER_NIGHT
+			,FEM.WATTMETER_DAY
+			,FEM.WATTMETER_MAKER
+			,S.SG_ID
+		FROM TBL_FACILITY_ELECMCC_MASTER FEM INNER JOIN TBL_SITE S
+			ON FEM.SITE_ID = S.SITE_ID
+		WHERE FEM_ID = #{femId}
+	</select>
+	
+	<!-- 심야전기 등록 -->
+	<insert id="insertElecMccInfo" parameterType="ElecMcc" useGeneratedKeys="true" keyProperty="femId">
+		INSERT INTO TBL_FACILITY_ELECMCC_MASTER(
+			SITE_ID
+			,ELECMCC_NAME
+			,ADDRESS
+			,PHONE
+			,TEST_RUN_DATE
+			,SALES_INFO
+			,MCC_TYPE
+			,MCC_MAKER
+			,REFRIG_TYPE
+			,REFRIG_INTERNET
+			,INVERTER_STORAGE
+			,INVERTER_RELEASE
+			,INVERTER_MAKER
+			,WATTMETER_NIGHT
+			,WATTMETER_DAY
+			,WATTMETER_MAKER
+			,REG_ID
+			,REG_DATE
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{siteId}
+			,#{elecmccName}
+			,#{address}
+			,#{phone}
+			,#{testRunDate}
+			,#{salesInfo}
+			,#{mccType}
+			,#{mccMaker}
+			,#{refrigType}
+			,#{refrigInternet}
+			,#{inverterStorage}
+			,#{inverterRelease}
+			,#{inverterMaker}
+			,#{wattmeterNight}
+			,#{wattmeterDay}
+			,#{wattmeterMaker}
+			,#{regId}
+			,now()
+			,#{updateId}
+			,now()
+		)
+	</insert>
+	
+	<!--수정  -->
+	<update id="updateElecMccInfo" parameterType="ElecMcc">
+		UPDATE TBL_FACILITY_ELECMCC_MASTER
+		SET SITE_ID = #{siteId}
+			,ELECMCC_NAME = #{elecmccName}
+			,ADDRESS = #{address}
+			,PHONE = #{phone}
+			,TEST_RUN_DATE = #{testRunDate}
+			,SALES_INFO = #{salesInfo}
+			,MCC_TYPE = #{mccType}
+			,MCC_MAKER = #{mccMaker}
+			,REFRIG_TYPE = #{refrigType}
+			,REFRIG_INTERNET = #{refrigInternet}
+			,INVERTER_STORAGE = #{inverterStorage}
+			,INVERTER_RELEASE = #{inverterRelease}
+			,INVERTER_MAKER = #{inverterMaker}
+			,WATTMETER_NIGHT = #{wattmeterNight}
+			,WATTMETER_DAY = #{wattmeterDay}
+			,WATTMETER_MAKER = #{wattmeterMaker}
+		WHERE FEM_ID = #{femId}
+	</update>
+	
+	<!-- 삭제 -->
+	<update id="updateUseFlag" parameterType="ElecMcc">
+		UPDATE TBL_FACILITY_ELECMCC_MASTER
+		SET 
+			USE_FLAG = 'N'
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE FEM_ID = #{femId}
+	</update>
+</mapper>

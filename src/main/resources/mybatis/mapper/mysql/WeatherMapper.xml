@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.work.mapper.WeatherMapper">
+ 
+ 	<!-- 날씨별 부하량 조회 -->
+	<select id="selectWeatherOver" parameterType="Weather" resultType="Weather">
+		/* WeatherMapper.selectWeatherOver */
+		WITH TBL_TEMP AS (
+		    SELECT sg_cd
+		           , sg_name
+		           , a.site_cd as site_cd
+		           , site_name
+		           , date
+		           , date_dd
+		           , tmx
+		           , tmn
+		           , rin
+		           , ROUND(anal_value, 1) as anal_value
+		      FROM
+		    (
+			    SELECT TSG.sg_cd
+			           , sg_name
+			           , TS.site_cd
+			           , site_name
+			           , date
+			           , RIGHT(date, 2) AS date_dd
+			           , MAX(tmx) AS tmx
+			           , MIN(tmn) AS tmn
+			           , ROUND(AVG(SUBSTRING(rin_cd, 4)), 1) AS rin
+			      FROM tbl_weather TW, tbl_site TS, tbl_site_group TSG
+			     WHERE TW.site_id = TS.site_id
+			       AND TS.use_flag = 'Y'
+			       AND TS.sg_id = TSG.sg_id
+			       AND TSG.use_flag = 'Y'
+			       AND LEFT(date, 6) = CONCAT(#{checkYear}, #{checkMonth})
+				<if test="searchCondition != null and searchCondition != ''">
+					AND TS.sg_id = #{searchCondition}
+				</if>
+			    <if test="searchCondition2 != null and searchCondition2 != ''">
+					AND TS.site_id = #{searchCondition2}
+				</if>
+			     GROUP BY TS.sg_id, TW.site_id, date
+		    ) A
+			  LEFT OUTER JOIN tbl_stat_anal_daily TSAD
+			    ON anal_code = '22'
+			   AND A.site_cd = TSAD.site_cd
+			   AND A.date = TSAD.stat_date
+		)
+		
+		SELECT sg_name, site_name, col
+		       , IFNULL(SUM(day01), '') AS day01
+		       , IFNULL(SUM(day02), '') AS day02 
+		       , IFNULL(SUM(day03), '') AS day03 
+		       , IFNULL(SUM(day04), '') AS day04 
+		       , IFNULL(SUM(day05), '') AS day05 
+		       , IFNULL(SUM(day06), '') AS day06 
+		       , IFNULL(SUM(day07), '') AS day07 
+		       , IFNULL(SUM(day08), '') AS day08 
+		       , IFNULL(SUM(day09), '') AS day09 
+		       , IFNULL(SUM(day10), '') AS day10 
+		       , IFNULL(SUM(day11), '') AS day11 
+		       , IFNULL(SUM(day12), '') AS day12 
+		       , IFNULL(SUM(day13), '') AS day13 
+		       , IFNULL(SUM(day14), '') AS day14 
+		       , IFNULL(SUM(day15), '') AS day15 
+		       , IFNULL(SUM(day16), '') AS day16 
+		       , IFNULL(SUM(day17), '') AS day17 
+		       , IFNULL(SUM(day18), '') AS day18 
+		       , IFNULL(SUM(day19), '') AS day19 
+		       , IFNULL(SUM(day20), '') AS day20 
+		       , IFNULL(SUM(day21), '') AS day21 
+		       , IFNULL(SUM(day22), '') AS day22 
+		       , IFNULL(SUM(day23), '') AS day23 
+		       , IFNULL(SUM(day24), '') AS day24 
+		       , IFNULL(SUM(day25), '') AS day25 
+		       , IFNULL(SUM(day26), '') AS day26 
+		       , IFNULL(SUM(day27), '') AS day27 
+		       , IFNULL(SUM(day28), '') AS day28 
+		       , IFNULL(SUM(day29), '') AS day29 
+		       , IFNULL(SUM(day30), '') AS day30 
+		       , IFNULL(SUM(day31), '') AS day31 
+
+		FROM (
+		  SELECT sg_cd, sg_name, site_cd, site_name, '1_tmx' as col
+		         , case when date_dd = '01' then tmx end as day01 
+		         , case when date_dd = '02' then tmx end as day02
+		         , case when date_dd = '03' then tmx end as day03
+		         , case when date_dd = '04' then tmx end as day04
+		         , case when date_dd = '05' then tmx end as day05
+		         , case when date_dd = '06' then tmx end as day06
+		         , case when date_dd = '07' then tmx end as day07
+		         , case when date_dd = '08' then tmx end as day08
+		         , case when date_dd = '09' then tmx end as day09
+		         , case when date_dd = '10' then tmx end as day10
+		         , case when date_dd = '11' then tmx end as day11
+		         , case when date_dd = '12' then tmx end as day12
+		         , case when date_dd = '13' then tmx end as day13
+		         , case when date_dd = '14' then tmx end as day14
+		         , case when date_dd = '15' then tmx end as day15
+		         , case when date_dd = '16' then tmx end as day16
+		         , case when date_dd = '17' then tmx end as day17
+		         , case when date_dd = '18' then tmx end as day18
+		         , case when date_dd = '19' then tmx end as day19
+		         , case when date_dd = '20' then tmx end as day20
+		         , case when date_dd = '21' then tmx end as day21
+		         , case when date_dd = '22' then tmx end as day22
+		         , case when date_dd = '23' then tmx end as day23
+		         , case when date_dd = '24' then tmx end as day24
+		         , case when date_dd = '25' then tmx end as day25
+		         , case when date_dd = '26' then tmx end as day26
+		         , case when date_dd = '27' then tmx end as day27
+		         , case when date_dd = '28' then tmx end as day28
+		         , case when date_dd = '29' then tmx end as day29
+		         , case when date_dd = '30' then tmx end as day30
+		         , case when date_dd = '31' then tmx end as day31 
+		    FROM TBL_TEMP
+		    
+		  UNION ALL 
+		    
+		  SELECT sg_cd, sg_name, site_cd, site_name, '2_tmn' as col
+		         , case when date_dd = '01' then tmn end as day01 
+		         , case when date_dd = '02' then tmn end as day02
+		         , case when date_dd = '03' then tmn end as day03
+		         , case when date_dd = '04' then tmn end as day04
+		         , case when date_dd = '05' then tmn end as day05
+		         , case when date_dd = '06' then tmn end as day06
+		         , case when date_dd = '07' then tmn end as day07
+		         , case when date_dd = '08' then tmn end as day08
+		         , case when date_dd = '09' then tmn end as day09
+		         , case when date_dd = '10' then tmn end as day10
+		         , case when date_dd = '11' then tmn end as day11
+		         , case when date_dd = '12' then tmn end as day12
+		         , case when date_dd = '13' then tmn end as day13
+		         , case when date_dd = '14' then tmn end as day14
+		         , case when date_dd = '15' then tmn end as day15
+		         , case when date_dd = '16' then tmn end as day16
+		         , case when date_dd = '17' then tmn end as day17
+		         , case when date_dd = '18' then tmn end as day18
+		         , case when date_dd = '19' then tmn end as day19
+		         , case when date_dd = '20' then tmn end as day20
+		         , case when date_dd = '21' then tmn end as day21
+		         , case when date_dd = '22' then tmn end as day22
+		         , case when date_dd = '23' then tmn end as day23
+		         , case when date_dd = '24' then tmn end as day24
+		         , case when date_dd = '25' then tmn end as day25
+		         , case when date_dd = '26' then tmn end as day26
+		         , case when date_dd = '27' then tmn end as day27
+		         , case when date_dd = '28' then tmn end as day28
+		         , case when date_dd = '29' then tmn end as day29
+		         , case when date_dd = '30' then tmn end as day30
+		         , case when date_dd = '31' then tmn end as day31 
+		    FROM TBL_TEMP
+		    
+		  UNION ALL 
+		    
+		  SELECT sg_cd, sg_name, site_cd, site_name, '3_rin' as col
+		         , case when date_dd = '01' then rin end as day01 
+		         , case when date_dd = '02' then rin end as day02
+		         , case when date_dd = '03' then rin end as day03
+		         , case when date_dd = '04' then rin end as day04
+		         , case when date_dd = '05' then rin end as day05
+		         , case when date_dd = '06' then rin end as day06
+		         , case when date_dd = '07' then rin end as day07
+		         , case when date_dd = '08' then rin end as day08
+		         , case when date_dd = '09' then rin end as day09
+		         , case when date_dd = '10' then rin end as day10
+		         , case when date_dd = '11' then rin end as day11
+		         , case when date_dd = '12' then rin end as day12
+		         , case when date_dd = '13' then rin end as day13
+		         , case when date_dd = '14' then rin end as day14
+		         , case when date_dd = '15' then rin end as day15
+		         , case when date_dd = '16' then rin end as day16
+		         , case when date_dd = '17' then rin end as day17
+		         , case when date_dd = '18' then rin end as day18
+		         , case when date_dd = '19' then rin end as day19
+		         , case when date_dd = '20' then rin end as day20
+		         , case when date_dd = '21' then rin end as day21
+		         , case when date_dd = '22' then rin end as day22
+		         , case when date_dd = '23' then rin end as day23
+		         , case when date_dd = '24' then rin end as day24
+		         , case when date_dd = '25' then rin end as day25
+		         , case when date_dd = '26' then rin end as day26
+		         , case when date_dd = '27' then rin end as day27
+		         , case when date_dd = '28' then rin end as day28
+		         , case when date_dd = '29' then rin end as day29
+		         , case when date_dd = '30' then rin end as day30
+		         , case when date_dd = '31' then rin end as day31 
+		    FROM TBL_TEMP 
+		    
+		  UNION ALL 
+		    
+		  SELECT sg_cd, sg_name, site_cd, site_name, '4_over' as col
+		         , case when date_dd = '01' then anal_value end as day01 
+		         , case when date_dd = '02' then anal_value end as day02
+		         , case when date_dd = '03' then anal_value end as day03
+		         , case when date_dd = '04' then anal_value end as day04
+		         , case when date_dd = '05' then anal_value end as day05
+		         , case when date_dd = '06' then anal_value end as day06
+		         , case when date_dd = '07' then anal_value end as day07
+		         , case when date_dd = '08' then anal_value end as day08
+		         , case when date_dd = '09' then anal_value end as day09
+		         , case when date_dd = '10' then anal_value end as day10
+		         , case when date_dd = '11' then anal_value end as day11
+		         , case when date_dd = '12' then anal_value end as day12
+		         , case when date_dd = '13' then anal_value end as day13
+		         , case when date_dd = '14' then anal_value end as day14
+		         , case when date_dd = '15' then anal_value end as day15
+		         , case when date_dd = '16' then anal_value end as day16
+		         , case when date_dd = '17' then anal_value end as day17
+		         , case when date_dd = '18' then anal_value end as day18
+		         , case when date_dd = '19' then anal_value end as day19
+		         , case when date_dd = '20' then anal_value end as day20
+		         , case when date_dd = '21' then anal_value end as day21
+		         , case when date_dd = '22' then anal_value end as day22
+		         , case when date_dd = '23' then anal_value end as day23
+		         , case when date_dd = '24' then anal_value end as day24
+		         , case when date_dd = '25' then anal_value end as day25
+		         , case when date_dd = '26' then anal_value end as day26
+		         , case when date_dd = '27' then anal_value end as day27
+		         , case when date_dd = '28' then anal_value end as day28
+		         , case when date_dd = '29' then anal_value end as day29
+		         , case when date_dd = '30' then anal_value end as day30
+		         , case when date_dd = '31' then anal_value end as day31 
+		    FROM TBL_TEMP    
+		) A
+		GROUP BY sg_cd, site_cd, col
+		ORDER BY sg_cd, site_cd, col
+	</select>
+
+</mapper>

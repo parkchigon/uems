@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area" class="screen_all">
+		
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li class="on"><a href="#">지점 관리</a></li>
+					<li><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+		
+			<div class="build_all_area">
+				<div class="mt30">
+					<table class="build_row">
+					<caption>caption</caption>
+					<colgroup>
+						<col width="200px">
+						<col width="400px">
+						<col width="200px">
+						<col width="*">
+					</colgroup>
+	
+						<tbody>
+							<tr>
+								<th><label for="">지점코드</label></th>
+								<td colspan="3"><input type="text" id=""  style="width: 350px" /> &nbsp;&nbsp;&nbsp;&nbsp; *지점코드 'S' + 'E'(1자리문자) + 000(3자리숫자)</td>
+							</tr>
+							<tr>
+								<th><label for="">지점IP</label></th>
+								<td><input type="text" id="" /></td>
+								<th><label for="">지점명</label></th>
+								<td>
+									<select id="" name="" style="width: 200px">
+										<option value="" selected="selected" >이마트/신세계</option>
+										<option value=""  >...</option>
+									</select>
+									
+									<input type="text" id="" style="width:755px;" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<table class="build_row mt20">
+					<caption>caption</caption>
+					<colgroup>
+						<col width="200px">
+						<col width="400px">
+						<col width="200px">
+						<col width="400px">
+						<col width="200px">
+						<col width="*">
+					</colgroup>
+	
+						<tbody>
+							<tr>
+								<th><label for="">포트설명</label></th>
+								<td><input type="text" id="" /></td>
+								<th><label for="">프로토폴</label></th>
+								<td><input type="text" id="" /></td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th><label for="">COM Port</label></th>
+								<td>
+									<select id="" name="" style="width: 200px">
+										<option value="" selected="selected" >COM1</option>
+										<option value=""  >...</option>
+									</select>
+								</td>
+								<th><label for="">Com Baud</label></th>
+								<td>
+									<select id="" name="" style="width: 200px">
+										<option value="" selected="selected" >9600</option>
+										<option value=""  >...</option>
+									</select>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th><label for="">패리티 비트</label></th>
+								<td>
+									<input type="radio" id="" name="build_chak1" checked="checked" /><label for="">None</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak1" /><label for="">1 Bit Odd</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak1" /><label for="">2 Bit Even</label>
+								</td>
+								<th><label for="">데이터 비트</label></th>
+								<td>
+									<input type="radio" id="" name="build_chak2" checked="checked" /><label for="">8 Bit</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak2" /><label for="">7 Bit</label>
+								</td>
+								<th><label for="">스톱 비트</label></th>
+								<td>
+									<input type="radio" id="" name="build_chak2" checked="checked" /><label for="">1 Bit</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak2" /><label for="">2 Bit</label>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="">Tx 흐름제어</label></th>
+								<td>
+									<input type="radio" id="" name="build_chak4" checked="checked" /><label for="">TxON</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak4" /><label for="">TxRTS</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak4" /><label for="">TxDTX</label>
+								</td>
+								<th><label for="">Rx 흐름제어</label></th>
+								<td colspan="3">
+									<input type="radio" id="" name="build_chak5" checked="checked" /><label for="">RxON</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak5" /><label for="">RxECHO</label> &nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" id="" name="build_chak5" /><label for="">Reserved</label>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<textarea id="" style="width:100%;height :200px;"></textarea>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="both"></div>
+				
+			</div>
+			
+			<div class="btn_areaC mt20">
+				<a class="btnType btn_type02" href="#">저장</a>
+			</div>
+				
+		</div>
+		<!-- e : content_area -->
+		
+	</div>
+	
+	
+</div>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.ems.system.mapper.EmsMainMapper">
+ 
+ 	<!-- 실시간 태그 값 조회 -->
+	<select id="selectTagValue" parameterType="RawData" resultType="flkMap">
+		/* EmsMainMapper.selectTagValue */
+		SELECT RDV.site_cd
+		       , RDV.tag_id
+           	   , IF(T.tag_type_cd='TAG_TYPE1',
+                	IF(INSTR(T.ai_display_format,'.')!=0,
+                    	FORMAT(RDV.tag_value, SUBSTRING_INDEX(T.ai_display_format, ".", -1))
+                    	,FORMAT(RDV.tag_value,0))
+                    ,FORMAT(RDV.tag_value,0)) AS tag_value
+		       , DATE_FORMAT(RDV.reg_date,'%Y%m%d%H%i%s') AS reg_date
+		       , TIME_TO_SEC(TIMEDIFF(SYSDATE(), RDV.reg_date)) AS DIFF_SEC
+		  FROM tbl_raw_data_view RDV
+          INNER JOIN tbl_tag T
+            ON RDV.site_cd = T.site_cd
+           AND RDV.tag_id = T.tag_id
+		 WHERE RDV.site_cd = #{siteCd};
+	</select>
+	
+	<!-- 실시간 경부 온도 습도 값 조회 -->
+	<select id="selectGeyngbuValue" parameterType="RawData" resultType="flkMap">
+		/* EmsMainMapper.selectGeyngbuValue */
+		SELECT RDV.site_cd
+		       , RDV.tag_id
+           	   , IF(T.tag_type_cd='TAG_TYPE1',
+                	IF(INSTR(T.ai_display_format,'.')!=0,
+                    	FORMAT(RDV.tag_value, SUBSTRING_INDEX(T.ai_display_format, ".", -1))
+                    	,FORMAT(RDV.tag_value,0))
+                    ,FORMAT(RDV.tag_value,0)) AS tag_value
+		       , DATE_FORMAT(RDV.reg_date,'%Y%m%d%H%i%s') AS reg_date
+		       , TIME_TO_SEC(TIMEDIFF(SYSDATE(), RDV.reg_date)) AS DIFF_SEC
+		  FROM tbl_raw_data_view RDV
+          INNER JOIN tbl_tag T
+            ON RDV.site_cd = T.site_cd
+           AND RDV.tag_id = T.tag_id
+		 WHERE RDV.site_cd = #{siteCd}
+		   AND RDV.tag_id in('AI_1007','AI_1021')
+	</select>
+	
+	<!-- 태그 매핑 조회 -->
+	<select id="selectTagMapping" parameterType="SystemTagMap" resultType="flkMap">
+		/* EmsMainMapper.selectTagMapping */
+		SELECT A.site_id
+			   , A.submenu_id
+			   , A.template_id
+			   , group_id
+			   , component_id
+			   , A.tag_id
+			   , C.plc_no
+			   , set_flag
+			   , display_name
+         	   , IFNULL(E.code_name,' ') AS unit_cd
+         	   , a_convert_base
+			   , a_convert_full
+		  FROM tbl_system_tag_mapping A
+         INNER JOIN tbl_system_submenu_site B
+            ON A.site_id = B.site_id
+           AND A.submenu_id = B.submenu_id
+           AND A.template_id = B.template_id
+         INNER JOIN tbl_tag C
+            ON A.tag_id = C.tag_id
+         INNER JOIN tbl_site D
+            ON A.site_id = D.site_id
+           AND C.site_cd = D.site_cd 
+          LEFT OUTER JOIN tbl_code E 
+            ON C.ai_unit_cd = E.code_use_name
+		 WHERE A.site_id = #{siteId}
+		   AND set_flag = 'Y' 
+		<choose>
+			<!-- 빙축열일 경우엔 좌/우 매핑 모두 조회한다 -->
+			<when test="submenuId != '' and submenuId != null and submenuId == 'SYS01'">
+				AND (A.submenu_id = #{submenuId} OR A.submenu_id = 'SYS02')
+			</when>
+			<!-- 설정일 경우엔 계통도 좌/설정 매핑 모두 조회한다 -->
+			<when test="submenuId != '' and submenuId != null and submenuId == 'SYS03'">
+				AND (A.submenu_id = #{submenuId} OR A.submenu_id = 'SYS01')
+			</when>
+			<!-- 냉동기A 나 흡수식냉동기B 경우엔 계통도 좌/냉동고A 매핑 모두 조회한다 -->
+			<when test="submenuId != '' and submenuId != null and (submenuId == 'SYS04' or submenuId == 'SYS10')">
+				AND (A.submenu_id = #{submenuId} OR A.submenu_id = 'SYS01')
+			</when>
+			<otherwise>
+				AND A.submenu_id = #{submenuId}
+			</otherwise>
+		</choose>
+		ORDER BY A.submenu_id, A.template_id, A.group_id, A.component_id
+	</select>
+	
+	<!-- 서브메뉴 리스트 조회 -->
+	<select id="selectSubMenuList" parameterType="SystemTagMap" resultType="flkMap">
+		/* EmsMainMapper.selectSubMenuList */
+		SELECT TSSS.site_id
+			   , TSSS.submenu_id
+			   , TSS.submenu_name
+			   , TSSS.template_id
+			   , template_file_path1
+			   , TSS.menu_flag
+			   , css_file_path
+		  FROM tbl_system_submenu_site TSSS, tbl_system_submenu TSS, tbl_system_template TST
+		 WHERE TSSS.site_id = #{siteId}
+		   AND TSSS.submenu_id = TSS.submenu_id
+		   AND TSS.use_flag = 'Y'
+		   AND TSSS.submenu_id = TST.submenu_id
+		   AND TSSS.template_id = TST.template_id
+		   AND TST.use_flag = 'Y'
+		<if test="menuListYn != '' and menuListYn != null and menuListYn == 'N'.toString()">
+			AND TSSS.submenu_id = #{submenuId}
+		</if>
+	</select>
+	
+	<!-- 실시간 알람 조회 -->
+	<select id="selectAlarmStatus" parameterType="RawData" resultType="flkMap">
+		/* EmsMainMapper.selectAlarmStatus */
+		SELECT alarm_id
+			   , tag_id
+			   , alarm_msg
+			   , alarm_status_cd
+		  FROM tbl_alarm TA
+		 WHERE site_cd = #{siteCd}	
+		   AND alarm_status_cd IN ('ALARM_STATUS01', 'ALARM_STATUS02')	
+		   AND reg_date >= DATE_ADD(NOW(), INTERVAL -7 DAY)
+	</select>
+	
+	<!-- 알람 리셋 -->
+	<update id="updateAlarmReset" parameterType="RawData">
+		/* EmsMainMapper.updateAlarmReset */
+		UPDATE tbl_alarm
+		   SET alarm_status_cd = #{tagValue}
+		 WHERE site_cd = #{siteCd}
+		   AND alarm_status_cd in {'ALARM_STATUS01','ALARM_STATUS02'}
+	</update>
+	
+	
+	<!-- 제어이력 등록 -->
+	<insert id="insertControlHistory" parameterType="java.util.Map">
+		INSERT INTO tbl_control_history	(
+			identity_code
+			, site_cd
+			, tag_id
+			, control_value
+			, control_place
+			, success_flag
+			, reg_id
+			)
+		VALUES 
+		<foreach collection="tagList" item="item" index="index" open="(" separator="),(" close=")">
+			#{item.identityCode}
+			, #{siteCd}
+			, #{item.tagId}
+			, #{item.controlValue}
+			, #{controlPlace}
+			, #{item.successFlag}
+			, #{mngId}
+		</foreach>		
+	</insert>
+	
+</mapper>

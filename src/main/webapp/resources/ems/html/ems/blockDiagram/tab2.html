@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/blockDiagram_tab2.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>부평지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1 on" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			<div class="subTab_area">
+				<ul>
+					<li><a href="#">빙축열</a></li>
+					<li class="on"><a href="#">보일러</a></li>
+					<li><a href="#">열량</a></li>
+					<li><a href="#">흡수식냉동기</a></li>
+					<li><a href="#">상온냉동기</a></li>
+					<li><a href="#">냉동기A</a></li>
+					<li><a href="#">냉동기B</a></li>
+				</ul>
+			</div>
+			<div class="blockDiagram_area">
+			
+				<div class="chw">
+					<span class="pipe_chw_ud down pipe001" name="DI_1154"></span>
+					<span class="pipe_chw_ud up pipe002" name="DI_1154"></span>
+					<span class="pipe_chw_ud down pipe003" name="DI_1154"></span>
+					<span class="pipe_chw_ud up pipe004" name="DI_1154"></span>
+					<span class="pipe_chw_ud up pipe005" name="DI_1154"></span>
+					<span class="pipe_chw_ud down pipe006" name="DI_1154"></span>
+					
+					<span class="pipe_chw_lr left pipe001" name="DI_1154"></span>
+					<span class="pipe_chw_lr left pipe002" name="DI_1154"></span>
+					<span class="pipe_chw_lr left pipe003" name="DI_1154"></span>
+					<span class="pipe_chw_lr right pipe004" name="DI_1153"></span>
+					<span class="pipe_chw_lr right pipe005" name="DI_1154"></span>
+					<span class="pipe_chw_lr right pipe006" name="DI_1152"></span>
+					<span class="pipe_chw_lr right pipe007" name="DI_1154"></span>
+					
+					<span class="pipe_chw_corner_ur corner001"></span>
+					<span class="pipe_chw_corner_ur corner002"></span>
+					<span class="pipe_chw_corner_ur corner003"></span>
+					
+					<span class="pipe_chw_corner_ul corner001"></span>
+					<span class="pipe_chw_corner_ul corner002"></span>
+					<span class="pipe_chw_corner_ul corner003"></span>
+					
+					<span class="pipe_chw_corner_dr corner001"></span>
+					<span class="pipe_chw_corner_dr corner002"></span>
+					
+					<span class="pipe_chw_t_lru corner001"></span>
+					<span class="pipe_chw_t_lru corner002"></span>
+					
+					<span class="sensor_u_temperature sensor001"><em class="font_sky">12345678 ℃</em></span>
+					<span class="sensor_d_temperature sensor001"><em class="font_sky">12345678 ℃</em></span>
+					
+					<div class="coolpump_area">
+						<a class="coolpump No1" href="#layerPop_type1" name="modal">
+							<span class="fan off"></span>
+						</a>
+						<a class="coolpump No2" href="#layerPop_type1" name="modal">
+							<span class="fan on"></span>
+						</a>
+						<strong class="text_info">난방순환펌프</strong>
+					</div>
+					
+				</div>
+				
+				<div class="header_lr"><span class="text">2차측부하</span></div>
+				
+				<div class="boiler">
+					<a href="#layerPop_type1" class="power on" name="modal">가동</a>
+				</div>
+				
+			</div>
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+			
+			<div class="data_area_inner">
+				<dl class="left">
+					<dt><span class="icon_set sys">시스템 상태</span></dt>
+					<dd>
+						<ul class="right_style">
+							<li>
+								<span class="tit">보일러 운전</span>
+								<span class="lamp on"></span>
+								<div class="switch on">
+									<span class="stop">정지</span>
+									<span class="start">가동</span>
+									<em></em>
+								</div>
+							</li>
+							<li>
+								<span class="tit">동파방지 운전</span>
+								<span class="lamp off"></span>
+								<div class="switch off">
+									<span class="stop">정지</span>
+									<span class="start">가동</span>
+									<em></em>
+								</div>
+							</li>
+							<li>&nbsp;</li>
+							<li>&nbsp;</li>
+						</ul>
+					</dd>
+				</dl>
+				<dl class="right">
+					<dt><span class="icon_set set">설정 관리</span></dt>
+					<dd>
+						<ul class="right_style">
+							<li>
+								<span class="tit">보일러 기동온도</span>
+								<a href="#layerPop_type2" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span>
+							</li>
+							<li>
+								<span class="tit">보일러 정지온도</span>
+								<a href="#layerPop_type2" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span>
+							</li>
+							<li>
+								<span class="tit">동파방지 기동시간</span>
+								<a href="#layerPop_type2" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span>
+							</li>
+							<li>
+								<span class="tit">동파방지 정지시간</span>
+								<a href="#layerPop_type2" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span>
+							</li>
+						</ul>
+					</dd>
+				</dl>
+				<div class="both"></div>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt><span class="icon_set danger">경보</span>
+						<div class="head_right">
+							<span class="reAlarm">알람리셋</span>
+							<div class="mr5 switch off">
+								<em></em>
+							</div>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="33.3%">
+							<col width="33.3%">
+							<col width="*">
+						</colgroup>
+	
+							<tbody class="warning">
+								<tr>
+									<td class="alarm_warning"><a href="#">보일러 이상</a></td>
+									<td class="alarm_on"><a href="#">난방 FLOW S/W 이상</a></td>
+									<td class=""><a href="#">난방펌프 기동이상</a></td>
+								</tr>
+								<tr>
+									<td class=""></td>
+									<td class=""></td>
+									<td class=""></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			
+		</div>
+		<!-- e : data_area -->
+		
+		<!-- s : footer -->
+		<div id="footer" class="alarm_on"><!-- 경보시 : warning , 알람확인후 : alarm_on -->
+			<span><a href="#">경보정보 : 냉각수온도 초과</a></span>
+		</div>
+		<!-- e : footer -->
+	
+	
+	
+	
+	
+	<!-- s : popup container -->
+<div class="popup_container type1" id="layerPop_type1">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>설비명</h2><a class="pop_btn btn_popup_header" href="#">트랜드보기</a></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="50%" />
+									<col width="50%" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th colspan="2"><input type="radio" id="" name="chak1" checked="checked" /><label for="">자동</label></th>
+									</tr>
+									<tr>
+										<th><input type="radio" id="" name="chak1" /><label for="">수동</label></th>
+										<td>
+											<div class="switch off">
+												<span class="stop">정지</span>
+												<span class="start">운전</span>
+												<em></em>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">저장</a>
+							<a class="pop_btn btn_type01 closePop" href="#">닫기</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container type2" id="layerPop_type2">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>설비명</h2><a class="pop_btn btn_popup_header" href="#">트랜드보기</a></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="40%" />
+									<col width="60%" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th colspan="2"><input type="radio" id="" name="chak2" checked="checked" /><label for="">자동</label></th>
+									</tr>
+									<tr>
+										<th rowspan="2" class="row"><input type="radio" id="" name="chak2" /><label for="">수동</label></th>
+										<td class="tit">설정값</td>
+									</tr>
+									<tr>
+										<td>
+											<a class="btn_textBox" href="#layerPop_type3" name="modal">53</a>
+											<p class="textL mt5">ㆍ입력최소값 : -10</p>
+											<p class="textL">ㆍ입력최대값 : 120</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#">저장</a>
+							<a class="pop_btn btn_type01 closePop" href="#">닫기</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- e: popup container -->
+	
+	</div>
+</div>
+
+</body>
+</html>

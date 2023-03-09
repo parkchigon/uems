@@ -1,0 +1,261 @@
+@charset "utf-8";
+
+
+.blind  {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    visibility: hidden;
+    width: 0;
+}
+
+.skip{ display:block; height:1px; width:1px; margin:0 -1px -1px 0; padding:0; overflow:hidden; font-size:0; line-height:0;}
+.skip:hover,
+.skip:active,
+.skip:focus{ width:100%; height:auto; margin:0; padding:5px 0; text-indent:10px; font-weight:bold; font-size:12px; color:#333; font-family:Tahoma; line-height:1; text-decoration:none !important;}
+
+.bgnone {background: none !important;}
+
+.fl	{float: left;}
+.fr {float: right;}
+.both	{clear: both;}
+.dp_ib	{display: inline-block;}
+
+.textC	{text-align: center !important;}
+.textR	{text-align: right !important;}
+.textL 	{text-align: left !important;}
+
+.pl0	{padding-left:0px !important;}
+.pl10	{padding-left:10px !important;}
+.pl20	{padding-left:20px !important;}
+.pl30	{padding-left:30px !important;}
+
+.ml5 {margin-left:5px !important;}
+.ml20 {margin-left:20px !important;}
+.mb5 {margin-bottom:5px !important;}
+.mb10 {margin-bottom:10px !important;}
+.mb20 {margin-bottom:20px !important;}
+.mb30 {margin-bottom:30px !important;}
+.mt5 {margin-top:5px !important;}
+.mt10 {margin-top:10px !important;}
+.mt20 {margin-top:20px !important;}
+.mt30 {margin-top:30px !important;}
+.mr5 {margin-right:5px !important;}
+
+.scroll {width: 100%;overflow: auto;}
+
+/* 폰트스타일 */
+.font_red	{color:#fe1414 !important;}
+.font_green	{color:#339702 !important;}
+.font_purple{color:#bb0196 !important;}
+.font_blue	{color:#134f9e !important;}
+.font_sky	{color:#3db4ec !important;}
+.font_orange{color:#ff8040 !important;}
+.font_yellow{color:#fdf202 !important;}
+
+
+.font12	{font-size: 12px !important;}
+.font16	{font-size: 16px !important; line-height: 16px!important;}
+.bold	{font-weight: bold;}
+
+
+/* 버튼스타일 */
+.btn_icon	{display:inline-block;overflow:hidden;width:29px;height:29px;font-size:0;text-indent:-9999px;background: url(/resources/ems/images/11-6.bmp) no-repeat;}
+.btn_set	{display:inline-block;overflow:hidden;width:29px;height:29px;font-size:0;text-indent:-9999px;background: url(/resources/ems/images/11-6.bmp) no-repeat;}
+.setPop {letter-spacing:-1.5px;}
+.setPop::before	{display:inline-block;content: ""; width: 10px;height: 16px;background:url(/resources/ems/images/icon_setting.png) 0 50% no-repeat;vertical-align: middle;}
+
+.btn_area {position:relative;width:100%;}
+.btn_areaC {position:relative;width:100%;text-align: center;}
+.btn_areaR {position:relative;width:100%;text-align: right;}
+
+a.btnType	{display:inline-block;padding:0px 15px;min-width:45px;line-height:28px;border:0px; border-radius:2px; font-size:15px; text-align:center;vertical-align: middle;}
+.btn_type01 {height:24px;border:1px solid #ccc; background:#f5f4f4; color:#666;}
+.btn_type02 {height:28px;background:#ff442c; color:#fff;}
+
+/* HEADER GNB */ 
+#header h1 {position: absolute;top:28px;left:50%;margin-left:-40px}
+
+#header .topUtil	{font-size: 12px;color:#fff;}
+#header .topUtil span.user {display:inline-block;margin-right:10px;line-height:20px;}
+#header .topUtil span.user::before {display:inline-block;content: ""; width: 20px;height: 20px;background:url(/resources/uems/images/total/icon_utile_user.png) 50% 50% no-repeat;vertical-align: top;}
+#header .topUtil	 a.btn_login {display:inline-block;font-size: 12px;color:#fff;line-height:20px;}
+#header .topUtil a.btn_login::before {display:inline-block;content: ""; width: 20px;height: 20px;background:url(/resources/uems/images/total/icon_utile_logout.png) 50% 50% no-repeat;vertical-align: top;}
+
+#header #gnb a {display:inline-block;padding:12px 25px 12px 30px;background:url(/resources/uems/images/total/gnb_line.png) 0 50% no-repeat;font-size: 22px;font-weight: bold;color:#000;}
+#header #gnb a:first-child {background: 0;}
+#header #gnb a.on {color: #a81600;}
+
+#header .header_right span.toDay {margin-right:10px;line-height: 30px;font-size: 17px;font-weight: bold;color:#333;}
+#header .header_right .links {display: inline-block;width: 225px;height: 33px;background:url(/resources/uems/images/total/bg_links.png) 0 0 no-repeat;vertical-align: top;}
+#header .header_right a {float:left;width: 112px;height: 31px;line-height: 30px;text-align: center;font-weight: bold;}
+#header .header_right a:first-child:hover {background:url(/resources/uems/images/total/bg_links.png) 0 -40px no-repeat;color:#fff;}
+#header .header_right a:last-child:hover {background:url(/resources/uems/images/total/bg_links.png) 100% -40px no-repeat;color:#fff;}
+
+
+/* CONTAINER */ 
+#container .content_head_area {position: absolute;top:0;left:0;padding-top:10px;width:100%;height: 40px;}
+#container .content_head_area h2 {position: absolute;top:13px;left:0;}
+#container .content_head_area h2 span {padding-left:5px;vertical-align: sub;color:#424b53;}	
+
+#container .content_head_area .weather {position: absolute;top:13px;left:0;}
+#container .content_head_area .weather strong {padding:0 5px;;font-size: 20px;vertical-align: middle;}
+#container .content_head_area .weather em {font-size: 11px;vertical-align: sub;}
+#container .content_head_area .weather:before {display:inline-block;content: ""; width: 25px;height: 25px;background:url(/resources/uems/images/total/icon_weather_set.png) no-repeat;vertical-align: middle;}
+#container .content_head_area .weather.sun:before {background-position:0 0;}				 			/* 낮 맑음 */
+#container .content_head_area .weather.sun_cloudy:before {background-position:-80px 0;}		 	/* 낮 구름조금 */
+#container .content_head_area .weather.sun_cloudy2:before {background-position:-40px 0;}	 		/* 낮 구름많음 */
+#container .content_head_area .weather.sun_rain:before {background-position:-121px 0;}		 		/* 낮 한때 비 */
+#container .content_head_area .weather.moon:before {background-position:0 -40px;}					/* 밤 맑음 */
+#container .content_head_area .weather.moon_cloudy:before {background-position:-80px -40px;}	/* 밤 구름조금 */
+#container .content_head_area .weather.moon_cloudy2:before {background-position:-40px -40px;}	/* 밤 구름많음 */
+#container .content_head_area .weather.moon_rain:before {background-position:-121px -40px;}		/* 밤 한때 비 */
+#container .content_head_area .weather.less_rain:before {background-position:-161px -40px;;}		/* 비조금 */
+#container .content_head_area .weather.less_show:before {background-position:-80px -80px;}		/* 눈조금 */
+#container .content_head_area .weather.rain:before {background-position:-80px -120px;}				/* 비 */
+#container .content_head_area .weather.show:before {background-position:-121px -80px;}			/* 눈 */
+#container .content_head_area .weather.rain_show:before {background-position:0 -80px;}				/* 비 또는 눈 */
+#container .content_head_area .weather.lightning:before {background-position:-242px -40px;}		/* 번개 */
+
+
+
+/************ content ************/
+
+label	{vertical-align: middle;}
+input[type=text], select	{border: 1px solid #bbc2cd;padding:0px 5px;box-sizing: border-box;}
+select	{width: 180px;height: 28px;}
+input[type=text]{width: 100%;height: 28px;line-height: 23px;}
+input[type=text].dis {background:#191b22;color:#666;}
+input[type=text]:disabled,
+select:disabled {background:#ddd;color:#666;}
+textarea	{border: 1px solid #bbc2cd;padding:5px;box-sizing: border-box;}
+
+input[type=radio] {margin-right:5px;}
+input[type=checkbox] {margin-right:5px;}
+
+
+/* 비쥬얼 */
+.visual_area {float:left;width: 720px;height: 348px;background:url(/resources/uems/images/total/bg_visual.jpg) no-repeat;}
+.visual_area ul {padding:24px 30px 23px 297px;height: 222px}
+.visual_area ul li {clear: both;}
+.visual_area ul li.list1 {padding-top:20px;}
+.visual_area ul li.list1 dl {float: left;width: 33.3%;text-align: center;line-height: 23px;}
+.visual_area ul li.list1 dl dt {font-size: 18px;font-weight: bold;color:#fff;}
+.visual_area ul li.list1 dl dd {font-size: 18px;font-weight: bold;color:#fdf641;}
+.visual_area ul li.list1 dl dd span {display:block;color:#fff;}
+.visual_area ul li.list2 {padding-top:20px;}
+.visual_area ul li.list2 dl {float: left;width: 33.3%;text-align: center;line-height: 23px;}
+.visual_area ul li.list2 dl dt {font-size: 18px;font-weight: bold;color:#bddbfd;}
+.visual_area ul li.list2 dl dd {font-size: 18px;font-weight: bold;color:#fff;}
+.visual_area ul li.list2 dl dd span {display:block;margin:10px auto 0;width: 110px;height: 60px;line-height: 60px;font-size: 30px;}
+.visual_area ul li.list2 dl dd span.down {background:url(/resources/uems/images/total/bg_down.png) no-repeat;}
+.visual_area ul li.list2 dl dd span.up {background:url(/resources/uems/images/total/bg_up.png) no-repeat;}
+.visual_area .total {clear: both;padding:15px 20px 0;font-size:20px;font-weight:bold;text-align: right;}
+.visual_area .total span {font-size:37px;color:#c92409;}
+.visual_area .total p {font-size:12px;font-weight: normal;}
+
+.info_area {width: 720px;}
+.info_area dl dt {padding:0 15px;height: 40px;line-height: 40px;border-radius: 10px 10px 0 0;background: #14447a;color:#fff;font-size: 16px;font-weight: 600;}
+.info_area dl dd {padding:10px 15px;border: 1px solid #14447a;border-top: 0px;background: #fff;}
+.info_area .table_wrap {height: 207px;}
+.info_area .table_wrap th, .info_area .table_wrap td {padding: 5px 10px;}
+
+.chart_area {width: 720px;}
+.chart_area dl {}
+.chart_area dl dt {padding:0 15px;height: 40px;line-height: 40px;border-radius: 10px 10px 0 0;background: #5c5c5c;color:#fff;font-size: 16px;font-weight: 600;}
+.chart_area dl dt > span {font-size: 13px;}
+.chart_area dl dt select {font-size: 13px;border: 1px solid #000;background: #333;color:#fff;}
+.chart_area dl dd {padding:10px 15px;height:204px;border: 1px solid #d3d3d3;border-top: 0px;background: #fff;overflow: hidden;}
+.chart_area dl dd .left_chart {float: left;width: 470px;}
+.chart_area dl dd .right_table {float: right;width: 210px;}
+
+
+/* 테이블스타일 */
+.info_head_area {padding:20px;margin-bottom:20px;border: 1px solid #bbc2cd;border-radius:10px;background: #ececec;}
+.info_head_area .title {margin-bottom:5px;font-size: 18px;color:#000;}
+
+
+/* 테이블스타일 */
+.table_head_area {margin-bottom: 10px;}
+
+table {font-family: '나눔고딕',NanumGothic;line-height: 1.2em;}
+
+	.table_wrap {width:100%; border:1px solid #c4c1bc;}
+	.table_wrap th {line-height:16px; padding:10px 5px; border-right:1px solid #c4c1bc; border-bottom:1px solid #c4c1bc; background:#f5f5f5; color:#80878d; letter-spacing:0px;}
+	.table_wrap td {line-height:16px; padding:5px 10px; border-right:1px solid #c4c1bc; border-bottom:1px solid #c4c1bc; background:#fff; word-break:break-all; color:#616161;letter-spacing:0px;}
+	.table_wrap.col th {background:#c6d5e4;color:#1c2a38;font-weight: bold;}
+	.table_wrap.col td {padding:10px;text-align: center;}
+	
+	.chart_inner_table {width:100%; border:1px solid #c4c1bc;}
+	.chart_inner_table th {line-height:6px; padding:8px 6px; border-right:1px solid #c4c1bc; border-bottom:1px solid #c4c1bc; background:#f5f5f5; color:#80878d; letter-spacing:0px;}
+	.chart_inner_table td {line-height:6px; padding:8px 6px; border-right:1px solid #c4c1bc; border-bottom:1px solid #c4c1bc; background:#fff; word-break:break-all; color:#616161;letter-spacing:0px;text-align: center;}
+
+
+table tbody .bg_red	{background: #fde7e7 !important;}
+table tbody .bg_blue{background: #e9f5fb !important;}
+table tbody .bg_gray{background: #e9ebef !important;}
+
+.tableBtn_areaC {padding:5px;border: 1px solid #bbc2cd;text-align: center;background: #dce1e6;}	
+
+
+/** icon_file **/
+.ico_fileSet {display:inline-block; width:16px; height:16px; background:url(/resources/uems/images/total/bg_ico_file.png) no-repeat top left;vertical-align:middle;}
+.ico_fileSet.ico_calenda {background-position:right 0; width:19px; height:17px; }
+.ico_fileSet.ico_jpg {background-position:left -40px;}
+.ico_fileSet.ico_doc {background-position:left -80px;}
+.ico_fileSet.ico_pdf {background-position:left -120px;}
+.ico_fileSet.ico_ppt {background-position:left -160px;}
+.ico_fileSet.ico_ai {background-position:left -200px;}
+.ico_fileSet.ico_hwp {background-position:left -240px;}
+.ico_fileSet.ico_file {background-position:left -280px;}
+.ico_fileSet.ico_xls {background-position:left -320px;}
+.ico_fileSet.ico_gif {background-position:left -360px;}
+.ico_fileSet.ico_people {background-position:left -398px;}
+
+
+/*페이징 */
+.paging_area {margin-top:20px;height:33px;vertical-align: middle;}
+.paging	{/*float:right; */height:27px;text-align: center;}
+.paging a	{display:inline-block;width:30px;height:27px;line-height:27px;text-align:center;vertical-align: middle;background: url("/resources/uems/images/total/set_paging.png") -109px 0px no-repeat;}
+.paging a.first	{width:28px;background-position:0px 0px;}
+.paging a.pre	{width:28px;background-position:-33px 0px;margin-right:10px;}
+.paging a.next	{width:28px;background-position:-152px 0px;margin-left:10px;}
+.paging a.last	{width:28px;background-position:-185px 0px;}
+.paging span{display:inline-block;}
+.paging strong {display:inline-block;width:28px;height:27px;line-height:27px;text-align:center;vertical-align: middle;color:#fff;background: url("/resources/uems/images/total/set_paging.png") -74px 0px no-repeat;}
+
+
+
+/* form
+------------------------------------------------------------------------------------------------- */
+.entry_calendar {position:relative; display:inline-block; height:28px; zoom:1; border: 1px solid #000; background: #333;vertical-align:middle; width:130px; padding:0px 30px 0 2px;box-sizing: border-box;}
+.entry_calendar input {padding-top:0px; height:26px; line-height:27px; border:none; vertical-align:top;overflow: hidden;background: #333;color:#fff;}
+.entry_calendar input.dis {background:#f0f0f0;}
+.entry_calendar img {cursor:pointer; position:absolute; right:0; top:0;}
+.entry_calendar .btn_calender{position:absolute; top:0px; right:0px; width:30px; height:27px;line-height:27px;background: #000;text-align:center;}
+
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fa-calendar:before {
+  content: "\f073";
+  color:#fff;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.chart_area .fr {position:relative;top:6px;line-height: 1em;}
+
+
+

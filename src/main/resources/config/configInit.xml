@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<init>
+	<service>
+		<title>UEMS</title>
+		<loginPage>/login/login.do</loginPage>
+		<mainPage>/index.do</mainPage>
+	</service>
+	
+		
+	<format>
+		<date>yyyy.MM.dd</date>
+		<datetime>yyyy.MM.dd HH:mm:ss</datetime>
+	</format>
+		
+	<list>
+		<blockSize>10</blockSize>
+		<listSize>10</listSize>
+	</list>
+	
+	<session>
+		<userId>userId</userId>
+		<userName>userNm</userName>
+	</session>	
+	
+	<paging type="default">
+		<body>
+			<![CDATA[
+			<a href="javascript:util.pagingSubmit(::startPage::, document.::formName::, '::pagingName::');" class="start" title="처음페이지"><i class="fa fa-fast-backward"></i></a>
+			<a href="javascript:util.pagingSubmit(::prePage::, document.::formName::, '::pagingName::');" class="prev" title="이전페이지" ><i class="fa fa-caret-left"></i></a>
+			::pagingNumber::
+            <a href="javascript:util.pagingSubmit(::nextPage::, document.::formName::, '::pagingName::');" class="next" title="다음페이지"><i class="fa fa-caret-right"></i></a>
+            <a href="javascript:util.pagingSubmit(::endPage::, document.::formName::, '::pagingName::');" class="end" title="마지막페이지"><i class="fa fa-fast-forward"></i></a>
+			]]>
+		</body>
+		<num>
+			<![CDATA[
+			<a href="javascript:util.pagingSubmit(::Num::, document.::formName::, '::pagingName::');">::pageNum::</a>
+			]]>
+		</num>
+		<select-num>
+			<![CDATA[
+			<strong>::pageNum::</strong>
+			]]>
+		</select-num>
+		<division>
+			<![CDATA[
+			]]>
+		</division>
+	</paging>
+	
+	<paging-script>
+		<![CDATA[
+		<script type="text/javascript">
+			<!--
+			function _pagingSubmit( pnum, f, pname)
+			{
+				var ele;					       
+				var ele = document.getElementById(pname);
+				if( ele == undefined )
+				{
+					ele = document.createElement( "input" );
+					ele.type = "text";
+					ele.id = pname;
+					ele.name = pname;
+					ele.value = pnum;
+		
+					f.appendChild( ele );
+				}
+				else
+				{
+					ele.value = pnum;
+				}
+		
+				f.submit();
+			}					  				    
+			//-->
+		</script>		
+		]]>	
+	</paging-script>
+	
+</init>

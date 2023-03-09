@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.attachfile.mapper.AttachFileMapper">
+	
+	<!-- 파일 데이터 등록 -->
+	<insert id="insertAttachFile" >
+		/* AttachFileMapper.insertAttachFile */
+		<![CDATA[
+			INSERT INTO TBL_ATTACH_FILE 
+				( 
+					FILE_ID
+				  , FILE_NAME
+				  , FILE_EXTENSION
+				  , FILE_PHYSICAL_PATH
+				  , FILE_SIZE
+				  , FILE_REFERENCE_ID
+				  , FILE_GROUP
+				  , REG_ID
+				  , REG_DATE
+				  , DELEGATE_YN 
+				  , FILE_REAL_PATH 
+				  , FILE_DOWN_COUNT 
+				  , FILE_ORG_PATH
+				 )
+			VALUES ( 
+					#{fileId}
+				  , #{fileName}
+				  , #{fileExtension}
+				  , #{filePhysicalPath}
+				  , #{fileSize}
+				  , #{fileReferenceId}
+				  , #{fileGroup}
+				  , #{regId}
+				  , now()
+				  , #{delegateYn}
+				  , #{fileRealPath}
+				  , 0
+				  , #{fileOrgPath}
+		     )
+		]]>
+	</insert>
+	
+	<!-- 파일 데이터 업데이트 -->
+	<update id="updateAttachFile" parameterType="AttachFile">
+		/* AttachFileMapper.updateAttachFile */
+		<![CDATA[
+			UPDATE TBL_ATTACH_FILE
+			SET 
+				FILE_REFERENCE_ID = #{fileReferenceId} 
+			    , DELEGATE_YN = #{delegateYn}
+			WHERE FILE_ID = #{fileId}
+		]]>
+	</update>	
+	
+	<!-- 파일 데이터 조회 -->
+	<select id="selectAttachFileView" parameterType="AttachFile" resultType="flkMap">
+		/* AttachFileMapper.selectAttachFileView */
+		<![CDATA[
+			SELECT
+				FILE_ID
+			  , FILE_NAME
+			  , FILE_EXTENSION
+			  , FILE_PHYSICAL_PATH
+			  , FILE_SIZE
+			  , FILE_REFERENCE_ID
+			  , FILE_GROUP
+			  , REG_ID
+			  , REG_DATE
+			  , DELEGATE_YN
+			  , FILE_REAL_PATH
+			  , FILE_DOWN_COUNT
+			  , FILE_ORG_PATH
+			FROM TBL_ATTACH_FILE
+			WHERE FILE_ID = #{fileId}
+		]]>
+	</select>
+	
+	<!-- 파일 데이터 삭제 -->
+	<delete id="deleteAttachFile"  >
+		/* AttachFileMapper.deleteAttachFile */
+		<![CDATA[
+			DELETE FROM TBL_ATTACH_FILE 
+			WHERE FILE_ID = #{fileId}
+		]]>
+	</delete>
+	
+	<!-- updateAttachFileFileRefId -->
+	<update id="updateAttachFileFileRefId"  >
+		/* AttachFileMapper.updateAttachFileFileRefId */
+		<![CDATA[
+			UPDATE TBL_ATTACH_FILE
+			SET 
+				FILE_REFERENCE_ID = ''
+			WHERE FILE_REFERENCE_ID = #{fileId}
+		]]>	
+		<if test="fileGroup != null and fileGroup != ''">
+			<![CDATA[ AND FILE_GROUP = #{fileGroup}		]]>
+		</if> 			
+	</update>		
+	
+	<!-- 파일 데이터 목록 조회 -->
+	<select id="selectAttachFileList" parameterType="AttachFile" resultType="flkMap">
+		/* AttachFileMapper.selectAttachFileList */
+            SELECT
+				FILE_ID
+			  , FILE_NAME
+			  , FILE_EXTENSION
+			  , FILE_PHYSICAL_PATH
+			  , FILE_SIZE
+			  , FILE_REFERENCE_ID
+			  , FILE_GROUP
+			  , REG_ID
+			  , REG_DATE
+			  , DELEGATE_YN
+			  , FILE_REAL_PATH
+			  , FILE_DOWN_COUNT
+			  , FILE_ORG_PATH
+            FROM TBL_ATTACH_FILE  
+            WHERE 1=1      
+            AND FILE_REFERENCE_ID = #{fileReferenceId}
+        <if test="fileGroup != null and fileGroup != ''">
+            AND FILE_GROUP = #{fileGroup}
+        </if>
+	</select>	
+
+	<!-- 파일 다운 횟수 업데이트 -->
+    <update id="updateAttachFileDownCnt">
+        /* AttachFileMapper.updateAttachFileDownCnt */
+        <![CDATA[
+			UPDATE TBL_ATTACH_FILE
+			SET
+				FILE_DOWN_COUNT = (FILE_DOWN_COUNT + 1)
+			WHERE FILE_ID = #{fileId}
+		]]>
+    </update>
+
+	<!-- 파일 데이터 조회해서 저장 -->
+	<insert id="insertAttachFileCopy" parameterType="AttachFile">
+		/* AttachFileMapper.insertAttachFileCopy */
+		 <![CDATA[
+			INSERT INTO TBL_ATTACH_FILE 
+				( 
+				    FILE_ID
+				  , FILE_NAME
+				  , FILE_EXTENSION
+				  , FILE_PHYSICAL_PATH
+				  , FILE_SIZE
+				  , FILE_REFERENCE_ID
+				  , FILE_GROUP
+				  , REG_ID
+				  , REG_DATE
+				  , DELEGATE_YN 
+				  , FILE_REAL_PATH 
+				  , FILE_DOWN_COUNT
+				  , FILE_ORG_PATH
+				 )
+			SELECT
+				    #{fileId}
+				  , FILE_NAME
+				  , FILE_EXTENSION
+				  , FILE_PHYSICAL_PATH
+				  , FILE_SIZE
+				  , #{fileReferenceId}
+				  , FILE_GROUP
+				  , #{regId}
+				  , NOW()
+				  , DELEGATE_YN 
+				  , FILE_REAL_PATH 
+				  , FILE_DOWN_COUNT
+				  , FILE_ORG_PATH
+			FROM TBL_ATTACH_FILE
+			WHERE FILE_ID = #{oldFileId}
+		]]>
+	</insert>
+</mapper>

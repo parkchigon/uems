@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/blockDiagram_tab2.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+
+<div id="loading_mask"></div>
+<div class="loading"><span class="blind">로딩중...</span></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#" name="loading">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li><a href="#">지점 관리</a></li>
+					<li><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li class="on"><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+			
+			<div class="blockDiagram_area">
+			
+			<div class="build_header_sub_area"><!-- 하단 리스트 선택시 버튼 추가됨 -->
+				<strong>기타설비 선택 :</strong>
+				<a class="btnType btn_type01" href="#">냉동기A</a>
+				<a class="btnType btn_type01" href="#">냉동기B</a>
+				<a class="btnType btn_type01" href="#">열량</a>
+				<a class="btnType btn_type01" href="#">흡수식 냉동기</a>
+				<a class="btnType btn_type01" href="#">보일러</a>
+				<a class="btnType btn_type02" href="#">상온 냉동기</a>
+			</div>
+			
+			<div class="refrigerating_machine_area">
+				<div class="refrigerating_machine_inner">
+					<div id="link1" class="refrigerating_machine" style="margin:20px auto;">
+						<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+					</div>
+				
+					<div class="data_area_inner">
+						<dl>
+							<dt class="textC">상온 흡수식 냉동기</dt>
+							<dd>
+								<table class="data_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="30%">
+									<col width="*">
+									<col width="30%">
+									<col width="20%">
+								</colgroup>
+			
+									<tbody>
+										<tr>
+											<th scope="row">정지/기동</th>
+											<td >1234시 30분</td>
+											<th scope="row">가동시간(월별)</th>
+											<td>1234시 30분</td>
+										</tr>
+									</tbody>
+								</table>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			
+				<div class="refrigerating_machine_inner">
+					<div id="link2" class="refrigerating_machine2" style="margin:20px auto;height:100px;">
+						<a href="#layerPop_type1" class="power off" name="modal">정지</a>
+					</div>
+				
+					<div class="data_area_inner">
+						<dl>
+							<dt class="textC">상온 흡수식 냉동기</dt>
+							<dd>
+								<table class="data_row">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="30%">
+									<col width="*">
+									<col width="30%">
+									<col width="20%">
+								</colgroup>
+			
+									<tbody>
+										<tr>
+											<th scope="row">정지/기동</th>
+											<td>1234시 30분</td>
+											<th scope="row">가동시간(월별)</th>
+											<td>1234시 30분</td>
+										</tr>
+									</tbody>
+								</table>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				
+				<div class="refrigerating_machine_inner">
+					<div class="ups" style="margin:40px auto 20px;">
+						<a href="#layerPop_type1" class="power off">정상</a>
+					</div>
+				
+					<div class="data_area_inner">
+						<dl>
+							<dt class="textC">UPS</dt>
+						</dl>
+					</div>
+				</div>
+
+			</div>
+			</div>
+			
+			<div class="btn_areaC mt5">
+				<a class="btnType btn_type02" href="#">저장</a>
+			</div>
+			
+			
+			
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+		<div class="scroll" style="height:870px;">
+			
+			<div class="data_area_inner">
+				<dl>
+					<dt>상온 흡수식 냉동기<a href="#link1" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">정지/기동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">가동시간(월별)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">가동시간(적산)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>상온 터보 냉동기<a href="#link2" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">정지/기동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">가동시간(월별)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">가동시간(적산)</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>UPS<a href="#link3" class="buildLink" name="buildChak"></a></dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">정지/기동</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>누적열량 리셋</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>TagID</th>
+									<th>Name</th>
+									<th>TagID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">축냉 누적열량 ON/OFF</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+									<th scope="row">방냉 누적열량 ON/OFF</th>
+									<td>
+										<select id="" name="" style="width: 100%">
+											<option value="" selected="selected" >TagID</option>
+											<option value=""  >...</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+			
+		</div>
+		<!-- e : data_area -->
+		
+	</div>
+	
+	
+</div>
+
+</body>
+</html>

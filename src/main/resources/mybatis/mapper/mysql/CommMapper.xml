@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.comm.mapper.CommMapper">
+
+	<!-- 통신관리 목록조회 -->
+	<select id="selectCommList" parameterType="Comm" resultType="FlkMap">
+		/* CommMapper.selectCommList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT 	ROW_NUMBER() OVER (ORDER BY TPC.REG_DATE DESC) AS RNUM
+				,TS.SITE_ID
+				,TS.SITE_CD
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = TS.SG_ID) AS SG_NAME
+				,TS.SITE_NAME
+				,TS.SITE_IP
+				,TPC.PLC_WORD_SIZE
+				,TPC.PLC_FLOAT_SIZE
+				,TPC.PLC_DWORD_SIZE
+				,TPC.PLC_STRING_SIZE 
+				,TPC.COM_PORT_CD
+				,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TPC.COM_PORT_CD AND USE_YN = 'Y' AND DELETE_YN = 'N') AS COM_PORT_NAME
+				,TPC.COM_BAUD_CD 
+				,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TPC.COM_BAUD_CD AND USE_YN = 'Y' AND DELETE_YN = 'N') AS COM_BAUD_NAME
+				,TPC.REG_DATE
+		FROM 	TBL_SITE TS,
+		  		TBL_PLC_COMM TPC 
+		WHERE 	TS.SITE_CD = TPC.SITE_CD
+	    ORDER BY TPC.REG_DATE DESC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+	
+	<select id="selectCommDetail" parameterType="Comm" resultType="FlkMap">
+		/* CommMapper.selectCommDetail */
+		SELECT 	TS.SITE_ID
+				,TS.SITE_CD
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = TS.SG_ID AND USE_FLAG = 'Y') AS SG_NAME
+				,TS.SITE_NAME
+				,TS.SITE_DESC
+				,TS.SITE_IP
+				,TPC.PC_NAME
+				,TPC.PLC_PROTOCOL_CD
+				,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TPC.PLC_PROTOCOL_CD AND USE_YN = 'Y' AND DELETE_YN = 'N') AS PLC_PROTOCOL_NAME
+				,TPC.PLC_WORD_SIZE
+				,TPC.PLC_FLOAT_SIZE
+				,TPC.PLC_DWORD_SIZE
+				,TPC.PLC_STRING_SIZE
+				,TPC.plc_exceed_read
+				,TPC.plc_exceed_write
+				,TPC.PLC_MEMORY_POSITION
+				,TPC.COM_PORT_CD
+				,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TPC.COM_PORT_CD AND USE_YN = 'Y' AND DELETE_YN = 'N') AS COM_PORT_NAME
+				,TPC.COM_BAUD_CD 
+				,(SELECT CODE_NAME FROM TBL_CODE WHERE CODE_USE_NAME = TPC.COM_BAUD_CD AND USE_YN = 'Y' AND DELETE_YN = 'N') AS COM_BAUD_NAME
+				,COM_BIT_PARITY_CD
+				,COM_BIT_DATA_CD
+				,COM_BIT_STOP_CD
+				,COM_TX_CTRL_CD
+				,COM_RX_CTRL_CD
+		  FROM 	TBL_SITE TS,
+		  		TBL_PLC_COMM TPC 
+		WHERE 	TS.SITE_CD = TPC.SITE_CD
+		  AND	TS.SITE_ID = #{siteId}
+	</select>
+	
+</mapper>

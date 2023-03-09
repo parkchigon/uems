@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+<link rel="shortcut icon" href="/resources/uems/images/favicon.ico">
+
+<link rel="stylesheet" type="text/css" href="/resources/uems/css/total/basic.css" />
+<script type="text/javascript" src="/resources/uems/js/jquery-1.7.2.min.js"></script>
+
+<link type="text/css" href="/resources/uems/js/lib/jquery/jquery-ui.css" rel="stylesheet"/>
+<script type="text/javascript" src="/resources/uems/js/lib/jquery/jquery-ui.js"></script>
+
+<script type='text/javascript'>//<![CDATA[
+
+function initDatePickers() {
+  // datepicker Korean option
+  $.datepicker.regional['ko'] = {
+    closeText: '닫기',
+    prevText: '이전달',
+    nextText: '다음달',
+    currentText: '오늘',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+    weekHeader: 'Wk',
+    dateFormat: 'yy-mm-dd',
+    firstDay: 0,
+    isRTL: false,
+    duration: 200,
+    showAnim: 'show',
+    showMonthAfterYear: true,
+    yearSuffix: '년'
+  };
+
+  $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+  $('#schDate1').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate1').val()
+  });
+  
+  $('#schDate2').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate2').val()
+  });
+  
+  $('#schDate3').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate3').val()
+  });
+  
+  $('#schDate4').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate4').val()
+  });
+  
+  $('#schDate5').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate5').val()
+  });
+  
+  $('#schDate6').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate6').val()
+  });
+  
+  $('#schDate7').datepicker({
+    changeMonth: false,
+    changeYear: false,
+    defaultDate: $('#schDate7').val()
+  });
+
+  // monthpicker and year selector start/end year (10 year ago)
+  var currentYear = (new Date()).getFullYear();
+  var startYear = currentYear - 10;
+
+  var options = {
+    startYear: startYear,
+    finalYear: currentYear,
+    pattern: 'yyyy-mm',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+  };
+
+  $('#schMonth').monthpicker(options);
+  $('#schMonth2').monthpicker(options);
+
+/*   // make year selector 
+  for (var i = currentYear; i >= startYear; i--) {
+    if ($("#schYear").attr("pathValue") == i) {
+      $("#schYear").append("<option value='" + i + "' selected>" + i + "</option>");
+    } else {
+      $('#schYear').append("<option value='" + i + "'>" + i + "</option>");
+    }
+  } */
+}
+
+$(function() {;
+  (function($) {
+
+    var methods = {
+      init: function(options) {
+        return this.each(function() {
+          var
+            $this = $(this),
+            data = $this.data('monthpicker'),
+            year = (options && options.year) ? options.year : (new Date()).getFullYear(),
+            settings = $.extend({
+              pattern: 'mm/yyyy',
+              selectedMonth: null,
+              selectedMonthName: '',
+              selectedYear: year,
+              startYear: year - 10,
+              finalYear: year + 10,
+              monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              id: "monthpicker_" + (Math.random() * Math.random()).toString().replace('.', ''),
+              openOnFocus: true,
+              disabledMonths: []
+            }, options);
+
+          settings.dateSeparator = settings.pattern.replace(/(mmm|mm|m|yyyy|yy|y)/ig, '');
+
+          // If the plugin hasn't been initialized yet for this element
+          if (!data) {
+
+            $(this).data('monthpicker', {
+              'target': $this,
+              'settings': settings
+            });
+
+            if (settings.openOnFocus === true) {
+              $this.on('focus', function() {
+                $this.monthpicker('show');
+              });
+            }
+
+            $this.monthpicker('parseInputValue', settings);
+
+            $this.monthpicker('mountWidget', settings);
+
+            $this.on('monthpicker-click-month', function(e, month, year) {
+              $this.monthpicker('setValue', settings);
+              $this.monthpicker('hide');
+            });
+
+            // hide widget when user clicks elsewhere on page
+            $this.addClass("mtz-monthpicker-widgetcontainer");
+            $(document).unbind("mousedown.mtzmonthpicker").on("mousedown.mtzmonthpicker", function(e) {
+              if (!e.target.className || e.target.className.toString().indexOf('mtz-monthpicker') < 0) {
+                $(this).monthpicker('hideAll');
+              }
+            });
+          }
+        });
+      },
+
+      show: function() {
+        $(this).monthpicker('hideAll');
+        var widget = $('#' + this.data('monthpicker').settings.id);
+        widget.css("top", this.offset().top + this.outerHeight());
+        if ($(window).width() > (widget.width() + this.offset().left)) {
+          widget.css("left", this.offset().left);
+        } else {
+          widget.css("left", this.offset().left - widget.width());
+        }
+        widget.show();
+        widget.find('select').focus();
+        this.trigger('monthpicker-show');
+      },
+
+      hide: function() {
+        var widget = $('#' + this.data('monthpicker').settings.id);
+        if (widget.is(':visible')) {
+          widget.hide();
+          this.trigger('monthpicker-hide');
+        }
+      },
+
+      hideAll: function() {
+        $(".mtz-monthpicker-widgetcontainer").each(function() {
+          if (typeof($(this).data("monthpicker")) != "undefined") {
+            $(this).monthpicker('hide');
+          }
+        });
+      },
+
+      setValue: function(settings) {
+        var
+          month = settings.selectedMonth,
+          year = settings.selectedYear;
+
+        if (settings.pattern.indexOf('mmm') >= 0) {
+          month = settings.selectedMonthName;
+        } else if (settings.pattern.indexOf('mm') >= 0 && settings.selectedMonth < 10) {
+          month = '0' + settings.selectedMonth;
+        }
+
+        if (settings.pattern.indexOf('yyyy') < 0) {
+          year = year.toString().substr(2, 2);
+        }
+
+        if (settings.pattern.indexOf('y') > settings.pattern.indexOf(settings.dateSeparator)) {
+          this.val(month + settings.dateSeparator + year);
+        } else {
+          this.val(year + settings.dateSeparator + month);
+        }
+
+        this.change();
+      },
+
+      disableMonths: function(months) {
+        var
+          settings = this.data('monthpicker').settings,
+          container = $('#' + settings.id);
+
+        settings.disabledMonths = months;
+
+        container.find('.mtz-monthpicker-month').each(function() {
+          var m = parseInt($(this).data('month'));
+          if ($.inArray(m, months) >= 0) {
+            $(this).addClass('ui-state-disabled');
+          } else {
+            $(this).removeClass('ui-state-disabled');
+          }
+        });
+      },
+
+      mountWidget: function(settings) {
+        var
+          monthpicker = this,
+          container = $('<div id="' + settings.id + '" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" />'),
+          header = $('<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all mtz-monthpicker" />'),
+          combo = $('<select class="mtz-monthpicker mtz-monthpicker-year" />'),
+          table = $('<table class="mtz-monthpicker" />'),
+          tbody = $('<tbody class="mtz-monthpicker" />'),
+          tr = $('<tr class="mtz-monthpicker" />'),
+          td = '',
+          selectedYear = settings.selectedYear,
+          option = null,
+          attrSelectedYear = $(this).data('selected-year'),
+          attrStartYear = $(this).data('start-year'),
+          attrFinalYear = $(this).data('final-year');
+
+        if (attrSelectedYear) {
+          settings.selectedYear = attrSelectedYear;
+        }
+
+        if (attrStartYear) {
+          settings.startYear = attrStartYear;
+        }
+
+        if (attrFinalYear) {
+          settings.finalYear = attrFinalYear;
+        }
+
+        container.css({
+          position: 'absolute',
+          zIndex: 999999,
+          whiteSpace: 'nowrap',
+          width: '250px',
+          overflow: 'hidden',
+          textAlign: 'center',
+          display: 'none',
+          top: monthpicker.offset().top + monthpicker.outerHeight(),
+          left: monthpicker.offset().left
+        });
+
+        combo.on('change', function() {
+          var months = $(this).parent().parent().find('td[data-month]');
+          months.removeClass('ui-state-active');
+          if ($(this).val() == settings.selectedYear) {
+            months.filter('td[data-month=' + settings.selectedMonth + ']').addClass('ui-state-active');
+          }
+          monthpicker.trigger('monthpicker-change-year', $(this).val());
+        });
+
+        // mount years combo
+        for (var i = settings.startYear; i <= settings.finalYear; i++) {
+          var option = $('<option class="mtz-monthpicker" />').attr('value', i).append(i);
+          if (settings.selectedYear == i) {
+            option.attr('selected', 'selected');
+          }
+          combo.append(option);
+        }
+        header.append(combo).appendTo(container);
+
+        // mount months table
+        for (var i = 1; i <= 12; i++) {
+          td = $('<td class="ui-state-default mtz-monthpicker mtz-monthpicker-month" style="padding:5px;cursor:default;" />').attr('data-month', i);
+          if (settings.selectedMonth == i) {
+            td.addClass('ui-state-active');
+          }
+          td.append(settings.monthNames[i - 1]);
+          tr.append(td).appendTo(tbody);
+          if (i % 3 === 0) {
+            tr = $('<tr class="mtz-monthpicker" />');
+          }
+        }
+
+        tbody.find('.mtz-monthpicker-month').on('click', function() {
+          var m = parseInt($(this).data('month'));
+          if ($.inArray(m, settings.disabledMonths) < 0) {
+            settings.selectedYear = $(this).closest('.ui-datepicker').find('.mtz-monthpicker-year').first().val();
+            settings.selectedMonth = $(this).data('month');
+            settings.selectedMonthName = $(this).text();
+            monthpicker.trigger('monthpicker-click-month', $(this).data('month'));
+            $(this).closest('table').find('.ui-state-active').removeClass('ui-state-active');
+            $(this).addClass('ui-state-active');
+          }
+        });
+
+        table.append(tbody).appendTo(container);
+
+        container.appendTo('body');
+      },
+
+      destroy: function() {
+        return this.each(function() {
+          $(this).removeClass('mtz-monthpicker-widgetcontainer').unbind('focus').removeData('monthpicker');
+        });
+      },
+
+      getDate: function() {
+        var settings = this.data('monthpicker').settings;
+        if (settings.selectedMonth && settings.selectedYear) {
+          return new Date(settings.selectedYear, settings.selectedMonth - 1);
+        } else {
+          return null;
+        }
+      },
+
+      parseInputValue: function(settings) {
+        if (this.val()) {
+          if (settings.dateSeparator) {
+            var val = this.val().toString().split(settings.dateSeparator);
+            if (settings.pattern.indexOf('m') === 0) {
+              settings.selectedMonth = val[0];
+              settings.selectedYear = val[1];
+            } else {
+              settings.selectedMonth = val[1];
+              settings.selectedYear = val[0];
+            }
+          }
+        }
+      }
+
+    };
+
+    $.fn.monthpicker = function(method) {
+      if (methods[method]) {
+        return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+      } else if (typeof method === 'object' || !method) {
+        return methods.init.apply(this, arguments);
+      } else {
+        $.error('Method ' + method + ' does not exist on jQuery.mtz.monthpicker');
+      }
+    };
+
+  })(jQuery);
+  initDatePickers();
+  
+	$(".btn_calender").click(function(){
+		$(this).prev().focus();
+	})
+  
+});
+
+//]]> 
+
+</script>
+
+</head>
+<body>
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/uems/images/total/logo.png" alt="ENERZENT" /></h1>
+		<div class="topUtil">
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+		<div id="gnb">
+			<a href="index.html">총계</a>
+			<a href="branch_info.html" class="on">지점정보</a>
+			<a href="report.html">보고서</a>
+		</div>
+		<div class="header_right">
+			<span class="toDay">2017년 05월 25일(월) 10:00:00</span>
+			<div class="links">
+				<a href="#">관리</a>
+				<a href="#">통합센터</a>
+			</div>
+		</div>
+	</div>
+	
+	<div id="container">
+		
+		<div class="content_head_area">
+			<span class="weather sun_cloudy"><strong>24℃</strong> <em>최저기온 : 18℃ / 최고기온 : 30℃</em></span>
+				<!-- 			
+				sun					/* 낮 맑음 */
+				sun_cloudy			/* 낮 구름조금 */
+				sun_cloudy2			/* 낮 구름많음 */
+				sun_rain				/* 낮 한때 비 */
+				moon				 	/* 밤 맑음 */
+				moon_cloudy	 	/* 밤 구름조금 */
+				moon_cloudy2  		/* 밤 구름많음 */
+				moon_rain		 	/* 밤 한때 비 */
+				less_rain		 		/* 비조금 */
+				less_show		 	/* 눈조금 */
+				rain				 	/* 비 */
+				show			 		/* 눈 */
+				rain_show	 		/* 비 또는 눈 */
+				lightning				/* 번개 */
+				 -->		
+			
+			<div class="fr">
+				<select id="" name="" style="width: 130px">
+					<option value="" selected="selected" >이마트</option>
+					<option value=""  >신세계</option>
+				</select>
+				
+				<select id="" name="" style="width: 160px">
+					<option value="" selected="selected" >동인천점</option>
+					<option value=""  >...</option>
+				</select>
+			</div>
+		</div>
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+		
+			<div class="fl">	
+				<div class="info_area">
+					<dl>
+						<dt>이마트 동인천점</dt>
+						<dd>
+							<table class="table_wrap">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="120px">
+								<col width="150px">
+								<col width="*">
+							</colgroup>
+			
+								<tbody>
+									<tr>
+										<th scope="row">연면적</th>
+										<td colspan="2">
+											3500평
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">빙축열운영</th>
+										<td colspan="2">
+											2015.07.01
+										</td>
+									</tr>
+									<tr>
+										<th scope="rowgroup" rowspan="3">장비형황</th>
+										<th scope="row">피크용량</th>
+										<td>360 USRt.h</td>
+									</tr>
+									<tr>
+										<th scope="row">빙축조 용량</th>
+										<td>1360 USRt-hr</td>
+									</tr>
+									<tr>
+										<th scope="row">냉동기 용량</th>
+										<td>
+											<p>(야간) 360 USRt.h</p>
+											<p>(주간) 360 USRt.h</p>
+										</td>
+									</tr>
+									<tr>
+										<th scope="rowgroup" rowspan="2">연락망</th>
+										<th scope="row">담당자</th>
+										<td>홍길동 : 010-1234-5678</td>
+									</tr>
+									<tr>
+										<th scope="row">기술운영팀</th>
+										<td>032-0000-0000, 0001</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="chart_area mt20">
+					<dl>
+						<dt>주요 지표 테이터
+							<span class="fr">
+								<select id="" name="" style="width: 130px"><!-- 년별 -->
+									<option value="" selected="selected" >2017년</option>
+									<option value=""  >2016년</option>
+								</select>
+							</span>
+						</dt>
+						<dd style="height: 207px;">
+							차트 영역(688*207) <br/>높이 변경 : 20170822
+						</dd>
+					</dl>
+				</div>
+			</div>
+			
+			<div class="fr">
+				<div class="chart_area">
+					<dl>
+						<dt>이력
+							<span class="fr">
+								<select id="" name="" style="width: 130px">
+									<option value="" selected="selected" >2017년</option>
+									<option value=""  >2016년</option>
+								</select>
+							</span>
+						</dt>
+						<dd>
+							차트 영역(688*207)
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="chart_area mt20">
+					<dl>
+						<dt>총 냉방 사용요금
+							<span class="fr">
+								<select id="" name="" style="width: 130px">
+									<option value="" selected="selected" >2017년</option>
+									<option value=""  >2016년</option>
+								</select>
+							</span>
+						</dt>
+						<dd>
+							<div class="left_chart">
+								차트 영역(470*207)
+							</div>
+							
+							<div class="right_table">
+								<table class="chart_inner_table">
+								<caption>caption</caption>
+								<colgroup>
+									<col width="35%">
+									<col width="*">
+								</colgroup>
+				
+									<tbody>
+										<tr>
+											<th scope="col">월</th>
+											<th scope="col">절감비율</th>
+										</tr>
+									</tbody>
+									<tbody>
+										<tr>
+											<td>5월</td>
+											<td><span class="font_blue">▼</span> -21%</td>
+										</tr>
+										<tr>
+											<td>6월</td>
+											<td><span class="font_blue">▼</span> -21%</td>
+										</tr>
+										<tr>
+											<td>7월</td>
+											<td><span class="font_blue">▼</span> -21%</td>
+										</tr>
+										<tr>
+											<td>8월</td>
+											<td><span class="font_blue">▼</span> -21%</td>
+										</tr>
+										<tr>
+											<td>9월</td>
+											<td><span class="font_red">▲</span> 21%</td>
+										</tr>
+										<tr>
+											<td>10월</td>
+											<td><span class="font_blue">▼</span> -21%</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</dd>
+					</dl>
+				</div>
+			</div>
+			
+			<div class="both"></div>
+			
+			<div class="mt20">
+				<div class="chart_area fl">
+					<dl>
+						<dt>CO2 배출량
+							<span class="fr">
+								<span class="entry_calendar"><!-- 일별 -->
+									<input type="text" class="datepicker" id="schDate1" name="schDate1" value="${schDate1}" style="width:90px;" ></input>
+									<a href="#" class="btn_calender"><i class="fa fa-calendar"></i></a>
+								</span>
+							</span>
+						</dt>
+						<dd>
+							차트 영역(688*207)
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="chart_area fr">
+					<dl>
+						<dt>사용요금 비교 데이터
+							<span class="fr">
+								<span class="entry_calendar"><!-- 월별 -->
+									<input type="text" class="monthPicker" id="schMonth" name="schMonth" value="${schMonth}" style="width:90px;" ></input>
+									<a href="#" class="btn_calender"><i class="fa fa-calendar"></i></a>
+								</span>
+							</span>
+						</dt>
+						<dd>
+							차트 영역(688*207)
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="both"></div>
+			</div>
+		
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : footer -->
+		<div id="footer">
+			<img src="/resources/uems/images/total/logo_footer.jpg" alt="ENERZENT" /> <span>Copyright (C) ENERZENT CO., LTD, All Rights Reserved.</span>
+		</div>
+		<!-- e : footer -->
+	
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.report.mapper.RegularCheckMapper">
+ 
+ 	<!-- 지점별 장비 리스트 조회 -->
+ 	<select id="selectFacilityList" parameterType="Maintenance" resultType="FlkMap">
+		SELECT * FROM 
+		(
+			SELECT ts.facility_id
+				   , ts.facility_kind
+				   , ts.ms_id
+				   , ts.site_id
+				   , CASE WHEN facility_kind = '01'
+				          THEN (SELECT pump_name FROM tbl_facility_pump_master WHERE fpm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '02'
+				          THEN (SELECT heatexc_name FROM tbl_facility_heatexc_master WHERE fhm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '03'
+				          THEN (SELECT chiller_name FROM tbl_facility_chiller_master WHERE fsm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '04'
+				          THEN (SELECT heatstg_name FROM tbl_facility_heatstg_master WHERE fhsm = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '05'
+				          THEN (SELECT ctower_name FROM tbl_facility_ctower_master WHERE fcm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '06'
+				          THEN (SELECT autoctrl_name FROM tbl_facility_autoctrl_master WHERE fam_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				          WHEN facility_kind = '07'
+				          THEN (SELECT elecmcc_name FROM tbl_facility_elecmcc_master WHERE fem_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+				     ELSE ''
+				     END AS facility_name
+			 FROM tbl_maintenance_site ts
+			WHERE ts.site_id = #{siteId}
+			  AND ts.use_flag = 'Y'
+		) u
+		WHERE u.facility_name IS NOT NULL
+		ORDER BY facility_kind ASC		  
+ 	</select>
+ 	
+ 	<!-- site_id, facility_id 로 ms_id 조회하기(항목조회를 위한 키값 조회) -->
+ 	<select id="selectMsId" parameterType="Maintenance" resultType="Maintenance">
+ 		 SELECT ms_id
+		   FROM tbl_maintenance_site
+		  WHERE site_id = #{siteId}
+		    AND facility_id = #{facilityId}
+ 	</select>
+	 	
+ 	<!-- 장비 점검 항목 리스트 조회 (대항목) -->
+ 	<select id = "selectFacilityQueList" parameterType="Maintenance" resultType="FlkMap">
+ 		SELECT msq_id
+		     , question
+		     , apply_date
+		     , sort_no
+		     , designed_code
+		     , ms_id
+		 FROM tbl_maintenance_site_que
+		WHERE use_flag = 'Y'
+		  AND ms_id = #{msId}
+ 	</select>
+ 	
+ 	<!-- 장비 Que 선택에 따른 Answer 항목 조회 -->
+ 	<select id = "selectFacilityAnsList" parameterType="Maintenance" resultType="FlkMap">
+ 		SELECT msa_id
+		     , answer
+		     , apply_date
+		     , check_type_flag
+		     , sort_no
+		     , use_flag
+		     , msq_id
+		 FROM tbl_maintenance_site_ans
+		WHERE msq_id = #{msqId}
+		  AND use_flag = 'Y'
+		  AND check_type_flag = 'Y'
+ 	</select>
+ 	
+ 	<!-- tbl_maintenance_site_que 대항목 수정 후 재등록 -->
+ 	
+ 	
+ 	<!-- tbl_maintenance_site_que USE_FLAG UPDATE -->
+ 	<update id="deleteQueList" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_que
+ 		SET use_flag = 'N'
+ 		WHERE msq_id IN
+ 		<foreach collection="delListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach>
+ 	</update>
+
+	<!-- tbl_maintenance_site_que USE_FLAG UPDATE -->
+ 	<update id="deleteQueAnsList" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET use_flag = 'N'
+ 		WHERE msq_id IN
+ 		<foreach collection="delListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach>
+ 	</update>
+
+ 	<!-- tbl_maintenance_site_que USE_FLAG UPDATE -->
+ 	<update id="deleteAnsList" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET use_flag = 'N'
+ 		WHERE msa_id IN
+ 		<foreach collection="delListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach>
+ 	</update>
+ 	
+ 	<!-- 수정항목 update  -->
+ 	<update id="updateQueList" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_que
+ 		SET use_flag = 'N'
+ 		WHERE msq_id = #{msqId}
+ 	</update>
+ 	
+ 	<!-- 수정항목 update  -->
+ 	<update id="updateAnsList" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET use_flag = 'N'
+ 		WHERE msa_id = #{msaId}
+ 	</update>
+ 	
+ 	<!-- 수정항목 update(필수항목 '기타' sort no 수정)  -->
+ 	<update id="updateAnsEtcSortNo" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET sort_no = #{sortNo}
+ 		WHERE msq_id = #{msqId} and check_type_flag = 'E'
+ 	</update>
+ 	
+ 	<!-- 추가/수정 재등록 tbl_maintenance_site_que -->
+ 	<insert id="insertQueList" parameterType="Maintenance" useGeneratedKeys="true" keyProperty="newMsqId">
+ 		INSERT INTO tbl_maintenance_site_que
+		(question, sort_no, designed_code, use_flag, reg_id, ms_id, update_id, apply_date)
+		VALUES 
+		(#{question}, #{sortNo}, #{designedCode}, 'Y', #{regId}, #{msId}, #{regId}, DATE_FORMAT(NOW(),'%Y%m%d%H%i'))
+ 	</insert>
+ 	
+ 	<!-- 대항목 신규등록시 상세항목 '기타'항목 default 생성 -->
+ 	<insert id="insertAnsDefaultEtc" parameterType="Maintenance">
+ 		INSERT INTO tbl_maintenance_site_ans
+		(answer, check_type_flag, sort_no, use_flag, reg_id, msq_id, update_id, apply_date)
+		VALUES 
+		(#{answer}, #{checkTypeFlag}, #{sortNo}, 'Y', #{regId}, #{newMsqId}, #{regId}, DATE_FORMAT(NOW(),'%Y%m%d%H%i'))
+ 	</insert>
+ 	
+ 	<!-- 추가/수정 재등록 tbl_maintenance_site_ans -->
+ 	<insert id="insertAnsList" parameterType="Maintenance">
+ 		INSERT INTO tbl_maintenance_site_ans
+		(answer, check_type_flag, sort_no, use_flag, reg_id, msq_id, update_id, apply_date)
+		VALUES 
+		(#{answer}, 'Y', #{sortNo}, 'Y', #{regId}, #{msqId}, #{regId}, DATE_FORMAT(NOW(),'%Y%m%d%H%i'))
+ 	</insert>
+ 	
+ 	<!-- Sort_no  update -->
+ 	<update id="updateQueSortNo" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_que
+ 		SET sort_no = #{sortNo}
+ 		WHERE msq_id = #{msqId}
+ 	</update>
+ 	
+ 	<!-- Sort_no  update -->
+ 	<update id="updateAnsSortNo" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET sort_no = #{sortNo}
+ 		WHERE msa_id = #{msaId}
+ 	</update>
+ 	
+ 	<update id="updateAnsMsqId" parameterType="Maintenance">
+ 		UPDATE tbl_maintenance_site_ans
+ 		SET msq_id = #{newMsqId}
+ 		WHERE msq_id = #{msqId}
+ 	</update>
+ 	
+ 	<!-- 장비별 점검 완료 리스트 조회 -->
+ 	<select id="selectMaintenanceChk" parameterType="Maintenance" resultType="Maintenance">
+		SELECT * FROM 
+			(
+				SELECT TMS.ms_id
+	           , TMS.site_id
+					   , TMS.facility_kind
+	           , TMS.facility_id
+					   , CASE WHEN facility_kind = '01'
+					          THEN (SELECT pump_name FROM tbl_facility_pump_master WHERE fpm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '02'
+					          THEN (SELECT heatexc_name FROM tbl_facility_heatexc_master WHERE fhm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '03'
+					          THEN (SELECT chiller_name FROM tbl_facility_chiller_master WHERE fsm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '04'
+					          THEN (SELECT heatstg_name FROM tbl_facility_heatstg_master WHERE fhsm = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '05'
+					          THEN (SELECT ctower_name FROM tbl_facility_ctower_master WHERE fcm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '06'
+					          THEN (SELECT autoctrl_name FROM tbl_facility_autoctrl_master WHERE fam_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					          WHEN facility_kind = '07'
+					          THEN (SELECT elecmcc_name FROM tbl_facility_elecmcc_master WHERE fem_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+					     ELSE ''
+					     END AS facility_name
+					     ,DATE_FORMAT(TMC.reg_date,'%Y%m%d') AS reg_date
+				 FROM tbl_maintenance_site  TMS , tbl_maintenance_chk TMC
+			WHERE TMS.ms_id = TMC.ms_id 
+	        AND TMS.site_id = #{siteId}
+				  AND TMS.use_flag = 'Y'
+			    AND TMC.chk_month = #{chkMonth}
+			    AND TMC.finish_yn = 'Y'
+			) u
+		  WHERE u.facility_name IS NOT NULL
+			ORDER BY facility_kind ASC
+ 	</select>
+ 	
+ 	<!-- 점검완료 리스트 -->
+ 	<select id = "selectFinishFacilityList" parameterType="Maintenance" resultType="Maintenance">
+		SELECT DISTINCT TMSA.msq_id
+		       , question
+		       , TMSA.msa_id
+		       , answer
+		       , sub_facility_id
+		       , result
+		       , designed_code
+		       , TMSA.check_type_flag
+		  FROM tbl_maintenance_chk_ans TMCA, tbl_maintenance_site_ans TMSA, tbl_maintenance_site_que TMSQ
+		 WHERE TMCA.ms_id = #{msId}
+		   AND TMCA.msa_id = TMSA.msa_id
+		   AND TMSA.msq_id = TMSQ.msq_id
+		   AND TMCA.ms_id = TMSQ.ms_id
+		   AND chk_month = #{chkMonth}
+		   AND TMSQ.use_flag='Y'
+		 ORDER BY TMSQ.sort_no, TMSA.sort_no		   
+ 	</select>
+ 	
+ 	<!-- 정기점검 사진 리스트 조회 -->
+ 	<select id = "selectFileQueList" parameterType="Maintenance" resultType="Maintenance">
+		SELECT mfq_id
+			   , chk_month
+			   , ms_id
+			   , msq_id
+			   , file_name
+			   , file_path
+			   , sub_facility_id
+		  FROM tbl_maintenance_file_que
+		 WHERE chk_month = #{chkMonth}
+		   AND ms_id = #{msId}
+		   AND use_flag = 'Y' 	
+ 	</select> 	
+ 	
+ 	<!-- 정기점검 장비 상태 리스트  -->
+ 	<select id="selectFacilityStatusList" parameterType="Maintenance" resultType="FlkMap">
+ 		SELECT * FROM 
+		(
+			SELECT TS.facility_id
+				   , TS.ms_id
+				   , facility_kind
+				   , CASE WHEN facility_kind = '01' THEN (SELECT pump_name FROM tbl_facility_pump_master WHERE fpm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+						  WHEN facility_kind = '02' THEN (SELECT heatexc_name FROM tbl_facility_heatexc_master WHERE fhm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+						  WHEN facility_kind = '03' THEN (SELECT chiller_name FROM tbl_facility_chiller_master WHERE fsm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+						  WHEN facility_kind = '04' THEN (SELECT heatstg_name FROM tbl_facility_heatstg_master WHERE fhsm = facility_id AND site_id=#{siteId} AND use_flag='Y')
+						  WHEN facility_kind = '05' THEN (SELECT ctower_name FROM tbl_facility_ctower_master WHERE fcm_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+						  WHEN facility_kind = '06' THEN (SELECT autoctrl_name FROM tbl_facility_autoctrl_master WHERE fam_id = facility_id AND site_id=#{siteId} AND use_flag='Y') 
+						  WHEN facility_kind = '07' THEN (SELECT elecmcc_name FROM tbl_facility_elecmcc_master WHERE fem_id = facility_id AND site_id=#{siteId} AND use_flag='Y')
+			         	  ELSE ''
+			          END AS facility_name
+		     	   , IFNULL(TC.finish_yn, 'N') AS finisi_yn 
+			  FROM tbl_maintenance_site TS
+			  LEFT JOIN tbl_maintenance_chk TC
+		        ON TS.ms_id = TC.ms_id
+			<if test="chkMonth != '' and chkMonth != null">
+		       AND TC.chk_month = #{chkMonth}
+			</if>
+			<where>
+				<if test="siteId != '' and siteId != null">
+			       AND TS.site_id = #{siteId}
+				</if>
+				AND TS.use_flag = 'Y'
+			</where>       
+		) u
+		WHERE u.facility_name IS NOT NULL
+		ORDER BY u.facility_kind ASC
+ 	</select>
+ 	
+ 	<!-- 보고서관리 > 정기점검목록관리 -->
+ 	<select id="selectFacilityCheckCmpltList" parameterType="Maintenance" resultType="FlkMap">
+ 		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+		SELECT * FROM 
+		(
+	 		SELECT
+	 		      ROW_NUMBER() OVER (ORDER BY tmc.reg_date DESC) AS RNUM
+	 		    , tms.ms_id
+				, tsg.sg_id
+				, tsg.sg_name
+				, tms.site_id
+				, ts.site_name
+				, tms.facility_kind
+				, tms.facility_id
+				, CASE WHEN tms.facility_kind = '01'
+				    THEN (SELECT pump_name FROM tbl_facility_pump_master WHERE fpm_id = tms.facility_id 
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '02'
+				    THEN (SELECT heatexc_name FROM tbl_facility_heatexc_master WHERE fhm_id = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '03'
+				    THEN (SELECT chiller_name FROM tbl_facility_chiller_master WHERE fsm_id = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '04'
+				    THEN (SELECT heatstg_name FROM tbl_facility_heatstg_master WHERE fhsm = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '05'
+				    THEN (SELECT ctower_name FROM tbl_facility_ctower_master WHERE fcm_id = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '06'
+				    THEN (SELECT autoctrl_name FROM tbl_facility_autoctrl_master WHERE fam_id = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				    WHEN tms.facility_kind = '07'
+				    THEN (SELECT elecmcc_name FROM tbl_facility_elecmcc_master WHERE fem_id = tms.facility_id
+				    <if test="siteId != '' and siteId != null">
+				    AND site_id = #{siteId}
+				    </if>
+				    )
+				ELSE ''
+				END AS facility_name
+				, tmc.chk_month
+				, CONCAT(LEFT(tmc.chk_month,4),'년',RIGHT(tmc.chk_month,2),'월') AS chk_month_val
+				, tmc.reg_id
+				, tm.mng_name
+				, DATE_FORMAT(tmc.reg_date,'%Y-%m-%d %H:%i') AS reg_date
+			FROM tbl_maintenance_chk tmc
+			   , tbl_maintenance_site tms
+			   , tbl_site ts
+			   , tbl_site_group tsg
+			   , tbl_mng tm
+			WHERE tmc.ms_id = tms.ms_id
+			  AND tms.site_id = ts.site_id
+			  AND ts.sg_id = tsg.sg_id
+			  AND tmc.reg_id = tm.mng_id
+			<if test="siteId != '' and siteId != null">
+		    	AND tms.site_id = #{siteId}
+			</if>
+			<if test="sgId != '' and sgId != null">
+		    	AND tsg.sg_id = #{sgId}
+			</if>
+			<if test="facilityId != '' and facilityId != null">
+		    	AND tms.facility_id = #{facilityId}
+			</if>
+			ORDER BY tmc.reg_date DESC
+		) u
+		WHERE u.facility_name IS NOT NULL
+		ORDER BY u.facility_kind ASC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+ 	</select>
+ 	
+ 	
+ 	<!-- 사진/이미지 조회 -->
+	<select id="selectPhotoList" parameterType="Maintenance" resultType="Maintenance">
+		SELECT file_name, file_path, mfq_id, chk_month, msq_id, sub_facility_id
+		FROM tbl_maintenance_file_que
+		WHERE chk_month = #{chkMonth}
+		  AND ms_id = #{msId}
+		  AND use_flag = 'Y'
+	</select>
+
+	<!-- 이미지 삭제 -->
+	<update id="deletePhotoList" parameterType="Maintenance">
+		UPDATE tbl_maintenance_file_que SET use_flag = 'N'
+		WHERE mfq_id IN
+		<foreach collection="realDelListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach> 
+	</update>
+	
+	<!-- 이미지 임시저장  -->
+	<insert id="uploadImg" parameterType="File" useGeneratedKeys="true" keyProperty="mfqId">
+		INSERT INTO tbl_maintenance_file_que
+		(chk_month, ms_id, sub_facility_id, msq_id, file_name, file_path, use_flag, update_id, reg_id)
+		VALUES
+		(#{chkMonth}, #{msId}, #{subFacilityId}, #{msqId}, #{fileName}, #{filePath}, #{useFlag}, #{updateId}, #{regId})
+	</insert>
+	
+	<!-- 임시저장 이미지 사용여부 업데이트 -->
+	<update id="updateImgUseYn" parameterType="Maintenance">
+		UPDATE tbl_maintenance_file_que
+		SET use_flag = 'Y'
+		WHERE mfq_id IN
+		<foreach collection="newListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach>
+	</update>
+	
+	<!-- 임시저장 use_yn = 'N' 데이터 조회 -->
+	<select id="selectNoUseImg" parameterType="Maintenance" resultType="Maintenance">
+		SELECT file_name, file_path
+		  FROM tbl_maintenance_file_que
+		WHERE use_flag = 'N'
+	</select>
+	
+	<!-- 삭제이미지 실제데이터 삭제 -->
+	<delete id="realDeletePhotoList" parameterType="Maintenance" >
+		DELETE FROM tbl_maintenance_file_que
+		WHERE mfq_id IN
+		<foreach collection="realDelListArr" item="item" index="index" open="(" separator="," close=")">
+ 			#{item}
+ 		</foreach> 
+	</delete>
+</mapper>

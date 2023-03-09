@@ -1,0 +1,151 @@
+@charset "utf-8";
+
+/* Block Diagram
+.blockDiagram_area::BEFORE	{position:absolute;top:0px;left:0px;content:"";width:100%;height:100%;background: url(/resources/ems/images/temp/ems_tab2.png) 0 0 no-repeat;opacity:0.2; }
+ */
+ 
+.header_big.up {top:30px;left:580px;}
+.header_big.down {top:480px;left:580px;}
+
+.hx_plate_v.No1 {top:78px;left:1100px;}
+.hx_plate_v.No2 {top:219px;left:1100px;}
+.hx_plate_v.No3 {top:359px;left:1100px;}
+
+.refrigerating_machine {position: absolute !important;}
+.refrigerating_machine.No1 {top:100px;left:0px;}
+.refrigerating_machine.No2 {top:230px;left:0px;}
+.refrigerating_machine.No3 {top:360px;left:0px;}
+.refrigerating_machine.No4 {top:490px;left:0px;}
+.refrigerating_machine.No5 {top:620px;left:0px;}
+
+/* HW */
+.pipe_hw_ud.pipe001 {height: 95px;top:558px;left:460px;}
+.pipe_hw_ud.pipe002 {height: 205px;top:428px;left:480px;}
+.pipe_hw_ud.pipe003 {height: 315px;top:298px;left:500px;}
+.pipe_hw_ud.pipe004 {height: 425px;top:168px;left:520px;}
+.pipe_hw_ud.pipe005 {height: 445px;top:128px;left:860px;}
+.pipe_hw_ud.pipe006 {height: 360px;top:269px;left:880px;}
+.pipe_hw_ud.pipe007 {height: 274px;top:409px;left:900px;}
+
+.pipe_hw_lr.pipe001 {width: 390px;top:158px;left:130px;}
+.pipe_hw_lr.pipe002 {width: 370px;top:288px;left:130px;}
+.pipe_hw_lr.pipe003 {width: 350px;top:418px;left:130px;}
+.pipe_hw_lr.pipe004 {width: 330px;top:548px;left:130px;}
+.pipe_hw_lr.pipe005 {width: 460px;top:678px;left:130px;}
+.pipe_hw_lr.pipe006 {width: 120px;top:658px;left:470px;}
+.pipe_hw_lr.pipe007 {width: 100px;top:638px;left:490px;}
+.pipe_hw_lr.pipe008 {width: 80px;top:618px;left:510px;}
+.pipe_hw_lr.pipe009 {width: 60px;top:598px;left:530px;}
+.pipe_hw_lr.pipe010 {width: 245px;top:118px;left:870px;}
+.pipe_hw_lr.pipe011 {width: 225px;top:259px;left:890px;}
+.pipe_hw_lr.pipe012 {width: 205px;top:399px;left:910px;}
+.pipe_hw_lr.pipe013 {width: 90px;top:576px;left:770px;}
+.pipe_hw_lr.pipe014 {width: 110px;top:630px;left:770px;}
+.pipe_hw_lr.pipe015 {width: 130px;top:685px;left:770px;}
+
+.pipe_hw_corner_ur.corner001 {top:117px;left:860px;}
+.pipe_hw_corner_ur.corner002 {top:258px;left:880px;}
+.pipe_hw_corner_ur.corner003 {top:398px;left:900px;}
+
+.pipe_hw_corner_ul.corner001 {top:157px;left:513px;}
+.pipe_hw_corner_ul.corner002 {top:287px;left:493px;}
+.pipe_hw_corner_ul.corner003 {top:417px;left:473px;}
+.pipe_hw_corner_ul.corner004 {top:547px;left:453px;}
+
+.pipe_hw_corner_dl.corner001 {top:568px;left:853px;}
+.pipe_hw_corner_dl.corner002 {top:622px;left:873px;}
+.pipe_hw_corner_dl.corner003 {top:677px;left:893px;}
+
+.pipe_hw_corner_dr.corner001 {top:650px;left:459px;}
+.pipe_hw_corner_dr.corner002 {top:630px;left:479px;}
+.pipe_hw_corner_dr.corner003 {top:610px;left:499px;}
+.pipe_hw_corner_dr.corner004 {top:590px;left:519px;}
+
+.hw .sensor_u_temperature.sensor001 {top:102px;left:1040px;}
+.hw .sensor_u_temperature.sensor002 {top:243px;left:1040px;}
+.hw .sensor_u_temperature.sensor003 {top:383px;left:1040px;}
+.hw .sensor_u_temperature.sensor001 em,
+.hw .sensor_u_temperature.sensor002 em,
+.hw .sensor_u_temperature.sensor003 em {bottom:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.hw .sensor_d_temperature.sensor001 {top:164px;left:200px;}
+.hw .sensor_d_temperature.sensor002 {top:294px;left:200px;}
+.hw .sensor_d_temperature.sensor003 {top:424px;left:200px;}
+.hw .sensor_d_temperature.sensor004 {top:554px;left:200px;}
+.hw .sensor_d_temperature.sensor005 {top:684px;left:200px;}
+.hw .sensor_d_temperature.sensor001 em,
+.hw .sensor_d_temperature.sensor002 em,
+.hw .sensor_d_temperature.sensor003 em,
+.hw .sensor_d_temperature.sensor004 em,
+.hw .sensor_d_temperature.sensor005 em {top:15px;left:50%;margin-left:-50px;text-align: center;}
+
+
+/* GLYCOL */
+
+.pipe_glycol_ud.pipe001 {height: 50px;top:194px;left:380px;}
+.pipe_glycol_ud.pipe002 {height: 160px;top:214px;left:400px;}
+.pipe_glycol_ud.pipe003 {height: 270px;top:234px;left:420px;}
+.pipe_glycol_ud.pipe004 {height: 380px;top:254px;left:440px;}
+.pipe_glycol_ud.pipe005 {height: 165px;top:294px;left:820px;}
+.pipe_glycol_ud.pipe006 {height: 81px;top:239px;left:840px;}
+
+.pipe_glycol_lr.pipe001 {width: 460px;top:118px;left:130px;}
+.pipe_glycol_lr.pipe002 {width: 250px;top:248px;left:130px;}
+.pipe_glycol_lr.pipe003 {width: 270px;top:378px;left:130px;}
+.pipe_glycol_lr.pipe004 {width: 290px;top:508px;left:130px;}
+.pipe_glycol_lr.pipe005 {width: 310px;top:638px;left:130px;}
+.pipe_glycol_lr.pipe006 {width: 200px;top:188px;left:390px;}
+.pipe_glycol_lr.pipe007 {width: 180px;top:208px;left:410px;}
+.pipe_glycol_lr.pipe008 {width: 160px;top:228px;left:430px;}
+.pipe_glycol_lr.pipe009 {width: 140px;top:248px;left:450px;}
+.pipe_glycol_lr.pipe010 {width: 340px;top:180px;left:770px;}
+.pipe_glycol_lr.pipe011 {width: 70px;top:230px;left:770px;}
+.pipe_glycol_lr.pipe012 {width: 50px;top:286px;left:770px;}
+.pipe_glycol_lr.pipe013 {width: 250px;top:322px;left:850px;}
+.pipe_glycol_lr.pipe014 {width: 270px;top:462px;left:830px;}
+
+.pipe_glycol_corner_ul.corner001 {top:229px;left:833px;}
+.pipe_glycol_corner_ul.corner002 {top:285px;left:813px;}
+
+.pipe_glycol_corner_ur.corner001 {top:187px;left:380px;}
+.pipe_glycol_corner_ur.corner002 {top:207px;left:400px;}
+.pipe_glycol_corner_ur.corner003 {top:227px;left:420px;}
+.pipe_glycol_corner_ur.corner004 {top:247px;left:440px;}
+
+.pipe_glycol_corner_dr.corner001 {top:314px;left:839px;}
+.pipe_glycol_corner_dr.corner002 {top:454px;left:819px;}
+
+.pipe_glycol_corner_dl.corner001 {top:240px;left:373px;}
+.pipe_glycol_corner_dl.corner002 {top:370px;left:393px;}
+.pipe_glycol_corner_dl.corner003 {top:500px;left:413px;}
+.pipe_glycol_corner_dl.corner004 {top:630px;left:433px;}
+
+.glycol .sensor_d_temperature.sensor001 {top:186px;left:1040px;}
+.glycol .sensor_d_temperature.sensor002 {top:328px;left:1040px;}
+.glycol .sensor_d_temperature.sensor003 {top:468px;left:1040px;}
+.glycol .sensor_d_temperature.sensor001 em,
+.glycol .sensor_d_temperature.sensor002 em,
+.glycol .sensor_d_temperature.sensor003 em {top:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.glycol .sensor_u_temperature.sensor001 {top:102px;left:200px;}
+.glycol .sensor_u_temperature.sensor002 {top:232px;left:200px;}
+.glycol .sensor_u_temperature.sensor003 {top:362px;left:200px;}
+.glycol .sensor_u_temperature.sensor004 {top:492px;left:200px;}
+.glycol .sensor_u_temperature.sensor005 {top:622px;left:200px;}
+.glycol .sensor_u_temperature.sensor001 em,
+.glycol .sensor_u_temperature.sensor002 em,
+.glycol .sensor_u_temperature.sensor003 em,
+.glycol .sensor_u_temperature.sensor004 em,
+.glycol .sensor_u_temperature.sensor005 em {bottom:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.glycol .symbol.No1 {top:158px;left:920px;}
+.glycol .symbol.No2 {top:300px;left:920px;}
+.glycol .symbol.No3 {top:440px;left:920px;}
+.glycol .symbol.No4 {top:96px;left:290px;}
+.glycol .symbol.No5 {top:226px;left:290px;}
+.glycol .symbol.No6 {top:356px;left:290px;}
+.glycol .symbol.No7 {top:486px;left:290px;}
+.glycol .symbol.No8 {top:616px;left:290px;}
+
+
+

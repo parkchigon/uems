@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.main.mapper.DashboardMapper">
+
+	<!-- 검색연도(데이터 있는 연도만 조회 가능) -->
+	<select id="selectYearList" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectYearList */
+		
+		SELECT DISTINCT(A.YEAR)
+		  FROM ( SELECT LEFT(MONTH,4) AS YEAR
+                    ,RIGHT(MONTH,2) AS MONTH
+				   FROM TBL_MANAGE_DATA
+			   ) A 
+     	 WHERE <![CDATA[ A.MONTH  >= 5 
+     	   AND A.MONTH  <  11 ]]>
+		 ORDER BY A.YEAR DESC 
+	</select>
+
+	<sql id="calendar6Month"> 
+		SELECT CONCAT(#{year},'05') XLIST UNION 
+		SELECT CONCAT(#{year},'06') UNION
+		SELECT CONCAT(#{year},'07') UNION
+		SELECT CONCAT(#{year},'08') UNION
+		SELECT CONCAT(#{year},'09') UNION
+		SELECT CONCAT(#{year},'10')					
+	</sql>
+	
+	<sql id="calendar8Month">
+		SELECT CONCAT(#{year},'04') XLIST UNION 
+		SELECT CONCAT(#{year},'05') UNION 
+		SELECT CONCAT(#{year},'06') UNION
+		SELECT CONCAT(#{year},'07') UNION
+		SELECT CONCAT(#{year},'08') UNION
+		SELECT CONCAT(#{year},'09') UNION
+		SELECT CONCAT(#{year},'10')	UNION
+		SELECT CONCAT(#{year},'11')					
+	</sql>
+	
+	<sql id="calendarMonth">
+		SELECT '01' XLIST UNION
+		SELECT '02' UNION SELECT '03' UNION SELECT '04' UNION SELECT '05' UNION	SELECT '06' UNION
+		SELECT '07' UNION SELECT '08' UNION	SELECT '09' UNION SELECT '10' UNION SELECT '11' UNION
+		SELECT '12' UNION SELECT '13' UNION	SELECT '14' UNION SELECT '15' UNION	SELECT '16' UNION
+		SELECT '17' UNION SELECT '18' UNION	SELECT '19' UNION SELECT '20' UNION	SELECT '21' UNION
+		SELECT '22' UNION SELECT '23' UNION	SELECT '24' UNION SELECT '25' UNION	SELECT '26' UNION
+		SELECT '27' UNION SELECT '28' UNION	SELECT '29' UNION SELECT '30' UNION	SELECT '31'					
+	</sql>
+	
+	<sql id="timeSlot">
+		SELECT A.*
+		  FROM (
+			    SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM, TB.*
+			      FROM (
+						SELECT '23' XLIST UNION 
+						SELECT '00' UNION SELECT '01' UNION	SELECT '02' UNION SELECT '03' UNION SELECT '04' UNION
+						SELECT '05' UNION SELECT '06' UNION	SELECT '07' UNION SELECT '08' UNION	SELECT '09' UNION
+						SELECT '10' UNION SELECT '11' UNION	SELECT '12' UNION SELECT '13' UNION	SELECT '14' UNION
+						SELECT '15' UNION SELECT '16' UNION	SELECT '17' UNION SELECT '18' UNION	SELECT '19' UNION
+						SELECT '20' UNION SELECT '21' UNION	SELECT '22'
+						) TB, 
+				       (SELECT @ROWNUM := 0) R
+				) A
+	</sql>
+
+	<!-- 총계 - 전체 CO2 배출량 -->
+	<select id="selectCo2EmissionsList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectCo2EmissionsList */
+		SELECT  SUBSTRING(A.XLIST,5,2) AS XLIST
+			  , ROUND(IFNULL(B.PREV_TCO_AMOUNT,IFNULL(C.PREV_TCO_AMOUNT,0)),2) AS AMOUNT_0, '기존방식' AS NAME_0	
+			  , ROUND(IFNULL(B.PRES_TCO_AMOUNT,IFNULL(C.PRES_TCO_AMOUNT,0)),2) AS AMOUNT_1, '빙축열' AS NAME_1
+			  , (SELECT UNIT FROM TBL_MANAGE_UNIT WHERE UPPER(DATA_TYPE) = #{chartVal} AND USE_FLAG = 'Y') AS UNIT
+		  FROM 
+			  (
+			  <if test="sgId == 1">
+			  	<include refid="calendar6Month" />
+			  </if>
+			  <if test="sgId == 2">
+			  	<include refid="calendar8Month" />
+			  </if>
+			  ) A LEFT OUTER JOIN (
+							  	SELECT	TMD.MONTH
+									   ,SUM(TMD.PREV_TCO_AMOUNT) AS PREV_TCO_AMOUNT
+						       		   ,SUM(TMD.PRES_TCO_AMOUNT) AS PRES_TCO_AMOUNT
+								  FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID
+								 WHERE TS.SG_ID = #{sgId}
+								 <if test="siteId != '' and siteId != null">
+								 	AND TS.SITE_ID = #{siteId}
+							   	 </if>
+								 <if test="year != '' and year != null">
+								 	<![CDATA[
+								 	AND STR_TO_DATE(TMD.MONTH, '%Y%m') >= STR_TO_DATE(CONCAT(#{year},'04'),'%Y%m')
+						    		AND STR_TO_DATE(TMD.MONTH, '%Y%m') <= STR_TO_DATE(CONCAT(#{year},'11'),'%Y%m')
+						    		]]>
+							   	 </if>
+								 GROUP BY TMD.MONTH
+							  ) B ON A.XLIST = B.MONTH
+				LEFT OUTER JOIN (
+				  				SELECT	GP.MONTH
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '52' THEN GP.ANAL_VALUE END) AS PREV_TCO_AMOUNT
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '54' THEN GP.ANAL_VALUE END) AS PRES_TCO_AMOUNT
+				  				  FROM (
+				          				SELECT SUBSTRING(STAT_DATE,1,6) AS MONTH, ANAL_CODE, SUM(ANAL_VALUE) AS ANAL_VALUE
+				          				  FROM TBL_STAT_ANAL_DAILY SAD
+				          				  JOIN TBL_SITE S
+				          					ON SAD.SITE_CD = S.SITE_CD
+				          				   AND S.SG_ID = #{sgId}
+				          				  <if test="siteId != '' and siteId != null">
+								 		   AND S.SITE_ID = #{siteId}
+							   	 		  </if>			
+				          				   AND S.USE_FLAG = 'Y'
+				          				 WHERE ANAL_CODE IN ('52', '54')
+				          				  <if test="year != '' and year != null">
+				          					<![CDATA[
+				          				   AND SUBSTRING(STAT_DATE,1,4) = #{year}
+				          					]]>
+				          				  </if>
+				          				 GROUP BY SUBSTRING(STAT_DATE,1,6), ANAL_CODE
+				        		  ) GP
+				        		  GROUP BY GP.MONTH
+				) C ON A.XLIST = C.MONTH
+							  
+		ORDER BY A.XLIST
+	</select>
+	
+	<!-- 총계 - 전체 냉방 사용요금 -->
+	<select id="selectCoolChargeList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectCoolChargeList */
+		SELECT  SUBSTRING(A.XLIST,5,2) AS XLIST
+			  , ROUND(IFNULL(B.PREV_COOL_CHARGE,IFNULL(C.PREV_COOL_CHARGE,0))/1000) AS AMOUNT_0, '기존방식' AS NAME_0
+			  , ROUND(IFNULL(B.PRES_COOL_CHARGE,IFNULL(C.PRES_COOL_CHARGE,0))/1000) AS AMOUNT_1, '빙축열' AS NAME_1
+			  , (SELECT UNIT FROM TBL_MANAGE_UNIT WHERE UPPER(DATA_TYPE) = #{chartVal} AND USE_FLAG = 'Y') AS UNIT
+		  FROM 
+			  (
+			  <if test="sgId == 1">
+			  	<include refid="calendar6Month" />
+			  </if>
+			  <if test="sgId == 2">
+			  	<include refid="calendar8Month" />
+			  </if>	
+			  ) A LEFT OUTER JOIN (
+							  	SELECT	TMD.MONTH
+									   ,SUM(TMD.PREV_COOL_CHARGE) AS PREV_COOL_CHARGE
+						       		   ,SUM(TMD.PRES_COOL_CHARGE) AS PRES_COOL_CHARGE
+								  FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID
+								 WHERE TS.SG_ID = #{sgId}
+								 <if test="siteId != '' and siteId != null">
+								 	AND TS.SITE_ID = #{siteId}
+							   	 </if>
+								 <if test="year != '' and year != null">
+								 	<![CDATA[
+								 	AND STR_TO_DATE(TMD.MONTH, '%Y%m') >= STR_TO_DATE(CONCAT(#{year},'04'),'%Y%m')
+						    		AND STR_TO_DATE(TMD.MONTH, '%Y%m') <= STR_TO_DATE(CONCAT(#{year},'11'),'%Y%m')
+						    		]]>
+							   	 </if>
+								 GROUP BY TMD.MONTH
+							  ) B ON A.XLIST = B.MONTH
+				LEFT OUTER JOIN (
+				  				SELECT	GP.MONTH
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '61' THEN GP.ANAL_VALUE END) AS PREV_COOL_CHARGE
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '62' THEN GP.ANAL_VALUE END) AS PRES_COOL_CHARGE
+				  				  FROM (
+				          				SELECT SUBSTRING(STAT_DATE,1,6) AS MONTH, ANAL_CODE, SUM(ANAL_VALUE) AS ANAL_VALUE
+				          				  FROM TBL_STAT_ANAL_DAILY SAD
+				          				  JOIN TBL_SITE S
+				          					ON SAD.SITE_CD = S.SITE_CD
+				          				   AND S.SG_ID = #{sgId}
+				          				  <if test="siteId != '' and siteId != null">
+								 		   AND S.SITE_ID = #{siteId}
+							   	 		  </if>			
+				          				   AND S.USE_FLAG = 'Y'
+				          				 WHERE ANAL_CODE IN ('61', '62')
+				          				  <if test="year != '' and year != null">
+				          					<![CDATA[
+				          				   AND SUBSTRING(STAT_DATE,1,4) = #{year}
+				          					]]>
+				          				  </if>
+				          				 GROUP BY SUBSTRING(STAT_DATE,1,6), ANAL_CODE
+				        		  ) GP
+				        		  GROUP BY GP.MONTH
+				) C ON A.XLIST = C.MONTH
+							  
+		ORDER BY A.XLIST
+	</select>
+	
+	
+	
+	
+	<!-- 총계 - 에너지 사용량 -->
+	<select id="selectEnergyUsageList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectEnergyUsageList */
+		SELECT  SUBSTRING(A.XLIST,5,2) AS XLIST
+			  , ROUND(IFNULL(B.PREV_ENERGY_AMOUNT,IFNULL(C.PREV_ENERGY_AMOUNT,0)),2) AS AMOUNT_0, '기존방식' AS NAME_0	
+			  , ROUND(IFNULL(B.PRES_ENERGY_AMOUNT,IFNULL(C.PRES_ENERGY_AMOUNT,0)),2) AS AMOUNT_1, '빙축열' AS NAME_1
+			  , (SELECT UNIT FROM TBL_MANAGE_UNIT WHERE UPPER(DATA_TYPE) = #{chartVal} AND USE_FLAG = 'Y') AS UNIT
+			  , IFNULL(TEMP.TEMP,0) AS TEMP
+		  FROM 
+			  (
+			  <if test="sgId == 1">
+			  	<include refid="calendar6Month" />
+			  </if>
+			  <if test="sgId == 2">
+			  	<include refid="calendar8Month" />
+			  </if>	
+			  ) A LEFT OUTER JOIN (SELECT	TMD.MONTH
+									   ,SUM(TMD.PREV_ENERGY_AMOUNT) AS PREV_ENERGY_AMOUNT
+						       		   ,SUM(TMD.PRES_ENERGY_AMOUNT) AS PRES_ENERGY_AMOUNT
+								  FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID
+								 WHERE TS.SG_ID = #{sgId}
+								 <if test="year != '' and year != null">
+								 	<![CDATA[
+								 	AND STR_TO_DATE(TMD.MONTH, '%Y%m') >= STR_TO_DATE(CONCAT(#{year},'04'),'%Y%m')
+						    		AND STR_TO_DATE(TMD.MONTH, '%Y%m') <= STR_TO_DATE(CONCAT(#{year},'11'),'%Y%m')
+						    		]]>
+							   	 </if>
+								 GROUP BY TMD.MONTH
+						   ) B ON A.XLIST = B.MONTH
+						   
+				LEFT OUTER JOIN (
+				  				SELECT	GP.MONTH
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '51' THEN GP.ANAL_VALUE END) AS PREV_ENERGY_AMOUNT
+				         			  	,MAX(CASE WHEN GP.ANAL_CODE = '53' THEN GP.ANAL_VALUE END) AS PRES_ENERGY_AMOUNT
+				  				  FROM (
+				          				SELECT SUBSTRING(STAT_DATE,1,6) AS MONTH, ANAL_CODE, SUM(ANAL_VALUE) AS ANAL_VALUE
+				          				  FROM TBL_STAT_ANAL_DAILY SAD
+				          				  JOIN TBL_SITE S
+				          					ON SAD.SITE_CD = S.SITE_CD
+				          				   AND S.SG_ID = #{sgId}
+				          				  <if test="siteId != '' and siteId != null">
+								 		   AND S.SITE_ID = #{siteId}
+							   	 		  </if>			
+				          				   AND S.USE_FLAG = 'Y'
+				          				 WHERE ANAL_CODE IN ('51', '53')
+				          				  <if test="year != '' and year != null">
+				          					<![CDATA[
+				          				   AND SUBSTRING(STAT_DATE,1,4) = #{year}
+				          					]]>
+				          				  </if>
+				          				 GROUP BY SUBSTRING(STAT_DATE,1,6), ANAL_CODE
+				        		  ) GP
+				        		  GROUP BY GP.MONTH
+				) C ON A.XLIST = C.MONTH
+						   
+				LEFT OUTER JOIN (SELECT LEFT(DATE,6) AS DATE,ROUND(AVG(TEH),2) AS TEMP
+							 FROM TBL_WEATHER
+							WHERE LEFT(DATE,4) = #{year}
+						 GROUP BY SUBSTRING(DATE,5,2)
+						   ) TEMP ON A.XLIST = TEMP.DATE
+		ORDER BY A.XLIST
+	</select>
+	
+	<!-- 총계 - 월별, 지점별 냉방 사용요금 -->
+	<select id="selectBranchCoolChargeList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectBranchCoolChargeList */
+		SELECT  A.SITE_NAME AS XLIST	 		 
+				,ROUND(IFNULL(B.PREV_COOL_CHARGE,IFNULL(C.PREV_COOL_CHARGE,0))/1000) AS AMOUNT_0, '기존방식' AS NAME_0
+				,ROUND(IFNULL(B.PRES_COOL_CHARGE,IFNULL(C.PRES_COOL_CHARGE,0))/1000) AS AMOUNT_1, '빙축열' AS NAME_1
+				,(SELECT UNIT FROM TBL_MANAGE_UNIT WHERE UPPER(DATA_TYPE) = #{chartVal} AND USE_FLAG = 'Y') AS UNIT
+		  FROM
+			(
+		    	SELECT SITE_ID, SITE_CD, SITE_NAME
+		    	FROM TBL_SITE
+		    	WHERE SG_ID = #{sgId}
+		    	AND USE_FLAG = 'Y'
+		    	GROUP BY SITE_ID
+			) A
+			LEFT OUTER JOIN
+			(
+		  		SELECT	SITE_ID	 
+					    ,PREV_COOL_CHARGE
+			       		,PRES_COOL_CHARGE
+			      FROM  TBL_MANAGE_DATA 
+		         WHERE MONTH = #{year}
+			     GROUP  BY SITE_ID
+			) B
+			ON A.SITE_ID = B.SITE_ID
+			LEFT OUTER JOIN
+			(
+		    	SELECT	GP.SITE_CD AS SITE_CD
+		    	  	   ,MAX(CASE WHEN GP.ANAL_CODE = '61' THEN GP.ANAL_VALUE END) AS PREV_COOL_CHARGE
+		    	  	   ,MAX(CASE WHEN GP.ANAL_CODE = '62' THEN GP.ANAL_VALUE END) AS PRES_COOL_CHARGE
+		    	  FROM (
+		    				SELECT SAD.SITE_CD, ANAL_CODE, SUM(ANAL_VALUE) AS ANAL_VALUE
+		    			  	  FROM TBL_STAT_ANAL_DAILY SAD
+		    			  	  JOIN TBL_SITE S
+		    					ON SAD.SITE_CD = S.SITE_CD
+		    			   	   AND S.SG_ID = #{sgId}
+		    			   	   AND S.USE_FLAG = 'Y'
+		    			 	 WHERE ANAL_CODE IN ('61', '62')
+		    			   	   AND SUBSTRING(STAT_DATE,1,6) = #{year}
+		    			 	 GROUP BY SAD.SITE_CD, ANAL_CODE
+		      	  	   ) GP
+		      	 GROUP BY GP.SITE_CD
+		 	) C 
+			ON A.SITE_CD = C.SITE_CD
+	     ORDER BY A.SITE_ID ASC
+	     
+	</select>
+	
+	<!-- 총계 - 총 누적 절감액, 누적 절감 비율 -->
+	<select id="selectTotalReductionValues" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectTotalReductionValues */
+		SELECT  
+				<!-- 총 누적 절감액 -->
+				ROUND(IFNULL(A.TOTAL_DIFF_CHARGE,0)/1000) AS TOTAL_DIFF_CHARGE
+				<!-- 사용요금 총 누적 절감비율 -->
+		       ,ROUND(IFNULL((A.TOTAL_DIFF_CHARGE/PREV_COOL_CHARGE),0)*100) AS COOL_CHARGE_REDUCTION_RATE
+		       	<!-- 에너지 사용량 총 누적 절감비율 -->
+		       ,ROUND(IFNULL((A.TOTAL_DIFF_ENERGY_AMOUNT/PREV_ENERGY_AMOUNT),0)*100) AS ENERGY_AMOUNT_REDUCTION_RATE
+		        <!-- co2 배출량 총 누적 절감비율 -->
+		       ,ROUND(IFNULL((A.TOTAL_DIFF_TCO_AMOUNT/PREV_TCO_AMOUNT),0)*100) AS TCO_AMOUNT_REDUCTION_RATE
+       			<!-- 전년도 절감액 -->
+		       ,(SELECT ROUND(IFNULL(SUM(TMD.PREV_COOL_CHARGE - TMD.PRES_COOL_CHARGE),0)/1000) AS DIFF_CHARGE_LAST
+				   FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID 
+				  WHERE TS.SG_ID = A.SG_ID
+			   		AND TMD.MONTH LIKE CONCAT(DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 YEAR), '%Y'),'%')
+        		) DIFF_CHARGE_LAST
+        		<!-- 금년도 절감액 -->
+		       ,(SELECT ROUND(IFNULL(SUM(TMD.PREV_COOL_CHARGE - TMD.PRES_COOL_CHARGE),0)/1000) AS DIFF_CHARGE_THIS
+				   FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID 
+				  WHERE TS.SG_ID = A.SG_ID
+					AND TMD.MONTH LIKE CONCAT(DATE_FORMAT(NOW(), '%Y'),'%')
+				) DIFF_CHARGE_THIS
+		   		<!-- 지난달 절감액 -->
+			   ,(SELECT ROUND(IFNULL(SUM(TMD.PREV_COOL_CHARGE - TMD.PRES_COOL_CHARGE),0)/1000) AS DIFF_CHARGE_LAST_MONTH
+				   FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID 
+				  WHERE TS.SG_ID = A.SG_ID
+				    AND TMD.MONTH = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 MONTH), '%Y%m')
+				) DIFF_CHARGE_LAST_MONTH
+		  FROM (
+				SELECT    IFNULL(SUM(TMD.PREV_COOL_CHARGE - TMD.PRES_COOL_CHARGE),0) AS TOTAL_DIFF_CHARGE
+						 ,IFNULL(SUM(TMD.PREV_COOL_CHARGE),0) AS PREV_COOL_CHARGE
+						 ,IFNULL(SUM(TMD.PREV_ENERGY_AMOUNT - TMD.PRES_ENERGY_AMOUNT),0) AS TOTAL_DIFF_ENERGY_AMOUNT
+						 ,IFNULL(SUM(TMD.PREV_ENERGY_AMOUNT),0) AS PREV_ENERGY_AMOUNT
+						 ,IFNULL(SUM(TMD.PREV_TCO_AMOUNT - TMD.PRES_TCO_AMOUNT),0) AS TOTAL_DIFF_TCO_AMOUNT
+						 ,IFNULL(SUM(TMD.PREV_TCO_AMOUNT),0) AS PREV_TCO_AMOUNT
+						 ,TS.SG_ID
+				  FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID 
+				 WHERE TS.SG_ID = #{sgId}
+ 		        ) A
+	</select>
+	
+	<!-- 총계 - 전력 총 소비량 -->
+	<select id="selectTotalPowerConsumption" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectTotalPowerConsumption */
+		SELECT DAY_DATE.DATE, DAY_DATE.DAY, ROUND(ANAL_VALUE,2) AS ANAL_VALUE
+  		  FROM (
+            		SELECT DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 DAY),'%Y%m%d') AS DATE, '어제' AS DAY
+    		  		 UNION
+    				SELECT DATE_FORMAT(NOW(),'%Y%m%d'), '오늘'
+			  	) DAY_DATE 
+        		LEFT OUTER JOIN (
+    				SELECT  TSAD.STAT_DATE
+    						,SUM(IFNULL(TSAD.ANAL_VALUE,0)) AS ANAL_VALUE
+    				  FROM TBL_STAT_ANAL_DAILY TSAD INNER JOIN TBL_SITE TS ON TSAD.SITE_CD = TS.SITE_CD
+    				 WHERE TS.SG_ID = #{sgId}
+    				   AND TSAD.ANAL_CODE IN ('41','42','43')
+    				   AND STAT_DATE = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 DAY),'%Y%m%d')
+    				 GROUP BY TSAD.STAT_DATE
+					 UNION ALL
+             		SELECT 	DATE_FORMAT(NOW(),'%Y%m%d') AS STAT_DATE
+                  			,SUM(IFNULL(TSAH.ANAL_VALUE,0)) AS ANAL_VALUE 
+    				  FROM TBL_STAT_ANAL_HOURLY TSAH 
+             		 INNER JOIN TBL_SITE TS 
+                		ON TSAH.SITE_CD = TS.SITE_CD
+                	   AND TS.SG_ID = #{sgId}
+               		   AND TSAH.ANAL_CODE IN ('41','42','43')
+    				   AND TSAH.STATS_TIME <![CDATA[>=]]> CONCAT(DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 DAY),'%Y%m%d'),23) 
+    				   AND TSAH.STATS_TIME <![CDATA[<=]]> CONCAT(DATE_FORMAT(NOW(),'%Y%m%d'),22)
+             		 GROUP BY STAT_DATE
+		    	) A ON DAY_DATE.DATE = A.STAT_DATE
+		  GROUP BY DAY_DATE.DATE
+		  ORDER BY DAY_DATE.DATE
+	</select>
+	
+	<!-- 총계/지점정보 - 각 차트 절감액, 증감량 표 -->
+	<select id="selectReductionValues" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectReductionValues */
+		SELECT 	  SUBSTRING(A.XLIST,5,2) AS XLIST
+				, IFNULL(ROUND(IFNULL(B.RATE,C.RATE),0),0) AS RATE
+				, ROUND(IFNULL(IFNULL(B.DIFF,C.DIFF),0),2) AS DIFF
+		  FROM ( 
+		  	  <if test="sgId == 1">
+			  	<include refid="calendar6Month" />
+			  </if>
+			  <if test="sgId == 2">
+			  	<include refid="calendar8Month" />
+			  </if>									
+			  	) A LEFT OUTER JOIN (							
+							SELECT SUB.MONTH
+									,((SUB.PREV - SUB.PRES)/SUB.PREV)*100 AS RATE
+									,(SUB.PRES - SUB.PREV) AS DIFF
+							  FROM (
+									SELECT TMD.MONTH
+										  ,SUM(TMD.PREV_${chartVal}) AS PREV						 
+										  ,SUM(TMD.PRES_${chartVal}) AS PRES
+									  FROM TBL_SITE TS INNER JOIN TBL_MANAGE_DATA TMD ON TMD.SITE_ID = TS.SITE_ID 
+									 WHERE TS.SG_ID = #{sgId}
+									 <if test="siteId != '' and siteId != null">
+									 	AND TS.SITE_ID = #{siteId}
+								   	 </if>
+									 <if test="year != '' and year != null">
+									 	<![CDATA[
+									 	AND STR_TO_DATE(TMD.MONTH, '%Y%m') >= STR_TO_DATE(CONCAT(#{year},'04'),'%Y%m')
+							    		AND STR_TO_DATE(TMD.MONTH, '%Y%m') <= STR_TO_DATE(CONCAT(#{year},'11'),'%Y%m')
+							    		]]>
+								   	 </if>
+									 GROUP BY  TMD.MONTH
+									) SUB
+				) B ON A.XLIST = B.MONTH
+        		LEFT OUTER JOIN (
+						          	SELECT SUB.MONTH
+										  ,IFNULL((SUB.PREV - SUB.PRES)/SUB.PREV,0)*100 AS RATE
+										  ,IFNULL((SUB.PRES - SUB.PREV),0) AS DIFF
+						            FROM (
+						                SELECT GP.MONTH
+						                <if test="chartVal == 'COOL_CHARGE'">
+						                       ,MAX(CASE WHEN GP.ANAL_CODE = '61' THEN GP.ANAL_VALUE END) AS PREV
+						                       ,MAX(CASE WHEN GP.ANAL_CODE = '62' THEN GP.ANAL_VALUE END) AS PRES
+						                </if>
+						                <if test="chartVal == 'TCO_AMOUNT'">
+						                	   ,MAX(CASE WHEN GP.ANAL_CODE = '52' THEN GP.ANAL_VALUE END) AS PREV
+						                       ,MAX(CASE WHEN GP.ANAL_CODE = '54' THEN GP.ANAL_VALUE END) AS PRES
+						                </if>
+						                <if test="chartVal == 'ENERGY_AMOUNT'">
+						                	   ,MAX(CASE WHEN GP.ANAL_CODE = '51' THEN GP.ANAL_VALUE END) AS PREV
+						                       ,MAX(CASE WHEN GP.ANAL_CODE = '53' THEN GP.ANAL_VALUE END) AS PRES
+						                </if>
+						                FROM (
+						                        SELECT SUBSTRING(STAT_DATE,1,6) AS MONTH, ANAL_CODE, SUM(ANAL_VALUE) AS ANAL_VALUE
+						                        FROM TBL_STAT_ANAL_DAILY SAD
+						                        JOIN TBL_SITE S
+						                        ON SAD.SITE_CD = S.SITE_CD
+						                        AND S.SG_ID = #{sgId}
+						                        <if test="siteId != '' and siteId != null">
+						                        AND S.SITE_ID = #{siteId}
+						                        </if>
+						                        AND S.USE_FLAG = 'Y'
+						                        <if test="chartVal == 'COOL_CHARGE'">
+						                        WHERE ANAL_CODE IN ('61', '62')
+						                		</if>
+						                		<if test="chartVal == 'TCO_AMOUNT'">
+						                        WHERE ANAL_CODE IN ('52', '54')
+						                		</if>
+						                		<if test="chartVal == 'ENERGY_AMOUNT'">
+						                        WHERE ANAL_CODE IN ('51', '53')
+						                		</if>
+						                        <if test="year != '' and year != null">
+						                        AND SUBSTRING(STAT_DATE,1,4) = #{year}
+						                        </if>
+						                        GROUP BY SUBSTRING(STAT_DATE,1,6), ANAL_CODE
+						                      ) GP
+						                      GROUP BY GP.MONTH
+						                ) SUB
+       		 	) C ON A.XLIST = C.MONTH
+				
+		ORDER BY A.XLIST
+	</select>
+	
+	<!-- ========================================================================= -->
+	<!-- ==============================지점정보=================================== -->
+	<!-- ========================================================================= -->
+	
+	<!-- 지점정보 - 지점정보 -->
+	<select id="selectBranchInfo" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectBranchInfo */
+		SELECT    TS.SITE_NAME
+				 ,TS.SITE_DESC
+				 ,IF(TS.TOTAL_AREA IS NULL,'',CONCAT(TS.TOTAL_AREA,'평')) AS TOTAL_AREA
+				 ,IFNULL(CONCAT(LEFT(TS.ICE_SYSTEM_SDATE,4),'.',SUBSTRING(TS.ICE_SYSTEM_SDATE,5,2),'.',RIGHT(TS.ICE_SYSTEM_SDATE,2)),'') AS ICE_SYSTEM_SDATE
+				 ,IFNULL(TFHM.PEAK_LOAD,0) AS PEAK_LOAD
+				 ,IFNULL(TFHM.VOLUMN,0) AS VOLUMN
+				 ,IFNULL(TFCM.VOLUME_NIGHT,0) AS VOLUME_NIGHT
+				 ,IFNULL(TFCM.VOLUME_DAY,0) AS VOLUME_DAY
+				 ,IFNULL(TS.CHARGE_PERSON_NAME,'') AS CHARGE_PERSON_NAME
+		 		 ,IFNULL(TS.CHARGE_PERSON_TEL,'') AS CHARGE_PERSON_TEL
+		 		 ,IFNULL(TS.TECH_OPERATION_TEL,'') AS TECH_OPERATION_TEL
+		  FROM TBL_SITE TS LEFT JOIN (SELECT * FROM TBL_FACILITY_HEATSTG_MASTER 
+		  							  WHERE SITE_ID = #{siteId} ORDER BY FHSM DESC LIMIT 1
+		  							  ) TFHM ON TS.SITE_ID = TFHM.SITE_ID
+		  				   LEFT JOIN (SELECT * FROM TBL_FACILITY_CHILLER_MASTER 
+		  				   			   WHERE SITE_ID = #{siteId} ORDER BY FSM_ID DESC LIMIT 1
+		  				   			  ) TFCM ON TS.SITE_ID = TFCM.SITE_ID
+		 WHERE TS.SITE_ID = #{siteId}
+	</select>
+	
+	<!-- 지점정보 - 이력 -->
+	<select id="selectWorkHistoryList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectWorkHistoryList */
+		SELECT    CONCAT(LEFT(WORK_DATE,4),'.',SUBSTRING(WORK_DATE,5,2),'.',RIGHT(WORK_DATE,2)) AS WORK_DATE
+				 ,TITLE
+		  FROM TBL_WORK_HISTORY
+		 WHERE SITE_ID = #{siteId}
+		 ORDER BY WORK_DATE DESC, REG_DATE DESC
+		 LIMIT 20
+	</select>
+	
+	<!-- 지점정보 - 주요 지표 데이터 -->
+	<select id="selectMainIndicatorsDataList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectMainIndicatorsDataList */
+		SELECT   A.XLIST
+				<choose>
+					<when test="subType == 'SUB_1'">
+						,ROUND(IFNULL(B.A,0),2) AS AMOUNT_0, CONCAT(#{year}, '년 축냉량') AS NAME_0
+					</when>
+					<otherwise>
+						,ROUND(IFNULL(B.B,0),2) AS AMOUNT_0, CONCAT(#{year}, '년  축열조방냉량') AS NAME_0
+						,ROUND(IFNULL(B.C,0),2) AS AMOUNT_1, CONCAT(#{year}, '년  냉동기방냉량') AS NAME_1
+					</otherwise>
+				</choose>
+				,#{year} AS YEAR
+		  FROM 
+  				( <include refid="calendarMonth" />
+			    ) A LEFT JOIN (
+			    		   SELECT TEMP.STAT_TIME,SUM(TEMP.A) AS A,SUM(TEMP.B) AS B,SUM(TEMP.C) AS C
+			    		     FROM (	
+									SELECT   TSAD.STAT_DATE AS STAT_TIME
+											 ,CASE WHEN TSAD.ANAL_CODE = '21' THEN TSAD.ANAL_VALUE ELSE NULL END AS A
+											 ,CASE WHEN TSAD.ANAL_CODE = '22' THEN TSAD.ANAL_VALUE ELSE NULL END AS B
+											 ,CASE WHEN TSAD.ANAL_CODE = '23' THEN TSAD.ANAL_VALUE ELSE NULL END AS C
+									  FROM TBL_STAT_ANAL_DAILY TSAD INNER JOIN TBL_SITE TS ON TS.SITE_CD = TSAD.SITE_CD
+									 WHERE TS.SITE_ID = #{siteId}
+									   AND LEFT(TSAD.STAT_DATE, 6) = CONCAT(#{year}, #{month})
+								  ) TEMP
+						    GROUP BY TEMP.STAT_TIME   
+				) B ON A.XLIST = RIGHT(B.STAT_TIME,2)
+				ORDER BY A.XLIST
+	</select>
+	
+	<!-- 지점정보 - 사용요금 비교 데이터(일별/월별) -->
+	<select id="selectUsageChargeDataList" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectUsageChargeDataList */
+		SELECT   A.XLIST
+				,CASE WHEN B.A IS NULL AND B.C IS NULL THEN NULL
+				      ELSE ROUND((IFNULL(B.A,0)+IFNULL(B.C,0))/1000) END AS AMOUNT_0, '흡수식' AS NAME_0
+				,CASE WHEN B.A IS NULL AND B.B IS NULL THEN NULL
+					  ELSE ROUND((IFNULL(B.A,0)+IFNULL(B.B,0))/1000) END AS AMOUNT_1, '빙축열' AS NAME_1
+		  FROM 
+		  		<choose>
+		  			<!-- 일별 조회 -->
+		  			<when test="year.length() gt 6">
+		  				( <include refid="timeSlot" />
+						) A LEFT JOIN (
+								   SELECT TEMP.STAT_TIME,SUM(TEMP.A) AS A,SUM(TEMP.B) AS B,SUM(TEMP.C) AS C
+							 		  FROM (	
+											SELECT   TSAH.STAT_HOUR AS STAT_TIME
+													 ,CASE WHEN TSAH.ANAL_CODE = '01' THEN TSAH.ANAL_VALUE ELSE NULL END AS A
+													 ,CASE WHEN TSAH.ANAL_CODE = '02' THEN TSAH.ANAL_VALUE ELSE NULL END AS B
+													 ,CASE WHEN TSAH.ANAL_CODE = '03' THEN TSAH.ANAL_VALUE ELSE NULL END AS C
+											  FROM TBL_STAT_ANAL_HOURLY TSAH INNER JOIN TBL_SITE TS ON TSAH.SITE_CD = TS.SITE_CD
+											 WHERE TS.SITE_ID = #{siteId}
+											   <!-- 전날 23시 ~ 당일 22시 조회 -->
+											   <![CDATA[
+											   AND STR_TO_DATE(TSAH.STATS_TIME,'%Y%m%d%H') >= DATE_ADD(STR_TO_DATE(CONCAT(#{year},'23'),'%Y%m%d%H'), INTERVAL -1 DAY)
+											   AND STR_TO_DATE(TSAH.STATS_TIME,'%Y%m%d%H') < STR_TO_DATE(CONCAT(#{year},'23'),'%Y%m%d%H')
+											   ]]>
+											) TEMP 
+									GROUP BY TEMP.STAT_TIME
+							) B ON A.XLIST = B.STAT_TIME
+						ORDER BY A.ROWNUM
+		  			</when>
+		  			<!-- 월별 조회 -->
+		  			<otherwise>
+		  				( <include refid="calendarMonth" />
+						) A LEFT JOIN (
+								   SELECT TEMP.STAT_TIME,SUM(TEMP.A) AS A,SUM(TEMP.B) AS B,SUM(TEMP.C) AS C
+					    		     FROM (	
+											SELECT  TSAD.STAT_DATE AS STAT_TIME
+												   ,CASE WHEN TSAD.ANAL_CODE = '01' THEN TSAD.ANAL_VALUE ELSE NULL END AS A
+												   ,CASE WHEN TSAD.ANAL_CODE = '02' THEN TSAD.ANAL_VALUE ELSE NULL END AS B
+												   ,CASE WHEN TSAD.ANAL_CODE = '03' THEN TSAD.ANAL_VALUE ELSE NULL END AS C
+										      FROM TBL_STAT_ANAL_DAILY TSAD
+										     WHERE TSAD.SITE_CD = (select site_cd from tbl_site where site_id=#{siteId})										     
+											   AND LEFT(TSAD.STAT_DATE,6) = #{year}
+										   ) TEMP
+								    GROUP BY TEMP.STAT_TIME 				
+							) B ON A.XLIST = RIGHT(B.STAT_TIME,2)
+						ORDER BY A.XLIST	
+		  			</otherwise>
+		  		</choose>
+	</select>
+
+	<!-- 냉동기개수(냉동기 축냉효율) -->
+	<select id="selectChillerCount" parameterType="DashboardData" resultType="flkMap">
+		SELECT COUNT(*) AS CHILLER_COUNT
+		  FROM TBL_TOC_SYSTEM_TEMPLATE_COMPONENT tstc
+		 INNER JOIN TBL_TOC_SYSTEM_SITE tss
+		    ON tstc.TEMPLATE_ID = tss.TEMPLATE_ID
+		   AND tss.SITE_ID = #{siteId}
+		 WHERE tstc.COMPONENT_ID LIKE 'fridge_storagetank_in_temp%'
+	</select>
+	
+	<!-- 냉동기 축냉효율 년도별 그래프 -->
+	<select id="selectChillerColdstorageData" parameterType="DashboardData" resultType="flkMap">
+		SELECT    XLIST
+				<foreach collection="yearArr" item="item" index="index">
+					, SUM(B.${item}) AS  AMOUNT_${index}
+					, CONCAT(#{item},'년') AS NAME_${index}
+				</foreach>
+			FROM(
+				SELECT '01' XLIST UNION
+				SELECT '02' UNION SELECT '03' UNION SELECT '04' UNION SELECT '05' UNION	SELECT '06' UNION
+				SELECT '07' UNION SELECT '08' UNION	SELECT '09' UNION SELECT '10' UNION SELECT '11' UNION
+				SELECT '12' UNION SELECT '13' UNION	SELECT '14' UNION SELECT '15' UNION	SELECT '16' UNION
+				SELECT '17' UNION SELECT '18' UNION	SELECT '19' UNION SELECT '20' UNION	SELECT '21' UNION
+				SELECT '22' UNION SELECT '23' UNION	SELECT '24' UNION SELECT '25' UNION	SELECT '26' UNION
+				SELECT '27' UNION SELECT '28' UNION	SELECT '29' UNION SELECT '30' UNION	SELECT '31'
+			)A
+			LEFT JOIN(
+				SELECT	  RIGHT(stat_date,2) AS stat_hour
+					<foreach collection="yearArr" item="item" index="index">
+						, CASE WHEN LEFT(stat_date,4)=#{item} THEN ROUND(anal_value,2) ELSE NULL END AS #{item}
+					</foreach>
+				FROM tbl_stat_anal_daily 
+				WHERE site_cd = (SELECT site_cd FROM tbl_site WHERE site_id = #{siteId})
+				AND anal_code = #{analCode}
+				AND SUBSTRING(stat_date,5,2) = #{month}
+			
+			)B ON A.XLIST = B.stat_hour
+			GROUP BY XLIST
+	</select>
+	
+	<!-- 지점정보 - 기온 -->
+	<select id="selectWeatherInfo" parameterType="DashboardData" resultType="flkMap">
+		/* com.flk.main.mapper.DashboardMapper.selectWeatherInfo */
+		SELECT   IFNULL(TEH,'') AS TEH
+		 		,IFNULL(TMN,'') AS TMN
+				,IFNULL(TMX,'') AS TMX
+				,IFNULL(HOUR,'') AS HOUR
+			 	,IFNULL(SKY,'') AS SKY
+			 	,IFNULL(PTY,'') AS PTY
+	  	  FROM  TBL_WEATHER
+	 	 WHERE  SITE_ID = #{siteId}
+	   	   AND  CONCAT(DATE, HOUR) = DATE_FORMAT(NOW(), '%Y%m%d%H')
+	</select>
+	
+	
+	<select id="selectReportList" parameterType="Report" resultType="flkMap">
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT	ROW_NUMBER() OVER (ORDER BY TRF.REG_DATE DESC) AS RNUM
+				,TRF.RF_ID
+				,TRF.REPORT_NAME
+				,TRF.REPORT_START_DATE
+				,TRF.REPORT_END_DATE
+				,TRF.REPORT_FILE_PATH
+				,TRF.REPORT_FILE_NAME
+				,TRF.REPORT_FILE_SIZE
+				,TRF.REG_DATE
+				,TRF.RT_ID
+				,TRT.REPORT_TYPE
+				,TRF.SITE_ID
+				,(SELECT SITE_NAME FROM TBL_SITE WHERE SITE_ID = TRF.SITE_ID) SITE_NAME
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE WHERE SITE_ID = TRF.SITE_ID)) SG_NAME
+		  FROM	TBL_REPORT_FILES TRF, TBL_REPORT_TEMPLATE TRT
+		<where>
+		   		AND	TRF.RT_ID = TRT.RT_ID
+			<if test='searchGroup != "" and searchGroup != null and searchGroup != "A"'>
+		    	AND TRF.SITE_ID IN (SELECT SITE_ID FROM TBL_SITE WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE_GROUP WHERE SG_CD = #{searchGroup}))
+			</if>		
+			<if test='searchSite != "" and searchSite != null and searchSite != "A"'>
+		    	AND TRF.SITE_ID = #{searchSite}
+			</if>
+			<if test="searchKeyword != '' and searchKeyword != null">
+		    	AND TRF.REPORT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</where>
+	    ORDER BY TRF.REG_DATE DESC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+	
+	<select id="selectReportDetail" parameterType="Report" resultType="flkMap">
+		SELECT	TRF.RF_ID
+				,TRF.REPORT_NAME
+				,TRF.REPORT_START_DATE
+				,TRF.REPORT_END_DATE
+				,TRF.REPORT_FILE_PATH
+				,TRF.REPORT_FILE_NAME
+				,TRF.REPORT_FILE_SIZE
+				,TRF.REG_DATE
+				,TRF.RT_ID
+				,TRT.REPORT_TYPE
+				,TRT.SITE_ID
+				,(SELECT SITE_NAME FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID) SITE_NAME
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID)) SG_NAME
+		  FROM	TBL_REPORT_FILES TRF, TBL_REPORT_TEMPLATE TRT
+		 WHERE	TRF.RT_ID = TRT.RT_ID
+		   AND	RF_ID = #{rfId}	
+	</select>
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.user.mapper.MngMapper">
+ 
+ 	<!-- 유저 리스트 -->
+	<select id="selectMngList" parameterType="Mng" resultType="flkMap">
+		/* MngMapper.selectMngList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT ROW_NUMBER() OVER (ORDER BY REG_DATE DESC) AS RNUM
+			 , A.MNG_ID					/* 관리자 아이디 */
+			 , A.MNG_NAME				/* 관리자 명 */
+		     , A.LOGIN_ID				/* 로그인 아이디 */
+		     , A.LOGIN_PASSWORD			/* 로그인 암호 */
+		     , A.USE_YN					/* 사용 여부 */
+		     , A.REG_DATE				/* 등록 일시 */
+		     , A.REG_ID					/* 등록 아이디 */
+		     , A.UPDATE_DATE			/* 수정 일시 */
+		     , A.UPDATE_ID				/* 수정 아이디 */
+		     , A.MNG_EMAIL				/* 관리자 이메일 */
+		     , A.MNG_CELL_NUM			/* 관리자 핸드폰 */
+		     , A.PASSWORD_FAIL_CNT		/* 패스워드 실패 카운트 */
+		     , A.PASSWORD_UPDATE_DATE	/* 패스워드 수정일 */
+		     , A.MEMO					/* 비고란 */
+		     , A.ROLE_ID				/* 권한 아이디 */
+		     , B.ROLE_NAME				/* 권한 이름 */
+		  FROM TBL_MNG A 
+		 INNER JOIN TBL_ROLE B ON A.ROLE_ID = B.ROLE_ID
+		<where>
+		    <if test="searchKeyword != '' and searchKeyword != null">
+			    <choose>
+			    	<when test="searchCondition == 'loginId' ">
+						AND LOGIN_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+			    	<when test="searchCondition == 'mngName' ">
+						AND MNG_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchCondition == 'roleName' ">
+						AND B.ROLE_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+			    </choose>
+			</if>
+		</where>
+		ORDER BY REG_DATE DESC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+		
+	</select>
+	
+	<!-- 유저 기본정보 조회 -->
+	<select id="selectMngView" parameterType="Mng"  resultType="flkMap">
+		/* MngMapper.selectMngView */
+		SELECT A.MNG_ID					/* 관리자 아이디 */
+		     , A.MNG_NAME				/* 관리자 명 */
+		     , A.LOGIN_ID				/* 로그인 아이디 */
+		     , A.LOGIN_PASSWORD			/* 로그인 암호 */
+		     , A.USE_YN					/* 사용 여부 */
+		     , A.REG_DATE				/* 등록 일시 */
+		     , A.REG_ID					/* 등록 아이디 */
+		     , A.UPDATE_DATE			/* 수정 일시 */
+		     , A.UPDATE_ID				/* 수정 아이디 */
+		     , A.MNG_EMAIL				/* 관리자 이메일 */
+		     , A.MNG_CELL_NUM			/* 관리자 핸드폰 */
+		     , A.PASSWORD_FAIL_CNT		/* 패스워드 실패 카운트 */
+		     , A.PASSWORD_UPDATE_DATE	/* 패스워드 수정일 */
+		     , A.MEMO					/* 비고란 */
+		     , A.ROLE_ID				/* 권한 아이디 */
+		     , B.ROLE_NAME				/* 권한 이름 */
+		     , C.SITE_ID
+		  FROM TBL_MNG A 
+		 INNER JOIN TBL_ROLE B ON A.ROLE_ID = B.ROLE_ID
+		 LEFT JOIN TBL_MNG_SITE C ON A.MNG_ID = C.MNG_ID
+		 WHERE A.MNG_ID = #{mngId}
+		 LIMIT 1
+	</select>
+	
+	<!-- 유저 등록 -->
+	<insert id="insertMng" parameterType="Mng" >
+		/* MngMapper.insertMng */
+		INSERT INTO TBL_MNG (
+			 MNG_ID		/* 관리자 아이디 */
+			 <if test="mngName != null and mngName != ''">
+		     , MNG_NAME		/* 관리자 명 */
+		     </if>
+		     <if test="loginId != null and loginId != ''">
+		     , LOGIN_ID		/* 로그인 아이디 */
+		     </if>
+		     <if test="loginPassword != null and loginPassword != ''">
+		     , LOGIN_PASSWORD		/* 로그인 암호 */
+		     </if>
+		     , USE_YN		/* 사용 여부 */
+		     , REG_DATE		/* 등록 일시 */
+		     <if test="regId != null and regId != ''">
+		     , REG_ID		/* 등록 아이디 */
+		     </if>
+		     , UPDATE_DATE		/* 수정 일시 */
+		     <if test="updateId != null and updateId != ''">
+		     , UPDATE_ID		/* 수정 아이디 */
+		     </if>
+		     <if test="roleId != null and roleId != ''">
+		     , ROLE_ID		/* 권한 아이디 */
+		     </if>
+		     <if test="mngCellNum != null and mngCellNum != ''">
+		     , MNG_CELL_NUM		/* 관리자 핸드폰 */
+		     </if>
+		     <if test="mngEmail != null and mngEmail != ''">
+		     , MNG_EMAIL		/* 관리자 이메일 */
+		     </if>
+		     <if test="passwordFailCnt != null and passwordFailCnt != ''">
+		     , PASSWORD_FAIL_CNT		/* 패스워드 실패 카운트 */
+		     , PASSWORD_UPDATE_DATE		/* 패스워드 수정일 */
+		     </if>
+			 <if test="memo != null and memo != ''">
+		     , MEMO		/* 비고란 */
+		     </if>
+		) VALUES (
+		       #{mngId}
+	    	 <if test="mngName != null and mngName != ''">
+		     , #{mngName}
+		     </if>
+		     <if test="loginId != null and loginId != ''">
+		     , #{loginId}
+		     </if>
+		     <if test="loginPassword != null and loginPassword != ''">
+		     , #{loginPassword}
+		     </if>
+		     , 'Y'		  
+		     , NOW()
+		     <if test="regId != null and regId != ''">
+		     , #{regId}
+		     </if>
+		     , NOW()
+		     <if test="updateId != null and updateId != ''">
+		     , #{updateId}
+		     </if>
+		     <if test="roleId != null and roleId != ''">
+		     , #{roleId}
+		     </if>
+		     <if test="mngCellNum != null and mngCellNum != ''">
+		     , #{mngCellNum}
+		     </if>
+		     <if test="mngPhoneNum != null and mngPhoneNum != ''">
+		     , #{mngPhoneNum}
+		     </if>
+		     <if test="mngEmail != null and mngEmail != ''">
+		     , #{mngEmail}
+		     </if>
+		     <if test="mngPosition != null and mngPosition != ''">
+		     , #{mngPosition}
+		     </if>
+		     <if test="mngDepartment != null and mngDepartment != ''">
+		     , #{mngDepartment}
+		     </if>
+		     <if test="contactTask != null and contactTask != ''">
+		     , #{contactTask}
+		     </if>
+		     <if test="passwordFailCnt != null and passwordFailCnt != ''">
+		     , #{passwordFailCnt}     
+		     , NOW()
+		     </if>
+		     <if test="memo != null and memo != ''">
+		     , #{memo}
+		     </if>
+		)
+	</insert>
+	
+	<!-- 유저 리스트 전체 카운트 -->
+	<select id="selectMngListTotalCnt" parameterType="Mng"  resultType="int">
+		/* MngMapper.selectMngListTotalCnt */
+		SELECT COUNT(1)
+		FROM TBL_MNG A 
+		INNER JOIN TBL_ROLE B ON A.ROLE_ID = B.ROLE_ID
+		<where>
+		    <if test="searchKeyword != '' and searchKeyword != null">
+			    <choose>
+			    	<when test="searchCondition == 'loginId' ">
+						AND LOGIN_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+			    	<when test="searchCondition == 'mngName' ">
+						AND MNG_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchCondition == 'roleName' ">
+						AND B.ROLE_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+			    </choose>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 운영자 정보 조회 -->
+	<select id="selectMngViewByLogin" parameterType="Mng"  resultType="flkMap">
+		/* MngMapper.selectMngViewByLogin */
+		SELECT A.MNG_ID					/* 관리자 아이디 */
+			, A.MNG_NAME				/* 관리자 명 */
+			, A.LOGIN_ID				/* 로그인 아이디 */
+			, A.LOGIN_PASSWORD			/* 로그인 암호 */
+			, A.USE_YN					/* 사용 여부 */
+			, A.REG_DATE				/* 등록 일시 */
+			, A.REG_ID					/* 등록 아이디 */
+			, A.UPDATE_DATE				/* 수정 일시 */
+			, A.UPDATE_ID				/* 수정 아이디 */
+			, A.ROLE_ID					/* 권한 아이디 */
+			, A.MNG_CELL_NUM			/* 관리자 핸드폰 */
+			, A.MNG_EMAIL				/* 관리자 이메일 */
+			, A.PASSWORD_FAIL_CNT		/* 패스워드 실패 카운트 */
+			, A.PASSWORD_UPDATE_DATE	/* 패스워드 수정일 */
+		  FROM TBL_MNG A
+		 WHERE LOGIN_ID = #{loginId}
+	</select>	 
+	
+	<!-- 유저 수정 -->
+	<update id="updateMng" parameterType="Mng" >
+		/* MngMapper.updateMng */
+		UPDATE TBL_MNG
+		   SET MNG_NAME = #{mngName}		/* 관리자 명 */
+		     , UPDATE_DATE = NOW()			/* 수정 일시 */
+		     , UPDATE_ID = #{updateId}		/* 수정 아이디 */
+		     , MNG_CELL_NUM = #{mngCellNum}	/* 관리자 핸드폰 */
+		     , MNG_EMAIL = #{mngEmail}		/* 관리자 이메일 */
+		     , MEMO	= #{memo}				/* 비고란 */
+		 WHERE MNG_ID = #{mngId}
+	</update>
+	
+	<!-- 유저 로그인 패스워드 체크 -->
+	<select id="selectMngLoginPasswordCheck" parameterType="Mng" resultType="int">
+		/* MngMapper.selectMngLoginPasswordCheck */
+		SELECT COUNT(LOGIN_ID) CNT 
+		FROM TBL_MNG 
+		WHERE LOGIN_PASSWORD = #{loginPassword} AND MNG_ID = #{mngId}
+	</select>	
+	
+	<!-- 유저 삭제 -->
+	<delete id="deleteMng" parameterType="Mng">
+		/* MngMapper.deleteMng */
+		DELETE FROM TBL_MNG
+		WHERE MNG_ID = #{mngId}
+	</delete>
+		
+	<!-- 유저 지점 등록 -->
+	<insert id="insertMngSiteList" parameterType="java.util.Map">
+		/* MngMapper.insertMngSiteList */
+		INSERT INTO TBL_MNG_SITE (MNG_ID, SITE_ID, REG_ID, UPDATE_ID, ARRAY_NO)
+		VALUES 
+		<foreach collection="siteList" item="item" open="(" separator="),(" close=")">
+			#{item.mngId}, #{item.siteId}, #{item.regId}, #{item.updateId}, #{item.arrayNo}
+		</foreach>
+	</insert>
+	
+	<!-- 유저 지점 삭제 -->
+	<delete id="deleteMngSite" parameterType="Mng">
+		/* MngMapper.deleteMngSite */
+		DELETE FROM TBL_MNG_SITE
+		 WHERE MNG_ID = #{mngId}
+	</delete>
+	
+	<!-- 유저 지점 리스트 -->
+	<select id="selectMngSiteList" parameterType="Mng" resultType="Mng">
+		/* MngMapper.selectMngSiteList */
+		SELECT A.MNG_ID
+			   , A.SITE_ID
+			   , B.SITE_NAME
+			   , C.SG_CD
+			   , C.SG_NAME
+			   , B.SITE_CD
+		  FROM TBL_MNG_SITE A, TBL_SITE B, TBL_SITE_GROUP C
+		 WHERE A.MNG_ID = #{mngId}
+		   AND A.SITE_ID = B.SITE_ID
+		   AND B.SG_ID = C.SG_ID
+		   AND B.USE_FLAG = 'Y'
+		   AND C.USE_FLAG = 'Y'
+	</select>
+	
+	<!-- 하위 유저 사용여부 업데이트 -->
+	<update id="updateAllMngUseFlag" parameterType="java.util.Map" >
+		/* MngMapper.updateAllMngUseFlag */
+		UPDATE TBL_MNG
+		   SET USE_YN = #{useYn}
+		 WHERE MNG_ID IN
+		 (
+		 	SELECT MNG_ID 
+		 	  FROM TBL_MNG_SITE
+		 	 WHERE SITE_ID IN
+			<foreach collection="siteList" item="item" open="(" separator="," close=")">
+				#{item.siteId}
+			</foreach>
+		 )
+	</update>
+	
+	<!-- 유저 사이트 등록 -->
+	<insert id="insertMngSite" parameterType="Mng">
+		/* MngMapper.insertMngSite */
+		INSERT INTO TBL_MNG_SITE (MNG_ID, SITE_ID, ARRAY_NO, REG_ID, UPDATE_ID)
+		VALUES (#{mngId}, #{siteId}, #{arrayNo}, #{regId}, #{updateId})
+	</insert>
+	
+</mapper>

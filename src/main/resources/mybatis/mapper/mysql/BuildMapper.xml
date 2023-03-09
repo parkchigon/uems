@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.ems.build.mapper.BuildMapper">
+ 
+ 	<!-- PLC 통신설정 등록 -->
+ 	<insert id="insertPlcComm" parameterType="PlcComm">
+ 		/* BuildMapper.insertPlcComm */
+ 		INSERT INTO TBL_PLC_COMM
+ 		(
+			site_cd
+			, pc_name
+			, plc_protocol_cd
+			, plc_exceed_read
+			, plc_exceed_write
+			, com_port_cd
+			, com_baud_cd
+			, com_bit_data_cd
+			, com_bit_parity_cd
+			, com_bit_stop_cd
+			, com_tx_ctrl_cd
+			, com_rx_ctrl_cd
+			, plc_word_size
+			, plc_float_size
+			, plc_dword_size
+			, plc_string_size
+			, plc_memory_position
+			, use_flag
+			, update_id
+			, reg_id
+ 		)
+ 		VALUES 
+ 		(
+			#{siteCd}
+			, #{pcName}
+			, #{plcProtocolCd}
+			, #{plcExceedRead}
+			, #{plcExceedWrite}
+			, #{comPortCd}
+			, #{comBaudCd}
+			, #{comBitDataCd}
+			, #{comBitParityCd}
+			, #{comBitStopCd}
+			, #{comTxCtrlCd}
+			, #{comRxCtrlCd}
+			, #{plcWordSize}
+			, #{plcFloatSize}
+			, #{plcDwordSize}
+			, #{plcStringSize}
+			, #{plcMemoryPosition}
+			, #{useFlag}
+			, #{updateId}
+			, #{regId}
+ 		)
+ 	</insert>
+ 	
+ 	
+ 	<!-- PLC 통신설정 수정 -->
+ 	<update id="updatePlcComm" parameterType="PlcComm">
+ 		/* BuildMapper.updatePlcComm */
+ 		UPDATE TBL_PLC_COMM
+ 		   SET site_cd = #{siteCd}
+			   , pc_name = #{pcName}
+			   , plc_protocol_cd = #{plcProtocolCd}
+			   , plc_exceed_read = #{plcExceedRead}
+			   , plc_exceed_write = #{plcExceedWrite}
+			   , com_port_cd = #{comPortCd}
+			   , com_baud_cd = #{comBaudCd}
+			   , com_bit_data_cd = #{comBitDataCd}
+			   , com_bit_parity_cd = #{comBitParityCd}
+			   , com_bit_stop_cd = #{comBitStopCd}
+			   , com_tx_ctrl_cd = #{comTxCtrlCd}
+			   , com_rx_ctrl_cd = #{comRxCtrlCd}
+			   , plc_word_size = #{plcWordSize}
+			   , plc_float_size = #{plcFloatSize}
+			   , plc_dword_size = #{plcDwordSize}
+			   , plc_string_size = #{plcStringSize}
+			   , plc_memory_position = #{plcMemoryPosition}
+			   , update_id = #{updateId}
+		 WHERE pc_id = #{pcId}
+ 	</update>
+ 	
+ 	<!-- PLC 통신설정  조회 -->
+ 	<select id="selectPlcCommView" parameterType="PlcComm" resultType="PlcComm">
+ 		/* BuildMapper.selectPlcCommView */
+ 		SELECT pc_id
+			   , site_cd
+			   , pc_name
+			   , plc_protocol_cd
+			   , plc_exceed_read
+			   , plc_exceed_write
+			   , com_port_cd
+			   , com_baud_cd
+			   , com_bit_data_cd
+			   , com_bit_parity_cd
+			   , com_bit_stop_cd
+			   , com_tx_ctrl_cd
+			   , com_rx_ctrl_cd
+			   , plc_word_size
+			   , plc_float_size
+			   , plc_dword_size
+			   , plc_string_size
+			   , plc_double_size
+			   , plc_int64_size
+			   , plc_memory_position
+			   , use_flag
+			   , update_id
+			   , reg_id
+		  FROM tbl_plc_comm
+		 WHERE site_cd = #{siteCd}	
+		 LIMIT 1		  
+ 	</select>
+ 	
+ 	<!-- 태그 리스트 조회 -->
+ 	<select id="selectTagList" parameterType="Tag" resultType="FlkMap">
+		/* BuildMapper.selectTagList */
+		SELECT site_cd
+			   , tag_id
+			   , tag_type_cd
+			   , IFNULL((SELECT code_name FROM tbl_code WHERE code_use_name = tag_type_cd), '') AS tag_type_cd_name
+			   , tag_kind_cd
+			   , tag_desc
+			   , tag_conn_type_cd
+			   , IFNULL(i_plcscan_address, '') AS i_plcscan_address
+			   , i_scan_time
+			   , ai_memtype_cd
+			   , ai_unit_cd
+			   , ai_display_format
+			   , ai_calc_filter_cd
+			   , a_convert_base
+			   , a_convert_full
+			   , a_convert_plcbase
+			   , a_convert_plcfull
+			   , ai_calc_script
+			   , a_cutover_value_cd
+			   , d_on_description
+			   , d_off_description
+			   , i_alarm_use_flag
+			   , ai_alarm_high
+			   , ai_alarm_low
+			   , ai_alarm_type_cd
+			   , di_alarm_type_cd
+			   , i_alarm_img_cd
+			   , i_alarm_wav_cd
+			   , ai_alarm_protect_percent
+			   , ai_alarm_protect_second
+			   , i_alarm_priority_cd
+			   , i_data_save_flag
+			   , i_output_use_flag
+			   , IFNULL(o_plcscan_station, '') AS o_plcscan_station
+			   , IFNULL(o_plcscan_address, '') AS o_plcscan_address
+			   , IFNULL(o_plcscan_extra1, '') AS o_plcscan_extra1
+			   , o_plcscan_extra2
+			   , ao_calc_filter_cd
+			   , ao_calc_script
+			   , do_relay_type_cd
+			   , do_relay_pulse_sec
+			   , do_delay_on_sec
+			   , do_delay_off_sec
+			   , ai_accumulate_flag
+			   , use_flag
+			   , update_id
+			   , update_date
+			   , reg_id
+			   , reg_date
+		  FROM tbl_tag
+		 WHERE site_cd = #{siteCd}
+		<if test="orderColumn != '' and orderColumn != null and orderType != '' and orderType != null">
+			ORDER BY ${orderColumn} ${orderType}
+		</if>
+ 	</select>
+ 	
+ 	<!-- 태그 등록 -->
+ 	<insert id="insertTag" parameterType="Tag">
+ 		/* BuildMapper.insertTag */
+ 		INSERT INTO tbl_tag 
+ 		(
+			site_cd
+			, tag_id
+			, tag_type_cd
+			, tag_kind_cd
+			, tag_desc
+			, i_plcscan_address
+		<if test="iScanTime != '' and iScanTime != null">			
+			, i_scan_time
+		</if>
+			, ai_memtype_cd
+			, ai_unit_cd
+			, ai_display_format
+			, ai_calc_filter_cd
+		<if test="aConvertBase != '' and aConvertBase != null">			
+			, a_convert_base
+		</if>
+		<if test="aConvertFull != '' and aConvertFull != null">
+			, a_convert_full
+		</if>
+		<if test="aConvertPlcbase != '' and aConvertPlcbase != null">
+			, a_convert_plcbase
+		</if>
+		<if test="aConvertPlcfull != '' and aConvertPlcfull != null">
+			, a_convert_plcfull
+		</if>			
+			, ai_calc_script
+			, a_cutover_value_cd
+			, d_on_description
+			, d_off_description
+		<if test="iAlarmUseFlag != '' and iAlarmUseFlag != null">
+			, i_alarm_use_flag
+		</if>
+		<if test="aiAlarmHigh != '' and aiAlarmHigh != null">			
+			, ai_alarm_high
+		</if>
+		<if test="aiAlarmLow != '' and aiAlarmLow != null">
+			, ai_alarm_low
+		</if>			
+			, ai_alarm_type_cd
+			, di_alarm_type_cd
+			, i_alarm_img_cd
+			, i_alarm_wav_cd
+		<if test="aiAlarmProtectPercent != '' and aiAlarmProtectPercent != null">			
+			, ai_alarm_protect_percent
+		</if>
+		<if test="aiAlarmProtectSecond != '' and aiAlarmProtectSecond != null">
+			, ai_alarm_protect_second
+		</if>			
+			, i_alarm_priority_cd
+		<if test="iDataSaveFlag != '' and iDataSaveFlag != null">
+			, i_data_save_flag
+		</if>
+		<if test="iOutputUseFlag != '' and iOutputUseFlag != null">
+			, i_output_use_flag
+		</if>
+			, o_plcscan_station
+			, o_plcscan_address
+			, o_plcscan_extra1
+			, o_plcscan_extra2
+			, ao_calc_filter_cd
+			, ao_calc_script
+			, do_relay_type_cd
+		<if test="doRelayPulseSec != '' and doRelayPulseSec != null">			
+			, do_relay_pulse_sec
+		</if>
+		<if test="doDelayOnSec != '' and doDelayOnSec != null">
+			, do_delay_on_sec
+		</if>
+		<if test="doDelayOffSec != '' and doDelayOffSec != null">
+			, do_delay_off_sec
+		</if>
+		<if test="aiAccumulateFlag != '' and aiAccumulateFlag != null">
+			, ai_accumulate_flag
+		</if>			
+			, use_flag
+			, update_id
+			, reg_id
+ 		)
+ 		VALUES 
+ 		(
+			#{siteCd}
+			, #{tagId}
+			, #{tagTypeCd}
+			, #{tagKindCd}
+			, #{tagDesc}
+			, #{iPlcscanAddress}
+		<if test="iScanTime != '' and iScanTime != null">
+			, #{iScanTime}
+		</if>
+			, #{aiMemtypeCd}
+			, #{aiUnitCd}
+			, #{aiDisplayFormat}
+			, #{aiCalcFilterCd}
+		<if test="aConvertBase != '' and aConvertBase != null">			
+			, #{aConvertBase}
+		</if>
+		<if test="aConvertFull != '' and aConvertFull != null">
+			, #{aConvertFull}
+		</if>
+		<if test="aConvertPlcbase != '' and aConvertPlcbase != null">
+			, #{aConvertPlcbase}
+		</if>
+		<if test="aConvertPlcfull != '' and aConvertPlcfull != null">
+			, #{aConvertPlcfull}
+		</if>	
+			, #{aiCalcScript}
+			, #{aCutoverValueCd}
+			, #{dOnDescription}
+			, #{dOffDescription}
+		<if test="iAlarmUseFlag != '' and iAlarmUseFlag != null">			
+			, #{iAlarmUseFlag}
+		</if>
+		<if test="aiAlarmHigh != '' and aiAlarmHigh != null">			
+			, #{aiAlarmHigh}
+		</if>
+		<if test="aiAlarmLow != '' and aiAlarmLow != null">
+			, #{aiAlarmLow}
+		</if>
+			, #{aiAlarmTypeCd}
+			, #{diAlarmTypeCd}
+			, #{iAlarmImgCd}
+			, #{iAlarmWavCd}
+		<if test="aiAlarmProtectPercent != '' and aiAlarmProtectPercent != null">			
+			, #{aiAlarmProtectPercent}
+		</if>
+		<if test="aiAlarmProtectSecond != '' and aiAlarmProtectSecond != null">
+			, #{aiAlarmProtectSecond}
+		</if>
+			, #{iAlarmPriorityCd}
+		<if test="iDataSaveFlag != '' and iDataSaveFlag != null">
+			, #{iDataSaveFlag}
+		</if>
+		<if test="iOutputUseFlag != '' and iOutputUseFlag != null">
+			, #{iOutputUseFlag}
+		</if>
+			, #{oPlcscanStation}
+			, #{oPlcscanAddress}
+			, #{oPlcscanExtra1}
+			, #{oPlcscanExtra2}
+			, #{aoCalcFilterCd}
+			, #{aoCalcScript}
+			, #{doRelayTypeCd}
+		<if test="doRelayPulseSec != '' and doRelayPulseSec != null">			
+			, #{doRelayPulseSec}
+		</if>
+		<if test="doDelayOnSec != '' and doDelayOnSec != null">
+			, #{doDelayOnSec}
+		</if>
+		<if test="doDelayOffSec != '' and doDelayOffSec != null">
+			, #{doDelayOffSec}
+		</if>
+		<if test="aiAccumulateFlag != '' and aiAccumulateFlag != null">
+			, #{aiAccumulateFlag}
+		</if>
+			, #{useFlag}
+			, #{updateId}
+			, #{regId}
+ 		)
+ 	
+ 	</insert>
+ 	
+ 	<!-- 태그 수정-->
+ 	<update id="updateTag" parameterType="Tag">
+ 		/* BuildMapper.updateTag */
+ 		UPDATE tbl_tag
+ 		   SET tag_type_cd = #{tagTypeCd}
+			   , tag_kind_cd= #{tagKindCd}
+			   , tag_desc = #{tagDesc}
+			   , i_plcscan_address = #{iPlcscanAddress}
+			<choose>
+				<when test="iScanTime != '' and iScanTime != null">
+					, i_scan_time = #{iScanTime}
+				</when>
+				<otherwise>
+					, i_scan_time = NULL
+				</otherwise>			
+			</choose>
+			   , ai_memtype_cd = #{aiMemtypeCd}
+			   , ai_unit_cd = #{aiUnitCd}
+			   , ai_display_format = #{aiDisplayFormat}
+			   , ai_calc_filter_cd = #{aiCalcFilterCd}
+			<choose>
+				<when test="aConvertBase != '' and aConvertBase != null">
+					, a_convert_base = #{aConvertBase}
+				</when>
+				<otherwise>
+					, a_convert_base = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="aConvertFull != '' and aConvertFull != null">
+					, a_convert_full = #{aConvertFull}
+				</when>
+				<otherwise>
+					, a_convert_full = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="aConvertPlcbase != '' and aConvertPlcbase != null">
+					, a_convert_plcbase = #{aConvertPlcbase}
+				</when>
+				<otherwise>
+					, a_convert_plcbase = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="aConvertPlcfull != '' and aConvertPlcfull != null">
+					, a_convert_plcfull = #{aConvertPlcfull}
+				</when>
+				<otherwise>
+					, a_convert_plcfull = NULL
+				</otherwise>			
+			</choose>			   
+			   , ai_calc_script = #{aiCalcScript}
+			   , a_cutover_value_cd = #{aCutoverValueCd}
+			   , d_on_description = #{dOnDescription}
+			   , d_off_description = #{dOffDescription}
+			<if test="iAlarmUseFlag != '' and iAlarmUseFlag != null">
+			   , i_alarm_use_flag = #{iAlarmUseFlag}
+			</if>
+			<choose>
+				<when test="aiAlarmHigh != '' and aiAlarmHigh != null">
+					, ai_alarm_high = #{aiAlarmHigh}
+				</when>
+				<otherwise>
+					, ai_alarm_high = NULL
+				</otherwise>			
+			</choose>	
+			<choose>
+				<when test="aiAlarmLow != '' and aiAlarmLow != null">
+					, ai_alarm_low = #{aiAlarmLow}
+				</when>
+				<otherwise>
+					, ai_alarm_low = NULL
+				</otherwise>			
+			</choose>				   
+			   , ai_alarm_type_cd = #{aiAlarmTypeCd}
+			   , di_alarm_type_cd = #{diAlarmTypeCd}
+			   , i_alarm_img_cd = #{iAlarmImgCd}
+			   , i_alarm_wav_cd = #{iAlarmWavCd}
+			<choose>
+				<when test="aiAlarmProtectPercent != '' and aiAlarmProtectPercent != null">
+					, ai_alarm_protect_percent = #{aiAlarmProtectPercent}
+				</when>
+				<otherwise>
+					, ai_alarm_protect_percent = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="aiAlarmProtectSecond != '' and aiAlarmProtectSecond != null">
+					, ai_alarm_protect_second = #{aiAlarmProtectSecond}
+				</when>
+				<otherwise>
+					, ai_alarm_protect_second = NULL
+				</otherwise>			
+			</choose>			   
+			   , i_alarm_priority_cd = #{iAlarmPriorityCd}
+			<if test="iDataSaveFlag != '' and iDataSaveFlag != null">
+			   , i_data_save_flag = #{iDataSaveFlag}
+			</if>
+			<if test="iOutputUseFlag != '' and iOutputUseFlag != null">
+			   , i_output_use_flag = #{iOutputUseFlag}
+			</if>
+			   , o_plcscan_station = #{oPlcscanStation}
+			   , o_plcscan_address = #{oPlcscanAddress}
+			   , o_plcscan_extra1 = #{oPlcscanExtra1}
+			   , o_plcscan_extra2 = #{oPlcscanExtra2}
+			   , ao_calc_filter_cd = #{aoCalcFilterCd}
+			   , ao_calc_script = #{aoCalcScript}
+			   , do_relay_type_cd = #{doRelayTypeCd}
+			<choose>
+				<when test="doRelayPulseSec != '' and doRelayPulseSec != null">
+					, do_relay_pulse_sec = #{doRelayPulseSec}
+				</when>
+				<otherwise>
+					, do_relay_pulse_sec = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="doDelayOnSec != '' and doDelayOnSec != null">
+					, do_delay_on_sec = #{doDelayOnSec}
+				</when>
+				<otherwise>
+					, do_delay_on_sec = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="doDelayOffSec != '' and doDelayOffSec != null">
+					, do_delay_off_sec = #{doDelayOffSec}
+				</when>
+				<otherwise>
+					, do_delay_off_sec = NULL
+				</otherwise>			
+			</choose>
+			<choose>
+				<when test="aiAccumulateFlag != '' and aiAccumulateFlag != null">
+					, ai_accumulate_flag = #{aiAccumulateFlag}
+				</when>
+				<otherwise>
+					, ai_accumulate_flag = 'N'
+				</otherwise>			
+			</choose>	
+			   , use_flag = #{useFlag}
+			   , update_id = #{updateId}
+		 WHERE tag_id = #{tagId}
+		   AND site_cd = #{siteCd}
+ 	</update>
+ 	
+ 	
+ 	<!-- 태그ID 조회 -->
+ 	<select id="selectTagId" parameterType="Tag" resultType="int">
+		/* BuildMapper.selectTagId */
+		SELECT count(tag_id)
+		  FROM tbl_tag
+	 	 WHERE tag_id = #{tagId}
+	 	   AND site_cd = #{siteCd}	
+	</select>
+	
+	<!-- 태그 이력 등록 -->
+	<insert id="insertTagHistory" parameterType="Tag" >
+ 		/* BuildMapper.insertTagHistory */
+ 		INSERT INTO tbl_tag_history
+ 		(
+			site_cd
+			, tag_id
+			, tag_type_cd
+			, tag_kind_cd
+			, tag_desc
+			, i_plcscan_address
+			, i_scan_time
+			, ai_memtype_cd
+			, ai_unit_cd
+			, ai_display_format
+			, ai_calc_filter_cd
+			, a_convert_base
+			, a_convert_full
+			, a_convert_plcbase
+			, a_convert_plcfull
+			, ai_calc_script
+			, a_cutover_value_cd
+			, d_on_description
+			, d_off_description
+			, i_alarm_use_flag
+			, ai_alarm_high
+			, ai_alarm_low
+			, ai_alarm_type_cd
+			, di_alarm_type_cd
+			, i_alarm_img_cd
+			, i_alarm_wav_cd
+			, ai_alarm_protect_percent
+			, ai_alarm_protect_second
+			, i_alarm_priority_cd
+			, i_data_save_flag
+			, i_output_use_flag
+			, o_plcscan_station
+			, o_plcscan_address
+			, o_plcscan_extra1
+			, o_plcscan_extra2
+			, ao_calc_filter_cd
+			, ao_calc_script
+			, do_relay_type_cd
+			, do_relay_pulse_sec
+			, do_delay_on_sec
+			, do_delay_off_sec
+			, ai_accumulate_flag
+			, use_flag
+			, reg_id
+ 		)
+ 		SELECT site_cd
+			   , tag_id
+			   , tag_type_cd
+			   , tag_kind_cd
+			   , tag_desc
+			   , i_plcscan_address
+			   , i_scan_time
+			   , ai_memtype_cd
+			   , ai_unit_cd
+			   , ai_display_format
+			   , ai_calc_filter_cd
+			   , a_convert_base
+			   , a_convert_full
+			   , a_convert_plcbase
+			   , a_convert_plcfull
+			   , ai_calc_script
+			   , a_cutover_value_cd
+			   , d_on_description
+			   , d_off_description
+			   , i_alarm_use_flag
+			   , ai_alarm_high
+			   , ai_alarm_low
+			   , ai_alarm_type_cd
+			   , di_alarm_type_cd
+			   , i_alarm_img_cd
+			   , i_alarm_wav_cd
+			   , ai_alarm_protect_percent
+			   , ai_alarm_protect_second
+			   , i_alarm_priority_cd
+			   , i_data_save_flag
+			   , i_output_use_flag
+			   , o_plcscan_station
+			   , o_plcscan_address
+			   , o_plcscan_extra1
+			   , o_plcscan_extra2
+			   , ao_calc_filter_cd
+			   , ao_calc_script
+			   , do_relay_type_cd
+			   , do_relay_pulse_sec
+			   , do_delay_on_sec
+			   , do_delay_off_sec
+			   , ai_accumulate_flag
+			   , use_flag
+			   , reg_id
+		  FROM tbl_tag
+		 WHERE tag_id = #{tagId}
+		   AND site_cd = #{siteCd}
+ 	</insert>
+	
+	<!-- 태그 삭제 -->
+	<delete id="deleteTag" parameterType="Tag" >
+		/* BuildMapper.deleteTag */
+		DELETE FROM tbl_tag
+		<where>
+			<if test="tagId != '' and tagId != null">
+				AND tag_id = #{tagId}							
+			</if>
+			<if test="siteCd != '' and siteCd != null">
+				AND site_cd = #{siteCd}							
+			</if>
+		</where>		
+	</delete>
+	
+	<!-- 태그 상세 조회 -->
+	<select id="selectTagView" parameterType="Tag" resultType="Tag" >
+		/* BuildMapper.selectTagView */
+		SELECT site_cd
+			   , tag_id
+			   , tag_type_cd
+			   , tag_kind_cd
+			   , tag_desc
+			   , tag_conn_type_cd
+			   , IFNULL(i_plcscan_address, '') AS i_plcscan_address
+			   , i_scan_time
+			   , ai_memtype_cd
+			   , ai_unit_cd
+			   , ai_display_format
+			   , ai_calc_filter_cd
+			   , a_convert_base
+			   , a_convert_full
+			   , a_convert_plcbase
+			   , a_convert_plcfull
+			   , ai_calc_script
+			   , a_cutover_value_cd
+			   , d_on_description
+			   , d_off_description
+			   , i_alarm_use_flag
+			   , ai_alarm_high
+			   , ai_alarm_low
+			   , ai_alarm_type_cd
+			   , di_alarm_type_cd
+			   , i_alarm_img_cd
+			   , i_alarm_wav_cd
+			   , ai_alarm_protect_percent
+			   , ai_alarm_protect_second
+			   , i_alarm_priority_cd
+			   , i_data_save_flag
+			   , i_output_use_flag
+			   , IFNULL(o_plcscan_station, '') AS o_plcscan_station
+			   , IFNULL(o_plcscan_address, '') AS o_plcscan_address
+			   , IFNULL(o_plcscan_extra1, '') AS o_plcscan_extra1
+			   , o_plcscan_extra2
+			   , ao_calc_filter_cd
+			   , ao_calc_script
+			   , do_relay_type_cd
+			   , do_relay_pulse_sec
+			   , do_delay_on_sec
+			   , do_delay_off_sec
+			   , ai_accumulate_flag
+			   , use_flag
+			   , update_id
+			   , update_date
+			   , reg_id
+			   , reg_date
+		  FROM tbl_tag
+		 WHERE tag_id = #{tagId}
+		   AND site_cd = #{siteCd}
+	</select>
+	
+	<!-- 정보 변경 등록 -->
+	<insert id="insertFixInfo" parameterType="FixInfo">
+		/* BuildMapper.insertFixInfo */
+		INSERT INTO tbl_fix_info 
+		(
+			fix_cd
+			, apply_flag
+			, update_id
+		)
+		VALUES 
+		(
+			#{fixCd}
+			, #{applyFlag}
+			, #{updateId}
+		)
+	</insert>
+	
+	<!-- 템플릿 패턴 리스트 -->
+	<select id="selectTemplateList" parameterType="SystemTemplate" resultType="FlkMap">
+		/* BuildMapper.selectTemplateList */
+		SELECT TST.submenu_id
+			   , template_id
+			   , template_name
+			   , template_file_path1
+			   , set_file_path1
+			   , thumbnail_file_path
+		  FROM tbl_system_template TST, tbl_system_submenu TSS
+		 WHERE TST.use_flag = 'Y'
+		   AND TST.submenu_id = TSS.submenu_id
+		   AND TSS.use_flag = 'Y'		  
+		<choose>
+			<when test="etcSubmenuYn != '' and etcSubmenuYn != null and etcSubmenuYn == 'Y'.toString()">
+				AND TST.submenu_id IN ('SYS04', 'SYS05', 'SYS06', 'SYS07', 'SYS08', 'SYS09')			
+			</when>
+			<otherwise>
+				AND TST.submenu_id = #{submenuId}
+			</otherwise>
+		</choose>
+		 ORDER BY sort_no ASC
+	</select>
+	
+	<!-- 템플릿 등록 -->
+	<insert id="insertSystemSubmenuSite" parameterType="SystemTemplate">
+		/* BuildMapper.insertSystemSubmenuSite */
+		INSERT INTO tbl_system_submenu_site
+		(
+			site_id
+			, submenu_id
+			, template_id
+			, apply_flag
+			, reg_id
+		)
+		VALUES 
+		(
+			#{siteId}
+			, #{submenuId}
+			, #{templateId}
+			, #{applyFlag}
+			, #{regId}
+		)
+		ON DUPLICATE KEY
+		UPDATE template_id = #{templateId}
+			   , apply_flag = #{applyFlag}
+	</insert>
+	
+	<!-- 사이트 별 템플릿 리스트 -->
+	<select id="selectSystemSubmenuSite" parameterType="SystemTemplate" resultType="SystemTemplate">
+		/* BuildMapper.selectSystemSubmenuSite */
+		SELECT site_id
+			   , submenu_id
+			   , template_id
+			   , apply_flag
+			   , reg_id
+			   , reg_date
+		  FROM tbl_system_submenu_site
+		 WHERE site_id = #{siteId}
+		<if test="submenuId != '' and submenuId != null">
+			AND submenu_id = #{submenuId}
+		</if>
+	</select>
+	
+	<!-- 템플릿 정보 조회 -->
+	<select id="selectTemplateInfo" parameterType="SystemTemplate" resultType="SystemTemplate">
+		/* BuildMapper.selectTemplateInfo */
+		SELECT site_id
+			   , TST.submenu_id
+			   , TST.template_id
+			   , template_file_path1
+			   , set_file_path1
+			   , set_file_path2
+			   , set_file_path3
+			   , thumbnail_file_path
+			   , css_file_path
+		  FROM tbl_system_template TST, tbl_system_submenu_site TSSS
+		 WHERE site_id = #{siteId}
+		   AND TST.submenu_id = #{submenuId}
+		   AND TST.submenu_id = TSSS.submenu_id
+		   AND TST.template_id = TSSS.template_id	
+	</select>
+	
+	<!-- 서브메뉴 css_path 조회 -->
+	<select id="selectSubMenuCss" parameterType="SystemTagMap" resultType="java.lang.String">
+		/* BuildMapper.selectSubMenuCss */
+		SELECT css_file_path
+		  FROM tbl_system_submenu_site TSSS, tbl_system_submenu TSS, tbl_system_template TST
+		 WHERE TSSS.site_id = #{siteId}
+		   AND TSSS.submenu_id = TSS.submenu_id
+		   AND TSS.use_flag = 'Y'
+		   AND TSSS.submenu_id = TST.submenu_id
+		   AND TSSS.template_id = TST.template_id
+		   AND TST.use_flag = 'Y'
+		   AND TSSS.submenu_id = #{submenuId}
+	</select>
+	
+	<!-- 태그 매핑 삭제 -->
+	<delete id="deleteSystemTagMapping" parameterType="SystemTagMap">
+		/* BuildMapper.deleteSystemTagMapping */
+		DELETE FROM tbl_system_tag_mapping
+		 WHERE site_id = #{siteId}
+		   AND submenu_id = #{submenuId}
+		<if test="templateId != '' and templateId != null">
+		   AND template_id = #{templateId}
+		</if>
+		<if test="componentId != '' and componentId != null">
+			AND component_id = #{componentId}
+		</if>
+	</delete>
+	
+	<!-- 컴포넌트 리스트 조회 -->
+	<select id="selectSystemTemplateComponent" parameterType="SystemTemplate" resultType="FlkMap">
+		/* BuildMapper.selectSystemTemplateComponent */
+		SELECT submenu_id
+			   , template_id
+			   , group_id
+			   , component_id
+			   , component_name
+		  FROM tbl_system_template_component
+		 WHERE submenu_id = #{submenuId}
+		   AND template_id = #{templateId}
+		   AND use_flag = 'Y'		
+	</select>
+	
+	<!-- 타 Template ID 태그 매핑 삭제 -->
+	<delete id="deleteOtherSystemTagMapping" parameterType="SystemTagMap">
+		/* BuildMapper.deleteOtherSystemTagMapping */
+		DELETE FROM tbl_system_tag_mapping 
+		 WHERE site_id = #{siteId} 
+		   AND submenu_id = #{submenuId} 
+		   AND template_id != #{templateId}
+	</delete>
+	
+	<!-- 태그 매핑 등록 -->
+	<insert id="insertSystemTagMapping" parameterType="SystemTagMap">
+		/* BuildMapper.insertSystemTagMapping */
+		INSERT INTO tbl_system_tag_mapping
+		(
+			site_id
+			, submenu_id
+			, template_id
+			, group_id
+			, component_id
+			, tag_id
+			, set_flag
+			, display_name
+			, update_id
+			, reg_id
+		)
+		VALUES 
+		(
+			#{siteId}
+			, #{submenuId}
+			, #{templateId}
+			, #{groupId}
+			, #{componentId}
+			, #{tagId}
+			, #{setFlag}
+			, #{displayName}
+			, #{updateId}
+			, #{regId}
+		)
+		ON DUPLICATE KEY
+		UPDATE tag_id = #{tagId}
+			   , display_name = #{displayName}
+			   , set_flag = #{setFlag}
+			   , update_id = #{updateId}
+	</insert>
+	
+		
+	<!-- 사이트 별 템플릿 수정 -->
+	<update id="updateSystemSubmenuSite" parameterType="SystemTemplate" >
+		/* BuildMapper.updateSystemSubmenuSite */
+		UPDATE tbl_system_submenu_site
+		   SET apply_flag = #{applyFlag}
+		 WHERE site_id = #{siteId}
+		   AND submenu_id = #{submenuId}
+		   AND template_id = #{templateId}
+	</update>
+	
+	<!-- 태그 매핑 조회 -->
+	<select id="selectSystemTagMapping" parameterType="SystemTagMap" resultType="FlkMap">
+		/* BuildMapper.selectSystemTagMapping */
+		SELECT site_id
+			   , submenu_id
+			   , template_id
+			   , group_id
+			   , component_id
+			   , tag_id
+			   , set_flag
+			   , display_name
+			   , update_id
+			   , update_date
+			   , reg_id
+			   , reg_date
+		  FROM tbl_system_tag_mapping
+		 WHERE site_id = #{siteId}
+		   AND submenu_id = #{submenuId}
+		   AND template_id = #{templateId}
+		   AND set_flag = 'Y' 
+	</select>
+	
+	<!-- 사이트 별 기타설비 리스트 조회 -->
+	<select id="selectSystemSubmenuSiteList" parameterType="SystemTemplate" resultType="FlkMap">
+		/* BuildMapper.selectSystemSubmenuSiteList */
+		SELECT site_id
+			   , submenu_id
+			   , template_id
+			   , apply_flag
+			   , reg_id
+			   , reg_date
+		  FROM tbl_system_submenu_site
+		 WHERE site_id = #{siteId}
+		   AND submenu_id IN ('SYS04', 'SYS05', 'SYS06', 'SYS07', 'SYS08', 'SYS09')
+	</select>	
+	
+	<!-- 템플릿 삭제 -->
+	<insert id="deleteSystemSubmenuSite" parameterType="SystemTemplate">
+		/* BuildMapper.deleteSystemSubmenuSite */
+		DELETE FROM tbl_system_submenu_site
+		 WHERE site_id = #{siteId}
+		   AND submenu_id = #{submenuId}
+		   AND template_id = #{templateId}
+	</insert>
+	
+	<!-- 태그 관련 코드 리스트 조회 -->
+	<select id="tagCodeList" resultType="Code">
+		/* BuildMapper.tagCodeList */
+		SELECT A.code_id, A.code_name, A.code_use_name, B.code_use_name AS parent_code_use_name
+		  FROM tbl_code A , ( SELECT code_id, code_use_name
+		                        FROM tbl_code 
+		                       WHERE code_use_name IN ('TAG_TYPE','TAG_KIND','TAG_CONN_TYPE','AI_MEMTYPE','AI_UNIT','AI_CALC_FILTER'
+		                       							,'A_CUTOVER_VALUE','AI_ALARM_TYPE','DI_ALARM_TYPE','I_ALARM_IMG','I_ALARM_WAV'
+		                       							,'I_ALARM_PRIORITY','AO_CALC_FILTER','DO_RELAY_TYPE')) B
+		 WHERE A.parent_code_id = B.code_id
+		 ORDER BY A.code_use_name ASC
+	</select>
+	
+	<!-- 태그 리스트 등록 -->
+	<insert id="insertTagList" parameterType="java.util.Map">
+		/* BuildMapper.insertTagList */
+ 		INSERT INTO tbl_tag 
+ 		(
+			site_cd
+			, tag_id
+			, tag_type_cd
+			, tag_kind_cd
+			, tag_desc
+			, tag_conn_type_cd
+			, i_plcscan_address
+			, i_scan_time
+			, ai_memtype_cd
+			, ai_unit_cd
+			, ai_display_format
+			, ai_calc_filter_cd
+			, a_convert_base
+			, a_convert_full
+			, a_convert_plcbase
+			, a_convert_plcfull
+			, ai_calc_script
+			, a_cutover_value_cd
+			, d_on_description
+			, d_off_description
+			, i_alarm_use_flag
+			, ai_alarm_high
+			, ai_alarm_low
+			, ai_alarm_type_cd
+			, di_alarm_type_cd
+			, i_alarm_img_cd
+			, i_alarm_wav_cd
+			, ai_alarm_protect_percent
+			, ai_alarm_protect_second
+			, i_alarm_priority_cd
+			, i_data_save_flag
+			, i_output_use_flag
+			, o_plcscan_station
+			, o_plcscan_address
+			, o_plcscan_extra1
+			, o_plcscan_extra2
+			, ao_calc_filter_cd
+			, ao_calc_script
+			, do_relay_type_cd
+			, do_relay_pulse_sec
+			, do_delay_on_sec
+			, do_delay_off_sec
+			, ai_accumulate_flag 
+			, use_flag
+			, update_id
+			, reg_id
+ 		)
+ 		VALUES 
+		<foreach collection="tagList" item="item" open="(" separator="),(" close=")">
+			#{siteCd}
+			, #{item.tagId}
+			, #{item.tagTypeCd}
+			, #{item.tagKindCd}
+			, #{item.tagDesc}
+			<choose>
+				<when test="item.tagConnTypeCd != '' and templateId != item.tagConnTypeCd">
+					, #{item.tagConnTypeCd}
+				</when>
+				<otherwise>
+					, 'TAG_CONN_TYPE1'
+				</otherwise>	
+			</choose>
+			, #{item.iPlcscanAddress}
+			, #{item.iScanTime}
+			, #{item.aiMemtypeCd}
+			, #{item.aiUnitCd}
+			, #{item.aiDisplayFormat}
+			, #{item.aiCalcFilterCd}
+			, #{item.aConvertBase}
+			, #{item.aConvertFull}
+			, #{item.aConvertPlcbase}
+			, #{item.aConvertPlcfull}
+			, #{item.aiCalcScript}
+			, #{item.aCutoverValueCd}
+			, #{item.dOnDescription}
+			, #{item.dOffDescription}
+			<choose>
+				<when test="item.iAlarmUseFlag != '' and templateId != item.iAlarmUseFlag">
+					, #{item.iAlarmUseFlag}
+				</when>
+				<otherwise>
+					, 'N'
+				</otherwise>	
+			</choose>
+			, #{item.aiAlarmHigh}
+			, #{item.aiAlarmLow}
+			, #{item.aiAlarmTypeCd}
+			, #{item.diAlarmTypeCd}
+			, #{item.iAlarmImgCd}
+			, #{item.iAlarmWavCd}
+			, #{item.aiAlarmProtectPercent}
+			, #{item.aiAlarmProtectSecond}
+			, #{item.iAlarmPriorityCd}
+			<choose>
+				<when test="item.iDataSaveFlag != '' and templateId != item.iDataSaveFlag">
+					, #{item.iDataSaveFlag}
+				</when>
+				<otherwise>
+					, 'Y'
+				</otherwise>	
+			</choose>			
+			<choose>
+				<when test="item.iOutputUseFlag != '' and templateId != item.iOutputUseFlag">
+					, #{item.iOutputUseFlag}
+				</when>
+				<otherwise>
+					, 'N'
+				</otherwise>	
+			</choose>
+			, TRUNCATE(#{item.oPlcscanStation},0)
+			, TRUNCATE(#{item.oPlcscanAddress},0)
+			, #{item.oPlcscanExtra1}
+			, TRUNCATE(#{item.oPlcscanExtra2},0)
+			, #{item.aoCalcFilterCd}
+			, #{item.aoCalcScript}
+			, #{item.doRelayTypeCd}
+			<choose>
+				<when test="item.doRelayPulseSec != '' and templateId != item.doRelayPulseSec">
+					, #{item.doRelayPulseSec}
+				</when>
+				<otherwise>
+					, 0
+				</otherwise>	
+			</choose>
+			<choose>
+				<when test="item.doDelayOnSec != '' and templateId != item.doDelayOnSec">
+					, #{item.doDelayOnSec}
+				</when>
+				<otherwise>
+					, 0
+				</otherwise>	
+			</choose>
+			<choose>
+				<when test="item.doDelayOffSec != '' and templateId != item.doDelayOffSec">
+					, #{item.doDelayOffSec}
+				</when>
+				<otherwise>
+					, 0
+				</otherwise>	
+			</choose>
+			<choose>
+				<when test="item.aiAccumulateFlag != '' and templateId != item.aiAccumulateFlag">
+					, #{item.aiAccumulateFlag}
+				</when>
+				<otherwise>
+					, 'N'
+				</otherwise>	
+			</choose>
+			, #{item.useFlag}
+			, #{updateId}
+			, #{regId}
+		</foreach> 		
+	</insert>
+	
+	<!-- 태그 이력 리스트 등록 -->
+	<insert id="insertTagHistoryList" parameterType="java.util.Map">
+ 		/* BuildMapper.insertTagHistoryList */
+ 		INSERT INTO tbl_tag_history
+ 		(
+			site_cd
+			, tag_id
+			, tag_type_cd
+			, tag_kind_cd
+			, tag_desc
+			, tag_conn_type_cd
+			, i_plcscan_address
+			, i_scan_time
+			, ai_memtype_cd
+			, ai_unit_cd
+			, ai_display_format
+			, ai_calc_filter_cd
+			, a_convert_base
+			, a_convert_full
+			, a_convert_plcbase
+			, a_convert_plcfull
+			, ai_calc_script
+			, a_cutover_value_cd
+			, d_on_description
+			, d_off_description
+			, i_alarm_use_flag
+			, ai_alarm_high
+			, ai_alarm_low
+			, ai_alarm_type_cd
+			, di_alarm_type_cd
+			, i_alarm_img_cd
+			, i_alarm_wav_cd
+			, ai_alarm_protect_percent
+			, ai_alarm_protect_second
+			, i_alarm_priority_cd
+			, i_data_save_flag
+			, i_output_use_flag
+			, o_plcscan_station
+			, o_plcscan_address
+			, o_plcscan_extra1
+			, o_plcscan_extra2
+			, ao_calc_filter_cd
+			, ao_calc_script
+			, do_relay_type_cd
+			, do_relay_pulse_sec
+			, do_delay_on_sec
+			, do_delay_off_sec
+			, ai_accumulate_flag
+			, use_flag
+			, reg_id
+ 		)
+ 		SELECT site_cd
+			   , tag_id
+			   , tag_type_cd
+			   , tag_kind_cd
+			   , tag_desc
+			   , tag_conn_type_cd
+			   , i_plcscan_address
+			   , i_scan_time
+			   , ai_memtype_cd
+			   , ai_unit_cd
+			   , ai_display_format
+			   , ai_calc_filter_cd
+			   , a_convert_base
+			   , a_convert_full
+			   , a_convert_plcbase
+			   , a_convert_plcfull
+			   , ai_calc_script
+			   , a_cutover_value_cd
+			   , d_on_description
+			   , d_off_description
+			   , i_alarm_use_flag
+			   , ai_alarm_high
+			   , ai_alarm_low
+			   , ai_alarm_type_cd
+			   , di_alarm_type_cd
+			   , i_alarm_img_cd
+			   , i_alarm_wav_cd
+			   , ai_alarm_protect_percent
+			   , ai_alarm_protect_second
+			   , i_alarm_priority_cd
+			   , i_data_save_flag
+			   , i_output_use_flag
+			   , TRUNCATE(o_plcscan_station,0)
+			   , TRUNCATE(o_plcscan_address,0)
+			   , o_plcscan_extra1
+			   , TRUNCATE(o_plcscan_extra2,0)
+			   , ao_calc_filter_cd
+			   , ao_calc_script
+			   , do_relay_type_cd
+			   , do_relay_pulse_sec
+			   , do_delay_on_sec
+			   , do_delay_off_sec
+			   , ai_accumulate_flag
+			   , use_flag
+			   , reg_id
+		  FROM tbl_tag
+		 WHERE site_cd = #{siteCd}	
+	</insert>
+	
+	
+	<!-- 태그 업로드 로그 등록 -->
+	<insert id="insertTagRegisterLog" parameterType="java.util.Map">
+		INSERT INTO tbl_tag_register_log 
+		(
+			success_flag
+			, site_cd
+			<if test="successFlag != '' and successFlag != null and successFlag == 'Y'.toString()">
+				, ai_count
+				, ao_count
+				, di_count
+				, do_count
+			</if>
+			, fail_msg
+			, register_id
+			, reg_id
+		
+		)
+		VALUES
+		(
+			#{successFlag}
+			, #{siteCd}
+			<if test="successFlag != '' and successFlag != null and successFlag == 'Y'.toString()">
+				<choose>
+					<when test="aiCount != '' and aiCount != null">
+					, #{aiCount}
+					</when>
+					<otherwise>
+					, 0
+					</otherwise>
+				</choose>
+				<choose>
+					<when test="aoCount != '' and aoCount != null">
+					, #{aoCount}
+					</when>
+					<otherwise>
+					, 0
+					</otherwise>
+				</choose>
+				<choose>
+					<when test="diCount != '' and diCount != null">
+					, #{diCount}
+					</when>
+					<otherwise>
+					, 0
+					</otherwise>
+				</choose>
+				<choose>
+					<when test="doCount != '' and doCount != null">
+					, #{doCount}
+					</when>
+					<otherwise>
+					, 0
+					</otherwise>
+				</choose>
+			</if>
+			, #{failMsg}
+			, #{regId}
+			, #{regId}
+		)
+	</insert>
+	
+</mapper>

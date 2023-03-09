@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.AutoCtrlMapper">
+	
+	<!-- 자동제어리스트 조회 -->
+	<select id="selectAutoCtrlList" parameterType="AutoCtrl" resultType="flkMap">
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY FAM.REG_DATE DESC) AS RNUM
+				,FAM.FAM_ID
+				,FAM.SITE_ID
+				,FAM.AUTOCTRL_NAME
+				,FAM.FORM
+				,FAM.POWER_SUPPLY
+				,FAM.SALES_INFO
+				,FAM.REG_DATE
+				,S.SG_ID
+				,S.SITE_DESC
+			FROM TBL_FACILITY_AUTOCTRL_MASTER FAM INNER JOIN TBL_SITE S
+			ON FAM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			AND FAM.USE_FLAG = 'Y'
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FAM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FAM.AUTOCTRL_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FAM.FORM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FAM.POWER_SUPPLY LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FAM.SALES_INFO LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    ORDER BY FAM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!-- 자동제어리스트 상세 -->
+	<select id="selectAutoCtrlInfo" parameterType="AutoCtrl" resultType="flkMap">
+		SELECT
+			FAM.FAM_ID
+			,FAM.SITE_ID
+			,FAM.AUTOCTRL_NAME
+			,FAM.ADDRESS
+			,FAM.PHONE
+			,FAM.TEST_RUN_DATE
+			,DATE_FORMAT(FAM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FAM.POWER_SUPPLY
+			,FAM.FORM
+			,FAM.SALES_INFO
+			,FAM.AS_INFO
+			,FAM.SIZE_W
+			,FAM.SIZE_L
+			,FAM.SIZE_H
+			,FAM.COMPONENT
+			,FAM.PC_MAKER
+			,FAM.PC_MODEL
+			,FAM.CTRL_MAKER
+			,FAM.CTRL_INTERNET
+			,FAM.MON_MAKER
+			,FAM.MON_MODEL
+			,SG_ID
+		FROM TBL_FACILITY_AUTOCTRL_MASTER FAM INNER JOIN TBL_SITE S
+			ON FAM.SITE_ID = S.SITE_ID
+		WHERE FAM_ID = #{famId}
+	</select>
+	
+	<!-- 자동제어리스트 등록 -->
+	<insert id="insertAutoCtrlInfo" parameterType="AutoCtrl" useGeneratedKeys="true" keyProperty="famId">
+		INSERT INTO TBL_FACILITY_AUTOCTRL_MASTER(
+			SITE_ID
+			,AUTOCTRL_NAME
+			,ADDRESS
+			,PHONE
+			,TEST_RUN_DATE
+			,POWER_SUPPLY
+			,FORM
+			,SALES_INFO
+			,AS_INFO
+			,SIZE_W
+			,SIZE_L
+			,SIZE_H
+			,COMPONENT
+			,PC_MAKER
+			,PC_MODEL
+			,CTRL_MAKER
+			,CTRL_INTERNET
+			,MON_MAKER
+			,MON_MODEL
+			,REG_ID
+			,REG_DATE
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{siteId}
+			,#{autoctrlName}
+			,#{address}
+			,#{phone}
+			,#{testRunDate}
+			,#{powerSupply}
+			,#{form}
+			,#{salesInfo}
+			,#{asInfo}
+			,#{sizeW}
+			,#{sizeL}
+			,#{sizeH}
+			,#{component}
+			,#{pcMaker}
+			,#{pcModel}
+			,#{ctrlMaker}
+			,#{ctrlInternet}
+			,#{monMaker}
+			,#{monModel}
+			,#{regId}
+			,now()
+			,#{updateId}
+			,now()
+		)
+	</insert>
+	
+	<!-- 자동제어리스트 수정-->
+	<update id="updateAutoCtrlInfo" parameterType="AutoCtrl">
+		UPDATE TBL_FACILITY_AUTOCTRL_MASTER
+		SET 
+			SITE_ID				= #{siteId}
+			,AUTOCTRL_NAME		= #{autoctrlName}
+			,ADDRESS			= #{address}
+			,PHONE				= #{phone}
+			,TEST_RUN_DATE		= #{testRunDate}
+			,POWER_SUPPLY		= #{powerSupply}	
+			,FORM				= #{form}
+			,SALES_INFO			= #{salesInfo}
+			,AS_INFO			= #{asInfo}
+			,SIZE_W				= #{sizeW}	
+			,SIZE_L				= #{sizeL}
+			,SIZE_H				= #{sizeH}
+			,COMPONENT			= #{component}
+			,PC_MAKER			= #{pcMaker}
+			,PC_MODEL			= #{pcModel}
+			,CTRL_MAKER			= #{ctrlMaker}
+			,CTRL_INTERNET		= #{ctrlInternet}
+			,MON_MAKER			= #{monMaker}
+			,MON_MODEL			= #{monModel}
+			,UPDATE_ID			= #{updateId}
+			,UPDATE_DATE		= now()
+		WHERE FAM_ID = #{famId}	
+	</update>
+	
+	<!-- 자동제어리스트 삭제-->
+	<update id="updateUseFlag" parameterType="AutoCtrl">
+		UPDATE TBL_FACILITY_AUTOCTRL_MASTER
+		SET  USE_FLAG ='N'
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now() 
+		WHERE FAM_ID = #{famId}	
+	</update>
+</mapper>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />	
+<title>ENERZENT APP</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/mobile/css/basic.css" />
+<script type="text/javascript" src="/resources/mobile/js/jquery-1.7.2.min.js"></script>
+
+<script type="text/javascript" src="/resources/mobile/js/jquery.model.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+<div id="wrap_area">
+
+	<div id="header">
+		<a class="btn_menu" href="#"><span class="blind">menu</span></a>
+		<h1><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /><!-- <img src="/resources/mobile/images/logo_ssg.png" alt="백화점" /> --> <strong>구미점</strong></h1>
+		<div class="header_right">
+			<span class="toDay">2017년 06월</span>
+		</div>
+	</div>
+	
+	<!-- s : lnb -->
+	<div id="lnb">
+	<h2 class="lnd_header">구미점 빙축열<a class="btn_lnb_close" href="#"><span class="blind">메뉴닫기</span></a></h2>
+	<a class="btn_lnb menu1" href="#">빙축열 스크류냉동기<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 열교환기<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 펌프-1<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 펌프-2<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 자동제어 부분<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 축열조 및 배관<span class="fr">Status: 미실시</span></a>
+	<a class="btn_lnb menu1" href="#">빙축열 심야전기 MCC부분<span class="fr">Status: 미실시</span></a>
+
+	</div>
+	<!-- e : lnb -->
+	
+	<div id="container">
+		
+		<div class="content_head_area">
+			<h3>빙축열스크류 냉동기</h3>
+			<div class="fr">
+				Status : 점검중
+			</div>
+		</div>
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			<p class="subTitle_area">축냉펌프-1<a class="fr" href="#popup01" name="modal">설비정보보기</a></p>
+			
+			<div class="chart_area">
+				<dl>
+					<dt>1. 외관검사</dt>
+					<dd>
+						<ol>
+							<li>1) 결로발생 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>2) 오일누수 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>3) 기타 
+								<span class="fr">
+									<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+									<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+								</span>
+								<textarea rows="" cols=""></textarea>
+							</li>
+						</ol>
+					</dd>
+				</dl>
+			</div>	
+			
+			<div class="chart_area">
+				<dl>
+					<dt>2. 운전상태</dt>
+					<dd>
+						<ol>
+							<li>1) 운전중 이상 진동/소음 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>2) 기타 
+								<span class="fr">
+									<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+									<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+								</span>
+								<textarea rows="" cols=""></textarea>
+							</li>
+						</ol>
+						
+						<table class="data_row mt20">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>소비전력[Kw] 측정</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+						<table class="data_row mt10">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>운전전류[A] 측정</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+						<table class="data_row mt10">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>운전 유량[㎡/h] 확인</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</dd>
+				</dl>
+			</div>	
+			
+			<div class="chart_area">
+				<dl>
+					<dt>3. 기타의견 및 특이사항
+						<span class="fr">
+							<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+							<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+						</span>
+					</dt>
+					<dd>
+						<textarea rows="" cols=""></textarea>
+					</dd>
+				</dl>
+			</div>
+			
+			<p class="subTitle_area">방냉펌프-1</p>
+			<div class="chart_area">
+				<dl>
+					<dt>1. 외관검사</dt>
+					<dd>
+						<ol>
+							<li>1) 결로발생 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>2) 오일누수 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>3) 기타 
+								<span class="fr">
+									<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+									<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+								</span>
+								<textarea rows="" cols=""></textarea>
+							</li>
+						</ol>
+					</dd>
+				</dl>
+			</div>	
+			
+			<div class="chart_area">
+				<dl>
+					<dt>2. 운전상태</dt>
+					<dd>
+						<ol>
+							<li>1) 운전중 이상 진동/소음 여부 <span class="fr"><label for="">확인여부</label> <input type="checkbox" name="" id="" /></span></li>
+							<li>2) 기타 
+								<span class="fr">
+									<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+									<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+								</span>
+								<textarea rows="" cols=""></textarea>
+							</li>
+						</ol>
+						
+						<table class="data_row mt20">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>소비전력[Kw] 측정</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+						<table class="data_row mt10">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>운전전류[A] 측정</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+						<table class="data_row mt10">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+						</colgroup>
+			
+							<thead>
+								<tr>
+									<th scope="col" colspan="2"><strong>운전 유량[㎡/h] 확인</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>기준값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정값</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>측정시모드</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+								<tr>
+									<th>확인기준</th>
+									<td><input type="text" class="" id="" name="" value="" /></td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</dd>
+				</dl>
+			</div>	
+			
+			<div class="chart_area">
+				<dl>
+					<dt>3. 기타의견 및 특이사항
+						<span class="fr">
+							<a class="btn_camera" href="#"><span class="blind">사진촬영</span></a>
+							<a class="btn_album" href="#photo" name="modal"><span class="blind">앨범보기</span></a>
+						</span>
+					</dt>
+					<dd>
+						<textarea rows="" cols=""></textarea>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="btn_areaC mt5">
+				<a class="btnType btn_type02" href="#">점검완료</a>
+			</div>
+			
+		</div>
+		<!-- e : content_area -->
+		
+	</div>
+	
+	
+	
+	<div class="popup_container" id="popup01">
+		<div class="popup_header">설비정보 <a class="closePop" href="#"><span class="blind">메뉴닫기</span></a></div>
+		<div class="popup_content">
+			<table class="data_row">
+			<caption>caption</caption>
+			<colgroup>
+				<col width="35%">
+				<col width="*">
+			</colgroup>
+
+				<tbody>
+					<tr>
+						<th>고객명</th>
+						<td>아마트 구미점</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>경상북도 구미시 구미대로 256</td>
+					</tr>
+					<tr>
+						<th>연락처</th>
+						<td>운영팀 사무실: 054-467-1100</td>
+					</tr>
+					<tr>
+						<th>시운전일자</th>
+						<td>2016년 06월 27일</td>
+					</tr>
+					<tr>
+						<th>전원</th>
+						<td>3P / 380V / 60Hz</td>
+					</tr>
+					<tr>
+						<th>형식</th>
+						<td>SCREW</td>
+					</tr>
+					<tr>
+						<th>콤프수량</th>
+						<td>2EA</td>
+					</tr>
+					<tr>
+						<th>모델번호</th>
+						<td>RCWW032MA21</td>
+					</tr>
+					<tr>
+						<th>기동방식</th>
+						<td>Y-△</td>
+					</tr>
+					<tr>
+						<th>제조번호</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>냉매</th>
+						<td>R-134a      /      냉매충전량:    340kg</td>
+					</tr>
+					<tr>
+						<th>업체명</th>
+						<td>㈜이엠이엔지 홍형택부장: 0108220-5210</td>
+					</tr>
+					<tr>
+						<th>A/S</th>
+						<td>대표: 1644-7887 손민식책임: 010-8571-8268</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<table class="data_row mt20">
+			<caption>caption</caption>
+			<colgroup>
+				<col width="*">
+				<col width="17.5%">
+				<col width="17.5%">
+				<col width="17.5%">
+				<col width="17.5%">
+			</colgroup>
+
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col" colspan="2">야간</th>
+						<th scope="col" colspan="2">주간</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>용량(USRt)</th>
+						<td colspan="2">200.2</td>
+						<td colspan="2">291.2</td>
+					</tr>
+					<tr>
+						<th>냉수온도(℃)</th>
+						<td colspan="2">-07/-4.5</td>
+						<td colspan="2">11.0/6.5</td>
+					</tr>
+					<tr>
+						<th>냉각수온도(℃)</th>
+						<td colspan="2">30.0/33.6</td>
+						<td colspan="2">32.0/37.0</td>
+					</tr>
+					<tr>
+						<th rowspan="2">유량(㎡/h/lpm)</th>
+						<th colspan="2">냉수</th>
+						<th colspan="2">냉각수</th>
+					</tr>
+					<tr>
+						<td>168.5㎡/h</td>
+						<td>2808.0lpm</td>
+						<td>168.5㎡/h</td>
+						<td>2808.0lpm</td>
+					</tr>
+					<tr>
+						<th rowspan="2">압력손실(kg/㎠)</th>
+						<th colspan="2">냉수</th>
+						<th colspan="2">냉각수</th>
+					</tr>
+					<tr>
+						<td colspan="2">0.64</td>
+						<td colspan="2">0.74</td>
+					</tr>
+					<tr>
+						<th>소비전력(kw)</th>
+						<td colspan="2">203.0</td>
+						<td colspan="2">203.0</td>
+					</tr>
+					<tr>
+						<th>전류(A)</th>
+						<td colspan="2"></td>
+						<td colspan="2">203.0</td>
+					</tr>
+					<tr>
+						<th>COP</th>
+						<td colspan="2">3.47</td>
+						<td colspan="2">3.47</td>
+					</tr>
+					<tr>
+						<th>제어범위</th>
+						<td colspan="4">17.5% ~ 100%</td>
+					</tr>
+					<tr>
+						<th>특이사항</th>
+						<td colspan="4">콤프대수제어 구성</td>
+					</tr>
+					<tr>
+						<th>중량</th>
+						<th>제품</th>
+						<td>7.0ton</td>
+						<th>운전</th>
+						<td>7.0ton</td>
+					</tr>
+					<tr>
+						<th rowspan="2">접속관경(A)</th>
+						<th colspan="2">냉수</th>
+						<th colspan="2">냉각수</th>
+					</tr>
+					<tr>
+						<td colspan="2">150</td>
+						<td colspan="2">150</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>		
+	
+	<div class="popup_container" id="photo">
+		<div class="popup_header">사진정보 <a class="closePop" href="#"><span class="blind">메뉴닫기</span></a></div>
+		<div class="popup_content">
+			<div class="photo_area">
+				<ul>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+					<li><label for=""><img src="/resources/mobile/images/logo_emart.png" alt="이마트" /></label> <input type="checkbox" name="" id="" /></li>
+				</ul>
+			</div>
+			<div class="btn_areaC mt20 both">
+				<a class="btnType btn_type01" href="#">삭제</a>
+			</div>
+		</div>
+	</div>		
+</div>
+
+</body>
+</html>

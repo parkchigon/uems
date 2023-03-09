@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+
+<div id="loading_mask"></div>
+<div class="loading"><span class="blind">로딩중...</span></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_emart.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>동인천지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#" name="loading">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container" class="build">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5 on" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<!-- s : build_header -->
+			<div class="build_header_area">
+				<ul>
+					<li><a href="#">지점 관리</a></li>
+					<li><a href="#">태그 관리</a></li>
+					<li><a href="#">계통도 선택</a></li>
+					<li><a href="#">계통도 설정(좌)</a></li>
+					<li><a href="#">계통도 설정(우)</a></li>
+					<li><a href="#">설정메뉴 선택</a></li>
+					<li class="on"><a href="#">설정메뉴 설정</a></li>
+					<li><a href="#">기타설비 선택</a></li>
+					<li><a href="#">기타설비 설정</a></li>
+				</ul>
+			</div>
+			<!-- e : build_header -->
+			
+			<div class="blockDiagram_area">
+			<div class="scroll" style="height:850px;">
+			
+				<div class="data_area_inner">
+					<dl>
+						<dt>냉각탑 제어설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">1그룹 기동온도</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">1그룹 정지온도</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"></th>
+										<td></td>
+										<th scope="row"></th>
+										<td></td>
+									</tr>
+									<tr>
+										<th scope="row">냉각탑1 주간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑1 주간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑1 야간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑1 야간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉각탑2 주간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑2 주간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑2 야간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑2 야간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉각탑3 주간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑3 주간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑3 야간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑3 야간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉각탑4 주간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑4 주간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑4 야간기동</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각탑4 야간정지</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>냉동기 제어 온도 설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">냉동기1 축냉설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기1 냉단설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기2 축냉설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기2 냉단설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉동기3 축냉설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기3 냉단설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기4 축냉설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기4 냉단설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>인버터 제어 설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">방냉펌프1 수동 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">방냉펌프2 수동 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">방냉펌프3 수동 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">방냉펌프4 수동 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">방냉펌프 최저 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">방냉펌프 최고 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">통합 수동 주파수</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">수동 주파수 하한값</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉단시 축냉펌프 1대 고정주파수 설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉단시 축냉펌프 2대 고정주파수 설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉단시 축냉펌프 3대 고정주파수 설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"></th>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>동시운전 제어설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">방냉종료 시간설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">방냉종료 축열량설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">초기부하 지연설정설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"></th>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>동파방지 제어설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">기동온도</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">정지온도</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">기동시간</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">정지시간</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>정지지연 설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">축냉펌프 (심야용)</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">축냉펌프 (주간용)</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각수펌프 (심야용)</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각수펌프 (주간용)</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">방냉펌프</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"></th>
+										<td></td>
+										<th scope="row"></th>
+										<td></td>
+										<th scope="row"></th>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>알람 제어설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">동파방지 경보온도</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉각수 입구고온</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">브라인 출구 과냉</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row"></th>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>기동지연 설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">냉동기1</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기2</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기3</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기4</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+				<div class="data_area_inner mt10">
+					<dl>
+						<dt>냉동기 제어 열량 설정</dt>
+						<dd>
+							<table class="data_row">
+							<caption>caption</caption>
+							<colgroup>
+								<col width="15%">
+								<col width="*">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+								<col width="15%">
+								<col width="10%">
+							</colgroup>
+		
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+										<th>Name</th>
+										<th>TagID</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">냉동기1 기동설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기1 정지설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기2 기동설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기2 정지설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">냉동기3 기동설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기3 정지설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기4 기동설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+										<th scope="row">냉동기4 정지설정</th>
+										<td>
+											<select id="" name="" style="width: 100%">
+												<option value="" selected="selected" >TagID</option>
+												<option value=""  >...</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</dd>
+					</dl>
+				</div>
+				
+			</div>
+			</div>
+			
+			<div class="btn_areaC mt5">
+				<a class="btnType btn_type02" href="#">확인</a>
+			</div>
+			
+			
+			
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+		<div class="scroll" style="height:850px;">
+			<div class="data_area_inner">
+				<dl>
+					<dt>냉각탑 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">1그룹 기동온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">1그룹 정지온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑1 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑1 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑1 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑1 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑2 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑2 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑2 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑2 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑3 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑3 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑3 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑3 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑4 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑4 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑4 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑4 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기 제어 온도 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기1 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기2 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기2 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기3 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기4 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기4 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>인버터 제어 설정
+						<div class="head_right">
+							<div class="switch on">
+								<span class="stop">정지</span>
+								<span class="start">사용</span>
+								<em></em>
+							</div>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">방냉펌프1 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프2 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프3 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프4 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프 최저 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프 최고 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">통합 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">수동 주파수 하한값</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉단시 축냉펌프 1대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">냉단시 축냉펌프 2대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉단시 축냉펌프 3대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동시운전 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">방냉종료 시간설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+									<th scope="row">방냉종료 축열량설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+								</tr>
+								<tr>
+									<th scope="row">초기부하 지연설정설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동파방지 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">기동온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">정지온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">기동시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">정지시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>정지지연 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">축냉펌프 (심야용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">축냉펌프 (주간용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각수펌프 (심야용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉각수펌프 (주간용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">초</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>알람 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">동파방지 경보온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각수 입구고온</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">브라인 출구 과냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>기동지연 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉동기2</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉동기4</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>기동지연 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+									<th scope="row">냉동기2</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+									<th scope="row">냉동기4</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기 제어 열량 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기1 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기2 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기2 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기3 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기4 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기4 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		</div>
+		<!-- e : data_area -->
+		
+	</div>
+	
+	
+</div>
+
+</body>
+</html>

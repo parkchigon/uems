@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.ems.schedule.mapper.ScheduleRecordMapper">
+
+	<!-- 스케줄 리스트 -->
+	<select id="selectScheduleRecordList" parameterType="ScheduleRecord" resultType="flkMap">
+		/* ScheduleMapper.selectScheduleRecordList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+		SELECT ROW_NUMBER() OVER (ORDER BY reg_date DESC) AS RNUM
+			  ,tsi.si_id
+			  ,tsi.site_cd
+			  ,tsi.tag_id_01
+			  ,CONCAT(LEFT(tsi.tag_time_01,2),':',RIGHT(tsi.tag_time_01,2)) AS tag_time_01
+			  ,tsi.tag_value_01
+			  ,tsi.tag_id_02
+			  ,CONCAT(LEFT(tsi.tag_time_02,2),':',RIGHT(tsi.tag_time_02,2)) AS tag_time_02
+			  ,tsi.tag_value_02
+			  ,tsi.read_tag_id
+			  ,tsi.apply_flag
+			  ,tt1.tag_desc AS w_tag_desc
+			  ,tt2.tag_desc AS r_tag_desc
+			  ,ts.site_name
+			  ,tch.control_value
+			  ,DATE_FORMAT(tch.reg_date, '%Y-%m-%d %H:%i') AS control_date
+		 FROM tbl_schedule_info tsi 
+		 LEFT OUTER JOIN 
+		 ( 
+			SELECT distinct aa.site_cd
+				  ,aa.tag_id
+				  ,aa.reg_date
+				  ,bb.control_value
+				  ,bb.success_flag
+      		 FROM (
+				SELECT ta.site_cd,ta.tag_id, ta.reg_date, ta.update_id  from
+			       (
+			       	SELECT site_cd, tag_id, max(reg_date) as reg_date
+						  FROM tbl_alarm 
+						 WHERE alarm_status_cd='ALARM_STATUS99'
+			        	   AND update_id is not null
+						 GROUP BY site_cd, tag_id
+			       ) ta2, tbl_alarm ta
+			        WHERE ta2.site_cd = ta.site_cd
+			        AND ta2.tag_id=ta.tag_id
+			        AND ta2.reg_date=ta.reg_date
+						 ) aa ,
+			 	 tbl_control_history bb
+				WHERE aa.site_cd = bb.site_cd
+				  AND aa.tag_id = bb.tag_id
+		          AND aa.update_id = bb.identity_code
+		          AND bb.control_type ='1'
+			 ) tch 
+		   ON tsi.site_cd = tch.site_cd
+		  AND tsi.tag_id_01 = tch.tag_id
+		 LEFT JOIN tbl_tag tt1
+		   ON tsi.tag_id_01 = tt1.tag_id
+		  AND tsi.site_cd = tt1.site_cd
+		 LEFT JOIN tbl_tag tt2
+		   ON tsi.read_tag_id = tt2.tag_id
+		  AND tsi.site_cd = tt2.site_cd
+		 LEFT JOIN tbl_site ts
+		   ON tsi.site_cd = ts.site_cd
+	    WHERE tsi.use_flag ='Y'
+		  AND ts.use_flag='Y'
+		<if test="searchCondition != '' and searchCondition != null">
+		  AND ts.sg_id = #{searchCondition}
+		</if>
+		<if test="searchCondition2 != '' and searchCondition2 != null">
+		  AND tsi.site_cd = #{searchCondition2}
+		</if>
+		<if test="driveId != null and driveId != ''">
+		  AND tt1.tag_type_cd = 'TAG_TYPE4'
+		  AND tt1.tag_desc LIKE #{driveId}
+		</if>  
+		ORDER BY tsi.reg_date DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+	
+	<!-- 드라이브 리스트 -->
+	<select id="selectDriveList" parameterType="Site" resultType="flkMap">
+		/* ScheduleMapper.selectDriveList */
+		SELECT tag_id
+			  , tag_desc
+		  FROM tbl_tag
+		 WHERE site_cd = #{searchCondition}
+		   AND tag_type_cd ='TAG_TYPE4' 
+		   AND tag_desc like '__운전'
+	</select>
+	
+	<!-- 드라이브 리스트 -->
+	<select id="selectTagList" parameterType="Site" resultType="flkMap">
+		/* ScheduleMapper.selectDriveList */
+		SELECT tag_id
+			  , tag_desc
+		  FROM tbl_tag
+		 WHERE site_cd = #{searchCondition}
+		   AND tag_type_cd ='TAG_TYPE3' 
+		   AND tag_desc like '__운전'
+	</select>
+	
+	<!-- 드라이브 리스트 -->
+	<select id="selectSiIdList" parameterType="ScheduleRecord" resultType="flkMap">
+		/* ScheduleMapper.selectSiIdList */
+		SELECT si_id
+		  FROM tbl_schedule_info
+		 WHERE site_cd = #{siteCd}
+		   
+	</select>
+	
+	<!-- 스케줄 등록 -->
+	<insert id="insertScheduleRecord" parameterType="java.util.List">
+		/* ScheduleMapper.insertScheduleRecord */
+		INSERT INTO tbl_schedule_info (
+			   	 si_id
+			   	 ,site_cd
+			   	 ,tag_id_01
+				 ,tag_value_01
+			   	 ,tag_time_01
+			   	 ,tag_id_02
+			   	 ,tag_value_02
+			   	 ,tag_time_02
+			   	 ,read_tag_id
+			   	 ,set_place
+			   	 ,sync_flag
+			   	 ,delay_time
+			   	 ,apply_flag
+			   	 ,use_flag
+			   	 ,update_id
+			   	 ,reg_id
+			   )
+		VALUES (
+				#{siId}
+		       	,#{siteCd}
+		       	,#{tagId01}
+		       	,#{tagValue01}
+		       	,#{tagTime01}
+		       	,#{tagId02}
+		       	,#{tagValue02}
+		       	,#{tagTime02}
+		       	,#{readTagId}
+		       	,#{setPlace}
+		       	,'N'
+		       	,#{delayTime}
+		       	,#{applyFlag}
+		       	,'Y'
+		       	,#{updateId}
+		       	,#{regId}
+			   )
+	</insert>
+	
+	<!-- 스케줄 이력등록  -->
+	<insert id="insertScheduleHistoryRecord" parameterType="java.util.List">
+		/* ScheduleMapper.insertScheduleHistoryRecord */
+		INSERT INTO tbl_schedule_info_history (
+			   	 si_id
+			   	 ,site_cd
+			   	 ,tag_id_01
+				 ,tag_value_01
+			   	 ,tag_time_01
+			   	 ,tag_id_02
+			   	 ,tag_value_02
+			   	 ,tag_time_02
+			   	 ,read_tag_id
+			   	 ,set_place
+			   	 ,sync_flag
+			   	 ,delay_time
+			   	 ,apply_flag
+			   	 ,use_flag
+			   	 ,update_id
+			   	 ,reg_id
+			   	 ,update_flag
+			   )
+		VALUES (
+				#{siId}
+		       	,#{siteCd}
+		       	,#{tagId01}
+		       	,#{tagValue01}
+		       	,#{tagTime01}
+		       	,#{tagId02}
+		       	,#{tagValue02}
+		       	,#{tagTime02}
+		       	,#{readTagId}
+		       	,#{setPlace}
+		       	,'N'
+		       	,#{delayTime}
+		       	,#{applyFlag}
+		       	,'Y'
+		       	,#{updateId}
+		       	,#{regId}
+		       	,'0'
+			   )
+
+	</insert>
+
+	<!-- 스케줄 수정 등록-->
+	<update id="updateScheduleRecord" parameterType="java.util.List">
+		/* ScheduleMapper.updateScheduleRecord */
+		UPDATE tbl_schedule_info 
+		   SET tag_time_01 = #{tagTime01}
+		       ,tag_time_02 = #{tagTime02}
+		       ,apply_flag = #{applyFlag}
+		       ,sync_flag = 'N'
+		 WHERE si_id = #{siId}
+	</update>
+
+	<!-- 스케줄 수정 이력 등록 -->
+	<insert id="updateScheduleHistoryRecord" parameterType="java.util.List">
+		/* ScheduleMapper.updateScheduleHistoryRecord */
+		INSERT INTO tbl_schedule_info_history (
+			   	 si_id
+			   	 ,site_cd
+			   	 ,tag_id_01
+				 ,tag_value_01
+			   	 ,tag_time_01
+			   	 ,tag_id_02
+			   	 ,tag_value_02
+			   	 ,tag_time_02
+			   	 ,read_tag_id
+			   	 ,set_place
+			   	 ,sync_flag
+			   	 ,delay_time
+			   	 ,apply_flag
+			   	 ,use_flag
+			   	 ,update_id
+			   	 ,reg_id
+			   	 ,update_flag
+			   )
+		SELECT 
+				si_id
+		       	,site_cd
+		       	,tag_id_01
+		       	,tag_value_01
+		       	,#{tagTime01}
+		       	,tag_id_02
+		       	,tag_value_02
+		       	,#{tagTime02}
+		       	,read_tag_id
+		       	,set_place
+		       	,'N'
+		       	,delay_time
+		       	,#{applyFlag}
+		       	,use_flag
+		       	,#{updateId}
+		       	,reg_id
+		       	,'1'
+		  FROM tbl_schedule_info
+		 WHERE si_id = #{siId}
+	</insert>
+
+	<!-- 스케줄제어 삭제 -->
+	<update id="deleteScheduleRecord" parameterType="java.util.List">
+		/* ScheduleMapper.deleteScheduleRecord */
+		UPDATE tbl_schedule_info
+		   SET   SYNC_FLAG = 'N'
+		       , USE_FLAG = 'N'
+		       , UPDATE_ID = #{updateId}
+		 WHERE si_id = #{siId}
+	</update>
+	
+	<!-- 스케줄 삭제 이력 등록 -->
+	<insert id="deleteScheduleHistoryRecord" parameterType="java.util.List">
+		/* ScheduleMapper.deleteScheduleHistoryRecord */
+		INSERT INTO tbl_schedule_info_history (
+			   	 si_id
+			   	 ,site_cd
+			   	 ,tag_id_01
+				 ,tag_value_01
+			   	 ,tag_time_01
+			   	 ,tag_id_02
+			   	 ,tag_value_02
+			   	 ,tag_time_02
+			   	 ,read_tag_id
+			   	 ,set_place
+			   	 ,sync_flag
+			   	 ,delay_time
+			   	 ,apply_flag
+			   	 ,use_flag
+			   	 ,update_id
+			   	 ,reg_id
+			   	 ,update_flag
+			   )
+		SELECT 
+				si_id
+		       	,site_cd
+		       	,tag_id_01
+		       	,tag_value_01
+		       	,tag_time_01
+		       	,tag_id_02
+		       	,tag_value_02
+		       	,tag_time_02
+		       	,read_tag_id
+		       	,set_place
+		       	,'N'
+		       	,delay_time
+		       	,apply_flag
+		       	,'N'
+		       	,update_id
+		       	,reg_id
+		       	,'2'
+		  FROM tbl_schedule_info
+		 WHERE si_id = #{siId}
+	</insert>
+	
+	<!-- 휴점일 리스트 -->
+	<select id="selectScheduleOutdayList" parameterType="ScheduleRecord" resultType="flkMap">
+		/* ScheduleMapper.selectScheduleOutdayList */
+		SELECT si_id
+		      ,CONCAT(SUBSTRING(date,1,4),"년 ",SUBSTRING(date,5,2),"월 ",SUBSTRING(date,7,2),"일") AS date_format
+		      ,date 
+		  FROM tbl_schedule_out_day 
+		 WHERE si_id = #{siId}
+		   AND use_flag='Y' 
+		<if test="years != null and years != ''">  
+		   AND SUBSTRING(date, 1, 4) = #{years}
+		</if>
+		 ORDER BY date ASC 
+	</select>
+	
+	<!-- 휴점일 등록 -->
+	<insert id="insertScheduleOutday" parameterType="java.util.List">
+		/* ScheduleMapper.insertScheduleOutday */
+		INSERT INTO tbl_schedule_out_day (
+				 si_id
+       			 ,date
+       			 ,set_place
+       			 ,sync_flag
+       			 ,use_flag
+       			 ,update_id
+       			 ,reg_id
+      			)
+		 VALUES (
+		 		 #{siId}
+		 		 ,#{date}
+		 		 ,#{setPlace}
+		 		 ,'N'
+		 		 ,'Y'
+		 		 ,#{updateId}
+		 		 ,#{regId}
+      			)
+	</insert>
+	
+	<!-- 휴점일 등록 이력 -->
+	<insert id="insertScheduleOutdayHistory" parameterType="java.util.List">
+		/* ScheduleMapper.insertScheduleOutdayHistory */
+		INSERT INTO tbl_schedule_out_day_history (
+				 si_id
+       			 ,date
+       			 ,set_place
+       			 ,sync_flag
+       			 ,use_flag
+       			 ,update_id
+       			 ,reg_id
+       			 ,update_flag
+      			)
+		 VALUES (
+		 		 #{siId}
+		 		 ,#{date}
+		 		 ,#{setPlace}
+		 		 ,'N'
+		 		 ,'Y'
+		 		 ,#{updateId}
+		 		 ,#{regId}
+		 		 ,'0'
+      			)
+	</insert>	
+	
+	<!-- 휴점 삭제 -->
+	<update id="deleteScheduleOutday" parameterType="java.util.List">
+		/* ScheduleMapper.deleteScheduleOutday */
+		UPDATE tbl_schedule_out_day
+		   SET   SYNC_FLAG = 'N'
+		       , USE_FLAG = 'N'
+		       , UPDATE_ID = #{updateId}
+		 WHERE si_id = #{siId}
+		   AND date = #{date}
+	</update>
+	
+	<!-- 휴점 삭제 이력 -->
+	<update id="deleteScheduleOutdayHistory" parameterType="java.util.List">
+		/* ScheduleMapper.deleteScheduleOutdayHistory */
+		INSERT INTO tbl_schedule_out_day_history (
+				 si_id
+       			 ,date
+       			 ,set_place
+       			 ,sync_flag
+       			 ,use_flag
+       			 ,update_id
+       			 ,reg_id
+       			 ,update_flag
+      			)
+		 SELECT 
+		 		 si_id
+       			 ,date
+       			 ,set_place
+		 		 ,'N'
+		 		 ,'N'
+		 		 ,#{updateId}
+		 		 ,reg_id
+ 		       	 ,'1'
+		  FROM  tbl_schedule_out_day
+		 WHERE si_id = #{siId}
+		   AND date = #{date}
+	</update>
+</mapper>

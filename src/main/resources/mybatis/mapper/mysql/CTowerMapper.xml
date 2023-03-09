@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.equipment.mapper.CTowerMapper">
+	
+	<!-- 냉각탑 조회 -->
+	<select id ="selectCTowerList" parameterType="CTower" resultType="flkMap">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.selectCTowerList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT
+				ROW_NUMBER() OVER (ORDER BY FCM.REG_DATE DESC) AS RNUM
+				,FCM.FCM_ID
+				,FCM.SITE_ID
+				,FCM.CTOWER_NAME
+				,FCM.TYPE
+				,FCM.COUNT
+				,FCM.SALES_INFO
+				,S.SG_ID
+				,S.SITE_DESC
+				,FCM.REG_DATE	
+			FROM TBL_FACILITY_CTOWER_MASTER FCM INNER JOIN TBL_SITE S
+			ON FCM.SITE_ID = S.SITE_ID
+			WHERE 1=1
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+	    		AND FCM.SITE_ID = #{searchCondition2}
+	    	</if>
+	    	<if test="searchKeyword != '' and searchKeyword != null">
+	 	   		AND (FCM.CTOWER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.TYPE LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.COUNT LIKE CONCAT('%', #{searchKeyword}, '%')
+	    		OR FCM.SALES_INFO LIKE CONCAT('%', #{searchKeyword}, '%'))
+		    </if>
+		    AND FCM.USE_FLAG = 'Y'
+		   ORDER BY FCM.REG_DATE DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!-- 냉각탑 상세정보 -->
+	<select id ="selectCTowerInfo" parameterType="CTower" resultType="flkMap">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.selectCTowerInfo */
+		SELECT
+	  	   FCM.FCM_ID
+			,FCM.SITE_ID
+			,FCM.CTOWER_NAME
+			,FCM.ADDRESS
+			,FCM.PHONE	
+			,FCM.TEST_RUN_DATE
+			,DATE_FORMAT(FCM.TEST_RUN_DATE,'%Y년 %m월 %d일') AS TEST_RUN_DATE_FORMAT
+			,FCM.TYPE
+			,FCM.COUNT
+			,FCM.SALES_INFO
+			,FCM.AS_INFO
+			,S.SG_ID
+		FROM TBL_FACILITY_CTOWER_MASTER FCM INNER JOIN TBL_SITE S
+		ON FCM.SITE_ID = S.SITE_ID
+		WHERE FCM.FCM_ID = #{fcmId}
+	</select>
+	
+	<!-- 냉각탑 SUB 리스트 -->
+	<select id ="selectSubCTowerList" parameterType="CTower" resultType="flkMap" >
+	/* com.flk.mng.equipment.mapper.CTowerMapper.selectSubCTowerList */
+		SELECT 
+			FC.FC_ID
+			,FC.FCM_ID
+			,FC.CTOWER_SUB_NAME
+			,FC.VOLUMN
+			,FC.MOTOR_COUNT
+			,FC.POWER_SUPPLY
+			,FC.SPEND_POWER_KW
+			,FC.SPEND_POWER_HP
+			,FC.CURRENT
+			,FC.FLOW_1
+			,FC.FLOW_2
+			,FC.FLUID
+			,FC.CHEMICAL_1_NAME
+			,FC.CHEMICAL_1_DESC
+			,FC.CHEMICAL_2_NAME
+			,FC.CHEMICAL_2_DESC
+			,FC.CHEMICAL_3_NAME
+			,FC.CHEMICAL_3_DESC
+		FROM TBL_FACILITY_CTOWER_MASTER FCM INNER JOIN TBL_FACILITY_CTOWER FC
+		WHERE 
+			FCM.FCM_ID = FC.FCM_ID
+		AND
+			FCM.FCM_ID = #{fcmId}
+	</select>
+	
+	<!-- 냉각탑 등록 Master insert -->
+	<insert id="insertCTowerMaster" parameterType="CTower" useGeneratedKeys="true" keyProperty="fcmId">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.insertCTowerMaster */
+		INSERT INTO TBL_FACILITY_CTOWER_MASTER
+		(
+			SITE_ID
+			,CTOWER_NAME
+			,ADDRESS
+			,PHONE
+			,TEST_RUN_DATE
+			,TYPE
+			,COUNT
+			,SALES_INFO
+			,AS_INFO
+			,USE_FLAG
+			,UPDATE_ID
+			,UPDATE_DATE
+			,REG_ID
+			,REG_DATE
+		)VALUES(
+			#{siteId}
+			,#{ctowerName}
+			,#{address}
+			,#{phone}
+			,#{testRunDate}
+			,#{type}
+			,#{count}
+			,#{salesInfo}
+			,#{asInfo}
+			,'Y'
+			,#{updateId}
+			,now()
+			,#{regId}
+			,now()
+		)
+		<selectKey resultType="String" keyProperty="fcmId" order="AFTER">
+        	SELECT  LAST_INSERT_ID()
+   		</selectKey> 
+	</insert>
+
+	<!-- 냉각탑 등록 SUB insert -->
+	<insert id="insertCTowerSub" parameterType="CTower">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.insertCTowerSub */
+		INSERT INTO TBL_FACILITY_CTOWER
+		(
+			<if test="fcId != '' and fcId != null">
+			FC_ID,
+			</if>
+			FCM_ID	
+			,CTOWER_SUB_NAME
+			,VOLUMN
+			,MOTOR_COUNT
+			,POWER_SUPPLY
+			,SPEND_POWER_KW
+			,SPEND_POWER_HP
+			,CURRENT
+			,FLOW_1
+			,FLOW_2
+			,FLUID
+			,CHEMICAL_1_NAME
+			,CHEMICAL_1_DESC
+			,CHEMICAL_2_NAME
+			,CHEMICAL_2_DESC
+			,CHEMICAL_3_NAME
+			,CHEMICAL_3_DESC
+		)VALUES(
+			<if test="fcId != '' and fcId != null">
+			#{fcId},
+			</if>
+			#{fcmId}
+			,#{ctowerSubName}
+			,#{volumn}
+			,#{motorCount}
+			,#{powerSupply}
+			,#{spendPowerKw}
+			,#{spendPowerHp}
+			,#{current}
+			,#{flow1}
+			,#{flow2}
+			,#{fluid}
+			,#{chemical1Name}
+			,#{chemical1Desc}
+			,#{chemical2Name}
+			,#{chemical2Desc}
+			,#{chemical3Name}
+			,#{chemical3Desc}
+		)
+	</insert>
+
+	<!--냉각탑 Master 수정  -->
+	<update id="updateCTowerMaster" parameterType = "CTower">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.updateCTowerMaster */
+		UPDATE TBL_FACILITY_CTOWER_MASTER 
+		SET 
+			SITE_ID = #{siteId}
+			,CTOWER_NAME = #{ctowerName}
+			,ADDRESS = #{address}
+			,PHONE = #{phone}
+			,TYPE = #{type}
+			,COUNT = #{count}
+			,SALES_INFO = #{salesInfo}
+			,AS_INFO = #{asInfo}
+			,TEST_RUN_DATE = #{testRunDate}
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE= now()
+		WHERE FCM_ID = #{fcmId}
+	</update>
+
+	<!--냉각탑 삭제시-->
+	<update id = "updateUseFlag" parameterType = "CTower">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.updateUseFlag */
+		UPDATE TBL_FACILITY_CTOWER_MASTER 
+		SET 
+			USE_FLAG = 'N'
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE FCM_ID = #{fcmId}
+	</update>
+
+	<!-- 냉각탑sub  삭제 -->
+	<delete id="deleteCTowerSub" parameterType = "CTower">
+	/* com.flk.mng.equipment.mapper.CTowerMapper.deleteCTowerSub */
+		DELETE FROM TBL_FACILITY_CTOWER
+		WHERE FCM_ID = #{fcmId}
+	</delete>
+	
+</mapper>

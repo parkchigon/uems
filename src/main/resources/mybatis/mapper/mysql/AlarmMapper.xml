@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.ems.alarm.mapper.AlarmMapper">
+ 
+ 	<!-- 푸터 > 경보 알람 조회 -->
+	<select id="selectAlarmFooter" parameterType="Alarm" resultType="Alarm">
+		/* AlarmMapper.selectAlarmFooter */
+		SELECT alarm_id
+			   , TA.site_cd
+			   , TA.tag_id
+			   , alarm_msg
+			   , alarm_status_cd
+			   , TA.reg_date
+			   , TT.i_alarm_img_cd
+		       , TT.i_alarm_wav_cd
+		       , (SELECT code_name FROM tbl_code a WHERE a.code_use_name  = TT.i_alarm_wav_cd) AS i_alarm_wav_cd_nm
+		       , (SELECT code_name FROM tbl_code a WHERE a.code_use_name  = TT.i_alarm_img_cd) AS i_alarm_img_cd_nm
+		  FROM tbl_alarm TA, tbl_tag TT
+		 WHERE TA.site_cd = #{siteCd}
+		   AND alarm_status_cd IN ('ALARM_STATUS01', 'ALARM_STATUS02')
+		   AND TA.tag_id = TT.tag_id
+		   AND TA.site_cd = TT.site_cd
+		   AND TT.i_alarm_priority_cd IN ('I_ALARM_PRIORITY00', 'I_ALARM_PRIORITY01' ,'I_ALARM_PRIORITY02')
+		   AND TT.use_flag = 'Y'
+		   AND TA.reg_date >= DATE_ADD(NOW(), INTERVAL -3 DAY)
+		 ORDER BY reg_date DESC 
+		  LIMIT 1
+	</select>
+	
+	<!-- 경보리스트 조회 -->
+	<select id="selectAlarmList" parameterType="Alarm" resultType="FlkMap">
+	<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+		SELECT ROW_NUMBER() OVER (ORDER BY alarm_status_cd asc, FIELD(i_alarm_priority_cd,'I_ALARM_PRIORITY01','I_ALARM_PRIORITY02','I_ALARM_PRIORITY03'), b.reg_date DESC) AS RNUM
+			 , DATE_FORMAT(b.reg_date,'%Y-%m-%d') AS alarm_date
+		     , DATE_FORMAT(b.reg_date,'%H:%i:%s') AS alarm_time
+		     , b.tag_id
+		     , c.tag_desc AS tag_desc
+		     , alarm_msg
+		     , alarm_status_cd
+		     , c.i_alarm_priority_cd
+		     , b.alarm_id
+		     , c.i_alarm_img_cd
+		     , c.i_alarm_wav_cd
+		     , (SELECT code_name FROM tbl_code a WHERE a.code_use_name  = c.i_alarm_wav_cd) AS i_alarm_wav_cd_nm
+		     , (SELECT code_name FROM tbl_code a WHERE a.code_use_name  = c.i_alarm_img_cd) AS i_alarm_img_cd_nm
+		  FROM tbl_alarm b
+		     , tbl_tag c
+		WHERE b.tag_id = c.tag_id
+		  AND b.site_cd = c.site_cd
+		  AND c.site_cd = #{siteCd}
+		  AND alarm_status_cd IN ('ALARM_STATUS01', 'ALARM_STATUS02', 'ALARM_STATUS03', 'ALARM_STATUS04')
+		  AND alarm_msg not like ('최대전력관리장치%')
+		  <!-- AND b.reg_date >= DATE_ADD(NOW(), INTERVAL -7 DAY) -->
+		ORDER BY alarm_status_cd asc, FIELD(i_alarm_priority_cd,'I_ALARM_PRIORITY01','I_ALARM_PRIORITY02','I_ALARM_PRIORITY03'), b.reg_date DESC
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>
+	
+	<!-- 상태값 별 카운트 조회  -->
+	<select id="selectAlarmCountForStatus" parameterType="Alarm" resultType="Alarm">
+		SELECT COUNT(IF(alarm_status_cd = 'ALARM_STATUS01', alarm_status_cd, NULL)) AS alarm_status_01
+		     , COUNT(IF(alarm_status_cd = 'ALARM_STATUS02', alarm_status_cd, NULL)) AS alarm_status_02
+		     , COUNT(IF(alarm_status_cd IN ('ALARM_STATUS03','ALARM_STATUS04'), alarm_status_cd, NULL)) AS alarm_status_03
+		FROM tbl_alarm b
+		     , tbl_tag c
+	   WHERE b.tag_id = c.tag_id
+		 AND b.site_cd = c.site_cd
+	     AND c.site_cd = #{siteCd}
+		 <!-- AND b.reg_date >= DATE_ADD(NOW(), INTERVAL -7 DAY) -->
+	</select>
+	
+	<!-- 경보리스트 상태값 변경 인지>해제 해제>종료 -->
+	<select id="updateAlarmStatusCd" parameterType="Alarm">
+		UPDATE tbl_alarm
+		  SET 
+		  <if test="alarmStatusCd == 'ALARM_STATUS01'">
+		  	alarm_status_cd = 'ALARM_STATUS02'
+		  </if>
+		  <if test="alarmStatusCd == 'ALARM_STATUS02'">
+		  	alarm_status_cd = 'ALARM_STATUS03'
+		  </if>
+		WHERE alarm_id = #{alarmId}  
+	</select>	
+	
+	<!-- 경보리스트 상태값 변경 인지>해제 해제>종료 -->
+	<select id="updatesAlarmStatusCd" parameterType="java.util.Map">
+		UPDATE tbl_alarm
+		  SET
+		  	alarm_status_cd = #{alramStatusCd}
+		  WHERE alarm_id in (
+		  <foreach collection="alarmIdList" item="item" index="index" separator=",">
+			#{item}
+		  </foreach>
+		  )
+		    AND site_cd = #{siteCd}
+	</select>	
+	
+</mapper>

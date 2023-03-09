@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>EMS</title>
+
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/resources/ems/css/blockDiagram_C64401.css" />
+
+<script type="text/javascript" src="/resources/ems/js/jquery-1.7.2.min.js"></script>
+
+<!-- s : 모달팝업추가 -->
+<script type="text/javascript" src="/resources/ems/js/jquery.model.js"></script>
+<!-- e : 모달팝업추가 -->
+
+<script type="text/javascript" src="/resources/ems/js/ui.js"></script>
+
+</head>
+<body>
+
+<!-- s : 모달 배경 -->
+<div id="startMask"></div>
+<div id="mask"></div>
+<!-- e : 모달 배경 -->
+
+
+<div id="wrap_area">
+
+	<div id="header">
+		<h1><img src="/resources/ems/images/logo_ssg.png" alt="이마트" /> <span>EMS</span></h1>
+		<h2>센트럴시티지점</h2>
+		<div class="topUtil">
+			<span class="toDay">2017/03/13(월) 09:00:00</span>
+			<span class="user">ADMIN</span>
+			<a class="btn_login" href="#">LOGOUT</a>
+		</div>
+	</div>
+	
+	<div id="container">
+		
+		<!-- s : lnb -->
+		<div id="lnb">
+		<h3 class="blind">lnb 영역</h3>
+		<a class="btn_lnb menu1" href="#"><strong>설비<br />제어</strong></a>
+		<a class="btn_lnb menu2" href="#"><strong>트랜드</strong></a>
+		<a class="btn_lnb menu3" href="#"><strong>경보</strong></a>
+		<a class="btn_lnb menu4 on" href="#"><strong>설정</strong></a>
+		<a class="btn_lnb menu5" href="#"><strong>구축</strong></a>
+		</div>
+		<!-- e : lnb -->
+		
+		<!-- s : content_area -->
+		<div id="content_area">
+			
+			<div class="subTitle_area">
+				설정관리
+			</div>
+			
+			<div class="blockDiagram_area typeH">
+				
+			</div>
+		</div>
+		<!-- e : content_area -->
+		
+		<!-- s : data_area -->
+		<div id="data_area">
+		<div class="scroll" style="height:900px;">
+			<div class="data_area_inner">
+				<dl>
+					<dt>냉각탑 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">1그룹 기동온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">1그룹 정지온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑1 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑1 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑1 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑1 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑2 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑2 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑2 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑2 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑3 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑3 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑3 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑3 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑4 주간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑4 주간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각탑4 야간기동</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각탑4 야간정지</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기 제어 온도 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기1 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기2 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기2 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기3 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기4 축냉설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉동기4 냉방설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>인버터 제어 설정
+						<div class="head_right">
+							<div class="switch on">
+								<span class="stop">정지</span>
+								<span class="start">사용</span>
+								<em></em>
+							</div>
+						</div>
+					</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">방냉펌프1 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프2 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프3 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프4 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프 최저 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">방냉펌프 최고 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">통합 수동 주파수</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">수동 주파수 하한값</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉단시 축냉펌프 1대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row">냉단시 축냉펌프 2대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉단시 축냉펌프 3대 고정주파수 설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">00</a> <span class="font_yellow">Hz</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동시운전 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">방냉종료 시간설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+									<th scope="row">방냉종료 축열량설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+								</tr>
+								<tr>
+									<th scope="row">초기부하 지연설정설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">시</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>동파방지 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">기동온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">정지온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">기동시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">정지시간</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>정지지연 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">축냉펌프 (심야용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">축냉펌프 (주간용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉각수펌프 (심야용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉각수펌프 (주간용)</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">방냉펌프</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">초</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>알람 제어설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">동파방지 경보온도</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row">냉각수 입구고온</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+								</tr>
+								<tr>
+									<th scope="row">브라인 출구 과냉</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">℃</span></td>
+									<th scope="row"></th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>기동지연 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉동기2</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+									<th scope="row">냉동기4</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">분</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>전류제한 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="35%">
+							<col width="*">
+							<col width="35%">
+							<col width="15%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+									<th scope="row">냉동기2</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+									<th scope="row">냉동기4</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">%</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="data_area_inner mt10">
+				<dl>
+					<dt>냉동기 제어 열량 설정</dt>
+					<dd>
+						<table class="data_row">
+						<caption>caption</caption>
+						<colgroup>
+							<col width="30%">
+							<col width="*">
+							<col width="30%">
+							<col width="20%">
+						</colgroup>
+	
+							<tbody>
+								<tr>
+									<th scope="row">냉동기1 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기1 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기2 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기2 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기3 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기3 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+								<tr>
+									<th scope="row">냉동기4 기동설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+									<th scope="row">냉동기4 정지설정</th>
+									<td><a href="#layerPop_type3" class="font_purple setPop" name="modal">0.0</a> <span class="font_yellow">USRT</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		</div>
+		<!-- e : data_area -->
+		
+		<!-- s : footer -->
+		<div id="footer" class=""><!-- 경보시 : warning , 알람확인후 : alarm_on -->
+			<span><a href="#">경보정보 : 냉각수온도 초과</a></span>
+		</div>
+		<!-- e : footer -->
+	    
+	</div>
+	
+	
+	
+	
+	
+	<!-- s : popup container -->
+	<div class="popup_container type2" id="layerPop_type3">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>설정값</h2></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="*" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th>설정값 입력</th>
+									</tr>
+									<tr>
+										<td><input type="text" id="" name="" value="" /></td>
+									</tr>
+									<tr>
+										<td class="textL">
+											<p>ㆍ입력최소값 : -10</p>
+											<p>ㆍ입력최대값 : 120</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							
+							<a class="pop_btn btn_type02" href="#layerPop2" name="alert">저장</a>
+							<a class="pop_btn btn_type01 closePop" href="">닫기</a>
+							
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="popup_container type2" id="layerPop_type4">
+		<div class="popup_inner">
+			<div class="popup_header"><h2>태그ID</h2><a class="pop_btn btn_popup_header" href="#">트랜드보기</a></div> 
+			<div class="popup_body">
+				<div class="popup_content">
+  			 			
+					<div class="main_content">
+					
+						<!-- s: table wrap-->
+						<div>
+							<table class="pop_row">
+								<colgroup>
+									<col width="50%" />
+									<col width="*" />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th colspan="2">냉동기 축냉 대수제어 교번사용</th>
+									</tr>
+									<tr>
+										<td><input type="radio" id="" name="chak4" checked="checked" /><label for="">선택</label></td>
+										<td><input type="radio" id="" name="chak4" /><label for="">미선택</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- s: btn wrap 가운데 정렬-->
+						<div class="pop_btn_wrap">
+							<a class="pop_btn btn_type01 closePop" href="#">닫기</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- e: popup container -->
+	
+</div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+/* basis Selector */
+body, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button {margin:0;padding:0;}
+body, input, textarea, table, button {font-size:12px; font-family:"맑은 고딕", "Malgun Gothic", "돋움", Dotum, Arial, AppleGothic, "애플고딕", sans-serif; }
+html:first-child select {padding-right:6px; height:20px;} /* Opera 9 & Below Fix */
+option {padding-right:6px;}
+legend {overflow:hidden; visibility:hidden; font-size:0; line-height:0;} /* For Screen Reader */
+img, fieldset, button {border:0;}
+ul, ol {list-style:none;}
+em, address {font-style:normal;}
+hr {display:none !important; visibility:hidden;}
+caption  {display:none;}
+input, textarea, button {line-height: 1.2;vertical-align: middle;}
+input.type-image {border:0 none; padding:0; margin:0;}
+label {cursor:pointer;}
+a {text-decoration:none;}
+a:hover, a:active, a:focus {text-decoration:underline;}
+
+/*코딩 리스트*/
+.container{min-width:300px;padding:0px 10px;}
+.header {position:relative; padding:20px 0 10px;}
+.header h1 {color:#333; font-size:16px;}
+.header h1 strong {color:#48cdf4;}
+.header ul {padding-top:10px;font-size:13px;}
+.header li strong {display:inline-block;padding-right:10px; color:#333; }
+
+.section table {width:100%; margin-bottom:20px; border-collapse:collapse; border-spacing:0; border-top:2px solid #48cdf4; border-bottom:1px solid #ddd;}
+.section th, .section td {padding:8px 5px; border:1px solid #ddd;}
+.section th {background-color:#eee;color:#333;text-align:center;}
+.section td {text-align:left;}
+.section td:first-child, .section td:last-child{text-align:center;}
+.hover{background:#edf5f8; font-weight:bold;}
+.tit_page01{color:#333; font-weight:900;}
+.tit_page02{color:#555; font-weight:800;}
+.tit_page03{color:#777; font-weight:700;}
+.tit_page04{color:#999; font-weight:600;}
+.tit_page05{color:#999; font-weight:500;}
+.borB{border-bottom:4px solid #ddd;}

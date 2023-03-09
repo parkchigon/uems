@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.tag.mapper.TagMapper">
+ 
+ 	<!-- 태그 리스트 -->
+	<select id="selectTagList" parameterType="Tag" resultType="flkMap">
+		/* TagMapper.selectTagList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT 
+			 ROW_NUMBER() OVER (ORDER BY tt.tag_id ASC) AS RNUM
+			 , tsg.sg_id
+		     , tsg.sg_name
+		     , tt.site_cd
+		     , ts.site_name 
+		     , tt.tag_id
+		     , tt.tag_desc
+		     , tt.tag_type_cd
+		     , tc.code_name AS tag_type_cd_nm
+		     , (SELECT code_name FROM tbl_code WHERE tt.ai_unit_cd = code_use_name) AS tag_ai_unit_cd_nm
+		     , tt.tag_kind_cd
+		     , (SELECT code_name FROM tbl_code WHERE tt.tag_kind_cd = code_use_name) AS tag_kind_cd_nm
+		     , i_plcscan_address
+		     , o_plcscan_station||','||o_plcscan_address||','||o_plcscan_extra1||','||o_plcscan_extra2 AS o_plcscan
+		     , i_alarm_use_flag
+		     , i_data_save_flag
+		     , daily_record_flag
+		 FROM tbl_tag tt
+		    , tbl_site ts
+		    , tbl_site_group tsg
+		    , tbl_code tc
+		WHERE tt.site_cd = ts.site_cd
+		  AND ts.sg_id = tsg.sg_id
+		  AND tt.tag_type_cd = tc.code_use_name
+		
+		<if test="sgId != '' and sgId != null">
+	    	AND tsg.sg_id = #{sgId}
+	    </if>  
+	    <if test="siteCd != '' and siteCd != null">
+	    	AND tt.site_cd = #{siteCd}
+	    </if> 
+	    <if test="searchCondition != '' and searchCondition != null">
+	    	AND tt.tag_type_cd = #{searchCondition}
+	    </if>
+	    <if test="searchKeyword != '' and searchKeyword != null">
+	    	AND tt.tag_desc LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+			
+		ORDER BY tt.tag_id ASC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+	
+	
+	<!-- 태그타입리스트 -->
+	<select id="searchTagTypeList" parameterType="Tag" resultType="flkMap">
+		SELECT code_name
+			 , code_use_name 
+	 	  FROM tbl_code 
+	 	 WHERE parent_code_id = 'CD_0000000000000089'
+	</select>
+	
+	<!-- siteGroup 선택별 site리스트 조회 -->
+	<select id="searchSiteList" parameterType="Tag" resultType="flkMap">
+		SELECT site_cd, site_name FROM tbl_site WHERE sg_id = #{sgId}
+	</select>
+	
+	
+	<!-- 상황일지 태그 밸류 업데이트  -->
+	<update id="updateDailyRecordFlag" parameterType="Tag">
+		UPDATE TBL_TAG
+		SET daily_record_flag = 'Y'
+		WHERE site_cd IN 
+		<foreach collection="siteCdArr" item="item" index="index" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+  		AND tag_id IN
+  		<foreach collection="tagIdArr" item="item" index="index" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+		
+	</update>
+</mapper>

@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.report.mapper.ReportMapper">
+
+	<select id="selectReportTempleteList" parameterType="Report" resultType="FlkMap">
+		/* ReportMapper.selectReportTempleteList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT 	ROW_NUMBER() OVER (ORDER BY REG_DATE DESC) AS RNUM
+				,RT_ID
+				,REPORT_TYPE
+				,REPORT_SUB_TYPE
+				,TEMPLATE_NAME
+				,FILE_SERVER_PATH
+				,FILE_NAME
+				,MIMETYPE
+				,USE_FLAG
+				,UPDATE_ID
+				,UPDATE_DATE
+				,REG_ID
+				,REG_DATE
+				,SITE_ID
+				,(SELECT SITE_NAME FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID) SITE_NAME
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID)) SG_NAME
+		  FROM	TBL_REPORT_TEMPLATE TRT
+		<where>
+				AND USE_FLAG = 'Y'
+			<if test='searchGroup != "" and searchGroup != null and searchGroup != "A"'>
+		    	AND SITE_ID IN (SELECT SITE_ID FROM TBL_SITE WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE_GROUP WHERE SG_CD = #{searchGroup}))
+			</if>		
+			<if test='searchSite != "" and searchSite != null and searchSite != "A"'>
+		    	AND SITE_ID = #{searchSite}
+			</if>
+			<if test='searchType != "" and searchType != null and searchType != "A"'>
+				AND REPORT_TYPE = #{searchType}
+			</if>
+			<if test="searchKeyword != '' and searchKeyword != null">
+		    	AND TEMPLATE_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			<if test="reportSubType != '' and reportSubType != null">
+		    	AND REPORT_SUB_TYPE = #{reportSubType}
+			</if>
+		</where>
+		 ORDER	BY REG_DATE DESC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+
+	<select id="selectReportTempleteDetail" parameterType="Report" resultType="FlkMap">
+		/* ReportMapper.selectReportTempleteDetail */
+		SELECT 	RT_ID
+				,REPORT_TYPE
+				,REPORT_SUB_TYPE
+				,TEMPLATE_NAME
+				,FILE_SERVER_PATH
+				,FILE_NAME
+				,MIMETYPE
+				,USE_FLAG
+				,UPDATE_ID
+				,UPDATE_DATE
+				,REG_ID
+				,REG_DATE
+				,SITE_ID
+				,(SELECT SITE_NAME FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID) SITE_NAME
+				,(SELECT SG_ID FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID) SG_ID
+				,(SELECT SG_NAME FROM TBL_SITE_GROUP WHERE SG_ID = (SELECT SG_ID FROM TBL_SITE WHERE SITE_ID = TRT.SITE_ID)) SG_NAME
+		  FROM	TBL_REPORT_TEMPLATE TRT
+		 WHERE	RT_ID = #{rtId}
+		   AND	USE_FLAG = 'Y'
+	</select>
+
+
+	<select id="checkDuplicationReportTemplete" parameterType="Report" resultType="FlkMap">
+		SELECT 	RT_ID
+				,REPORT_TYPE
+				,REPORT_SUB_TYPE
+				,TEMPLATE_NAME
+				,FILE_SERVER_PATH
+				,FILE_NAME
+				,MIMETYPE
+				,USE_FLAG
+				,UPDATE_ID
+				,UPDATE_DATE
+				,REG_ID
+				,REG_DATE
+				,SITE_ID
+		  FROM	TBL_REPORT_TEMPLATE TRT
+		 WHERE	REPORT_TYPE = #{reportType}
+			<choose>
+				<when test="siteId != null and siteId != ''">
+			  		AND SITE_ID = #{siteId}
+				</when>
+				<otherwise>
+					AND	REPORT_SUB_TYPE = '03'
+				</otherwise>
+			</choose>
+			<if test="reportSubType != null and reportSubType != ''">
+				AND	REPORT_SUB_TYPE = #{reportSubType}
+			</if>
+			AND	USE_FLAG = 'Y'
+	</select>
+	
+	<insert id="insertReportTemplete" parameterType="Report">
+		/* ReportMapper.insertReportTemplete */
+		INSERT INTO TBL_REPORT_TEMPLATE (
+				REPORT_TYPE
+			<if test="reportSubType != null and reportSubType != ''">
+				,REPORT_SUB_TYPE
+			</if>
+				,TEMPLATE_NAME
+				,FILE_SERVER_PATH
+				,FILE_NAME
+				,MIMETYPE
+				,USE_FLAG
+				,UPDATE_ID
+				,UPDATE_DATE
+				,REG_ID
+				,REG_DATE
+			<if test="siteId != null and siteId != ''">
+				,SITE_ID				 
+			</if>
+		 	) VALUES (
+				#{reportType}
+			<if test="reportSubType != null and reportSubType != ''">
+				,#{reportSubType}
+			</if>
+				,#{templateName}
+				,#{fileServerPath}
+				,#{fileName}
+				,#{mimetype}
+				,#{useFlag}
+				,#{updateId}
+				,NOW()
+				,#{regId}
+				,NOW()
+			<if test="siteId != null and siteId != ''">				
+				,#{siteId}
+			</if>
+		 	)
+	</insert>
+	
+	<update id="updateReportTemplete" parameterType="Report">
+		/* ReportMapper.updateReportTemplete */
+		UPDATE	TBL_REPORT_TEMPLATE
+		   SET	
+		   		REPORT_TYPE = #{reportType}
+		   		,TEMPLATE_NAME = #{templateName}
+		   	<if test="fileName != null and fileName != ''">
+		   		,FILE_SERVER_PATH = #{fileServerPath}
+		   		,FILE_NAME = #{fileName}
+		   	</if>
+		   		,UPDATE_ID = #{updateId}
+		   		,UPDATE_DATE = NOW()
+		   		,SITE_ID = #{siteId}
+		 WHERE	RT_ID = #{rtId}		
+	</update>
+	
+	<update id="deleteReportTemplete" parameterType="Report">
+		/* ReportMapper.deleteReportTemplete */
+		UPDATE	TBL_REPORT_TEMPLATE
+		   SET	USE_FLAG = 'N'	
+		 WHERE	RT_ID = #{rtId}
+	</update>
+	
+	<!-- 보고서 항목입력 등록 SPEC-->
+	<insert id="insertManageFacilitySpec" parameterType="ManageFacility">
+		/* ReportMapper.insertManageFacilitySpec */
+		INSERT INTO tbl_manage_facility_spec (
+			<if test="mfsId != '' and mfsId != null">
+				mfs_id,
+			</if>
+			site_id
+			, chillerheater_cnt
+			, chillerheater_vol
+			, chillerheater_ele
+			, chillerheater_gas
+			, absor_tower_cnt
+			, absor_tower_vol
+			, absor_tower_ele
+			, absor_pump_cnt
+			, absor_pump_vol
+			, absor_pump_ele
+			, turbo_chiller_cnt
+			, turbo_chiller_vol
+			, turbo_chiller_ele
+			, turbo_tower_cnt
+			, turbo_tower_vol
+			, turbo_tower_ele
+			, turbo_pump_cnt
+			, turbo_pump_vol
+			, turbo_pump_ele
+			<if test="prevAbsorAmt != '' and prevAbsorAmt != null">
+				, prev_absor_amt
+			</if>
+			<if test="prevTurboAmt != '' and prevTurboAmt != null">
+				, prev_turbo_amt
+			</if>
+			<if test="prevGasAmt != '' and prevGasAmt != null">
+			, prev_gas_amt
+			</if>
+			, low_chiller_cnt
+			, low_chiller_day_vol
+			, low_chiller_day_ele
+			, low_chiller_night_vol
+			, low_chiller_night_ele
+			<if test="icethermalTowerCnt != '' and icethermalTowerCnt != null">
+				, icethermal_tower_cnt
+			</if>
+			<if test="icethermalTowerVol != '' and icethermalTowerVol != null">
+				, icethermal_tower_vol
+			</if>
+			<if test="icethermalTowerEle != '' and icethermalTowerEle != null">
+				, icethermal_tower_ele
+			</if>
+			<if test="thermalStorageCnt != '' and thermalStorageCnt != null">
+				, thermal_storage_cnt
+			</if>
+			<if test="thermalStorageVol != '' and thermalStorageVol != null">
+				, thermal_storage_vol
+			</if>
+			<if test="heatExchangerCnt != '' and heatExchangerCnt != null">
+				, heat_exchanger_cnt
+			</if>
+			<if test="heatExchangerVol != '' and heatExchangerVol != null">
+				, heat_exchanger_vol
+			</if>
+			<if test="coolstoragePumpCnt != '' and coolstoragePumpCnt != null">
+				, coolstorage_pump_cnt
+			</if>
+			<if test="coolstoragePumpVol != '' and coolstoragePumpVol != null">
+				, coolstorage_pump_vol
+			</if>
+			<if test="coolstoragePumpEle != '' and coolstoragePumpEle != null">
+				, coolstorage_pump_ele
+			</if>
+			<if test="relestoragePumpCnt != '' and relestoragePumpCnt != null">
+				, relestorage_pump_cnt
+			</if>
+			<if test="relestoragePumpVol != '' and relestoragePumpVol != null">
+				, relestorage_pump_vol
+			</if>
+			<if test="relestoragePumpEle != '' and relestoragePumpEle != null">
+				, relestorage_pump_ele
+			</if>
+			<if test="brinePumpCnt != '' and brinePumpCnt != null">
+				, brine_pump_cnt
+			</if>
+			<if test="brinePumpVol != '' and brinePumpVol != null">
+				, brine_pump_vol
+			</if>
+			<if test="brinePumpEle != '' and brinePumpEle != null">
+				, brine_pump_ele
+			</if>
+			<if test="coolingPumpCnt != '' and coolingPumpCnt != null">
+				, cooling_pump_cnt
+			</if>
+			<if test="coolingPumpVol != '' and coolingPumpVol != null">
+				, cooling_pump_vol
+			</if>
+			<if test="coolingPumpEle != '' and coolingPumpEle != null">
+				, cooling_pump_ele
+			</if>
+			<if test="presIcethermalAmt != '' and presIcethermalAmt != null">
+				, pres_icethermal_amt
+			</if>
+			, pres_ele_day_amt
+			, pres_ele_night_amt
+			, use_flag
+			, update_id
+			, reg_id
+		)
+		VALUES (
+			<if test="mfsId != '' and mfsId != null">
+				#{mfsId},
+			</if>
+			#{siteId}
+			, #{chillerheaterCnt}
+			, #{chillerheaterVol}
+			, #{chillerheaterEle}
+			, #{chillerheaterGas}
+			, #{absorTowerCnt}
+			, #{absorTowerVol}
+			, #{absorTowerEle}
+			, #{absorPumpCnt}
+			, #{absorPumpVol}
+			, #{absorPumpEle}
+			, #{turboChillerCnt}
+			, #{turboChillerVol}
+			, #{turboChillerEle}
+			, #{turboTowerCnt}
+			, #{turboTowerVol}
+			, #{turboTowerEle}
+			, #{turboPumpCnt}
+			, #{turboPumpVol}
+			, #{turboPumpEle}
+			<if test="prevAbsorAmt != '' and prevAbsorAmt != null">
+				, #{prevAbsorAmt}
+			</if>
+			<if test="prevTurboAmt != '' and prevTurboAmt != null">
+				, #{prevTurboAmt}
+			</if>
+			<if test="prevGasAmt != '' and prevGasAmt != null">
+				, #{prevGasAmt}
+			</if>
+			, #{lowChillerCnt}
+			, #{lowChillerDayVol}
+			, #{lowChillerDayEle}
+			, #{lowChillerNightVol}
+			, #{lowChillerNightEle}
+			<if test="icethermalTowerCnt != '' and icethermalTowerCnt != null">
+				, #{icethermalTowerCnt}
+			</if>
+			<if test="icethermalTowerVol != '' and icethermalTowerVol != null">
+				, #{icethermalTowerVol}
+			</if>
+			<if test="icethermalTowerEle != '' and icethermalTowerEle != null">
+				, #{icethermalTowerEle}
+			</if>
+			<if test="thermalStorageCnt != '' and thermalStorageCnt != null">
+				, #{thermalStorageCnt}
+			</if>
+			<if test="thermalStorageVol != '' and thermalStorageVol != null">
+				, #{thermalStorageVol}
+			</if>
+			<if test="heatExchangerCnt != '' and heatExchangerCnt != null">
+				, #{heatExchangerCnt}
+			</if>
+			<if test="heatExchangerVol != '' and heatExchangerVol != null">
+				, #{heatExchangerVol}
+			</if>
+			<if test="coolstoragePumpCnt != '' and coolstoragePumpCnt != null">
+				, #{coolstoragePumpCnt}
+			</if>
+			<if test="coolstoragePumpVol != '' and coolstoragePumpVol != null">
+				, #{coolstoragePumpVol}
+			</if>
+			<if test="coolstoragePumpEle != '' and coolstoragePumpEle != null">
+				, #{coolstoragePumpEle}
+			</if>
+			<if test="relestoragePumpCnt != '' and relestoragePumpCnt != null">
+				, #{relestoragePumpCnt}
+			</if>
+			<if test="relestoragePumpVol != '' and relestoragePumpVol != null">
+				, #{relestoragePumpVol}
+			</if>
+			<if test="relestoragePumpEle != '' and relestoragePumpEle != null">
+				, #{relestoragePumpEle}
+			</if>
+			<if test="brinePumpCnt != '' and brinePumpCnt != null">
+				, #{brinePumpCnt}
+			</if>
+			<if test="brinePumpVol != '' and brinePumpVol != null">
+				, #{brinePumpVol}
+			</if>
+			<if test="brinePumpEle != '' and brinePumpEle != null">
+				, #{brinePumpEle}
+			</if>
+			<if test="coolingPumpCnt != '' and coolingPumpCnt != null">
+				, #{coolingPumpCnt}
+			</if>
+			<if test="coolingPumpVol != '' and coolingPumpVol != null">
+				, #{coolingPumpVol}
+			</if>
+			<if test="coolingPumpEle != '' and coolingPumpEle != null">
+				, #{coolingPumpEle}
+			</if>
+			<if test="presIcethermalAmt != '' and presIcethermalAmt != null">
+				, #{presIcethermalAmt}
+			</if>			
+			, #{presEleDayAmt}
+			, #{presEleNightAmt}
+			, #{useFlag}
+			, #{updateId}
+			, #{regId}
+		)
+		ON DUPLICATE KEY 
+		UPDATE chillerheater_cnt = #{chillerheaterCnt}
+			   , chillerheater_vol = #{chillerheaterVol}
+			   , chillerheater_ele = #{chillerheaterEle}
+			   , chillerheater_gas = #{chillerheaterGas}
+			   , absor_tower_cnt = #{absorTowerCnt}
+			   , absor_tower_vol = #{absorTowerVol}
+			   , absor_tower_ele = #{absorTowerEle}
+			   , absor_pump_cnt = #{absorPumpCnt}
+			   , absor_pump_vol = #{absorPumpVol}
+			   , absor_pump_ele = #{absorPumpEle}
+			   , turbo_chiller_cnt = #{turboChillerCnt}
+			   , turbo_chiller_vol = #{turboChillerVol}
+			   , turbo_chiller_ele = #{turboChillerEle}
+			   , turbo_tower_cnt = #{turboTowerCnt}
+			   , turbo_tower_vol = #{turboTowerVol}
+			   , turbo_tower_ele = #{turboTowerEle}
+			   , turbo_pump_cnt = #{turboPumpCnt}
+			   , turbo_pump_vol = #{turboPumpVol}
+			   , turbo_pump_ele = #{turboPumpEle}
+			<if test="prevAbsorAmt != '' and prevAbsorAmt != null">
+			   , prev_absor_amt = #{prevAbsorAmt}
+			</if>
+			<if test="prevTurboAmt != '' and prevTurboAmt != null">
+			   , prev_turbo_amt = #{prevTurboAmt}
+			</if>	
+			<if test="prevGasAmt != '' and prevGasAmt != null">		   
+			   , prev_gas_amt = #{prevGasAmt}
+			</if>
+			   , low_chiller_cnt = #{lowChillerCnt}
+			   , low_chiller_day_vol = #{lowChillerDayVol}
+			   , low_chiller_day_ele = #{lowChillerDayEle}
+			   , low_chiller_night_vol = #{lowChillerNightVol}
+			   , low_chiller_night_ele = #{lowChillerNightEle}
+			<if test="icethermalTowerCnt != '' and icethermalTowerCnt != null">
+				, icethermal_tower_cnt = #{icethermalTowerCnt}
+			</if>
+			<if test="icethermalTowerVol != '' and icethermalTowerVol != null">
+				, icethermal_tower_vol = #{icethermalTowerVol}
+			</if>
+			<if test="icethermalTowerEle != '' and icethermalTowerEle != null">
+				, icethermal_tower_ele = #{icethermalTowerEle}
+			</if>
+			<if test="thermalStorageCnt != '' and thermalStorageCnt != null">
+				, thermal_storage_cnt = #{thermalStorageCnt}
+			</if>
+			<if test="thermalStorageVol != '' and thermalStorageVol != null">
+				, thermal_storage_vol = #{thermalStorageVol}
+			</if>
+			<if test="heatExchangerCnt != '' and heatExchangerCnt != null">
+				, heat_exchanger_cnt = #{heatExchangerCnt}
+			</if>
+			<if test="heatExchangerVol != '' and heatExchangerVol != null">
+				, heat_exchanger_vol = #{heatExchangerVol}
+			</if>
+			<if test="coolstoragePumpCnt != '' and coolstoragePumpCnt != null">
+				, coolstorage_pump_cnt = #{coolstoragePumpCnt}
+			</if>
+			<if test="coolstoragePumpVol != '' and coolstoragePumpVol != null">
+				, coolstorage_pump_vol = #{coolstoragePumpVol}
+			</if>
+			<if test="coolstoragePumpEle != '' and coolstoragePumpEle != null">
+				, coolstorage_pump_ele = #{coolstoragePumpEle}
+			</if>
+			<if test="relestoragePumpCnt != '' and relestoragePumpCnt != null">
+				, relestorage_pump_cnt = #{relestoragePumpCnt}
+			</if>
+			<if test="relestoragePumpVol != '' and relestoragePumpVol != null">
+				, relestorage_pump_vol = #{relestoragePumpVol}
+			</if>
+			<if test="relestoragePumpEle != '' and relestoragePumpEle != null">
+				, relestorage_pump_ele = #{relestoragePumpEle}
+			</if>
+			<if test="brinePumpCnt != '' and brinePumpCnt != null">
+				, brine_pump_cnt = #{brinePumpCnt}
+			</if>
+			<if test="brinePumpVol != '' and brinePumpVol != null">
+				, brine_pump_vol = #{brinePumpVol}
+			</if>
+			<if test="brinePumpEle != '' and brinePumpEle != null">
+				, brine_pump_ele = #{brinePumpEle}
+			</if>
+			<if test="coolingPumpCnt != '' and coolingPumpCnt != null">
+				, cooling_pump_cnt = #{coolingPumpCnt}
+			</if>
+			<if test="coolingPumpVol != '' and coolingPumpVol != null">
+				, cooling_pump_vol = #{coolingPumpVol}
+			</if>
+			<if test="coolingPumpEle != '' and coolingPumpEle != null">
+				, cooling_pump_ele = #{coolingPumpEle}
+			</if>
+			<if test="presIcethermalAmt != '' and presIcethermalAmt != null">
+				, pres_icethermal_amt = #{presIcethermalAmt}
+			</if>			   
+			   , pres_ele_day_amt = #{presEleDayAmt}
+			   , pres_ele_night_amt = #{presEleNightAmt}
+			   , update_id = #{updateId}
+	</insert>
+	
+	<!-- 보고서 항목입력 등록 RATE-->
+	<insert id="insertManageFacilityRate" parameterType="ManageFacility">
+		/* ReportMapper.insertManageFacilityRate */
+		INSERT INTO tbl_manage_facility_rate (
+			<if test="mfrId != '' and mfrId != null">
+				mfr_id,
+			</if>
+			site_id
+			, absor_load_rate_05
+			, absor_load_rate_06
+			, absor_load_rate_07
+			, absor_load_rate_08
+			, absor_load_rate_09
+			, absor_load_rate_10
+			, turbo_load_rate_05
+			, turbo_load_rate_06
+			, turbo_load_rate_07
+			, turbo_load_rate_08
+			, turbo_load_rate_09
+			, turbo_load_rate_10
+			, absor_work_rate_05
+			, absor_work_rate_06
+			, absor_work_rate_07
+			, absor_work_rate_08
+			, absor_work_rate_09
+			, absor_work_rate_10
+			, absor_heat_eff_year
+			, absor_heat_eff_rate
+			, absor_asst_eff_year
+			, absor_asst_eff_rate
+			, absor_open_day
+			, absor_work_hour
+			, turbo_work_rate_05
+			, turbo_work_rate_06
+			, turbo_work_rate_07
+			, turbo_work_rate_08
+			, turbo_work_rate_09
+			, turbo_work_rate_10
+			, turbo_heat_eff_year
+			, turbo_heat_eff_rate
+			, turbo_asst_eff_year
+			, turbo_asst_eff_rate
+			, turbo_open_day
+			, turbo_work_hour
+			, elec_night_factor
+			, elec_day_factor
+			, reduction_elec
+			, use_flag
+			, update_id
+			, reg_id
+		)
+		VALUES (
+			<if test="mfrId != '' and mfrId != null">
+				#{mfrId},
+			</if>
+			#{siteId}
+			, #{absorLoadRate05}
+			, #{absorLoadRate06}
+			, #{absorLoadRate07}
+			, #{absorLoadRate08}
+			, #{absorLoadRate09}
+			, #{absorLoadRate10}
+			, #{turboLoadRate05}
+			, #{turboLoadRate06}
+			, #{turboLoadRate07}
+			, #{turboLoadRate08}
+			, #{turboLoadRate09}
+			, #{turboLoadRate10}
+			, #{absorWorkRate05}
+			, #{absorWorkRate06}
+			, #{absorWorkRate07}
+			, #{absorWorkRate08}
+			, #{absorWorkRate09}
+			, #{absorWorkRate10}
+			, #{absorHeatEffYear}
+			, #{absorHeatEffRate}
+			, #{absorAsstEffYear}
+			, #{absorAsstEffRate}
+			, #{absorOpenDay}
+			, #{absorWorkHour}
+			, #{turboWorkRate05}
+			, #{turboWorkRate06}
+			, #{turboWorkRate07}
+			, #{turboWorkRate08}
+			, #{turboWorkRate09}
+			, #{turboWorkRate10}
+			, #{turboHeatEffYear}
+			, #{turboHeatEffRate}
+			, #{turboAsstEffYear}
+			, #{turboAsstEffRate}
+			, #{turboOpenDay}
+			, #{turboWorkHour}
+			, #{elecNightFactor}
+			, #{elecDayFactor}
+			, #{reductionElec}
+			, #{useFlag}
+			, #{updateId}
+			, #{regId}	
+		)
+		ON DUPLICATE KEY 
+		UPDATE absor_load_rate_05 = #{absorLoadRate05}
+			   , absor_load_rate_06 = #{absorLoadRate06}
+			   , absor_load_rate_07 = #{absorLoadRate07}
+			   , absor_load_rate_08 = #{absorLoadRate08}
+			   , absor_load_rate_09 = #{absorLoadRate09}
+			   , absor_load_rate_10 = #{absorLoadRate10}
+			   , turbo_load_rate_05 = #{turboLoadRate05}
+			   , turbo_load_rate_06 = #{turboLoadRate06}
+			   , turbo_load_rate_07 = #{turboLoadRate07}
+			   , turbo_load_rate_08 = #{turboLoadRate08}
+			   , turbo_load_rate_09 = #{turboLoadRate09}
+			   , turbo_load_rate_10 = #{turboLoadRate10}
+			   , absor_work_rate_05 = #{absorWorkRate05}
+			   , absor_work_rate_06 = #{absorWorkRate06}
+			   , absor_work_rate_07 = #{absorWorkRate07}
+			   , absor_work_rate_08 = #{absorWorkRate08}
+			   , absor_work_rate_09 = #{absorWorkRate09}
+			   , absor_work_rate_10 = #{absorWorkRate10}
+			   , absor_heat_eff_year = #{absorHeatEffYear}
+			   , absor_heat_eff_rate = #{absorHeatEffRate}
+			   , absor_asst_eff_year = #{absorAsstEffYear}
+			   , absor_asst_eff_rate = #{absorAsstEffRate}
+			   , absor_open_day = #{absorOpenDay}
+			   , absor_work_hour = #{absorWorkHour}
+			   , turbo_work_rate_05 = #{turboWorkRate05}
+			   , turbo_work_rate_06 = #{turboWorkRate06}
+			   , turbo_work_rate_07 = #{turboWorkRate07}
+			   , turbo_work_rate_08 = #{turboWorkRate08}
+			   , turbo_work_rate_09 = #{turboWorkRate09}
+			   , turbo_work_rate_10 = #{turboWorkRate10}
+			   , turbo_heat_eff_year = #{turboHeatEffYear}
+			   , turbo_heat_eff_rate = #{turboHeatEffRate}
+			   , turbo_asst_eff_year = #{turboAsstEffYear}
+			   , turbo_asst_eff_rate = #{turboAsstEffRate}
+			   , turbo_open_day = #{turboOpenDay}
+			   , turbo_work_hour = #{turboWorkHour}
+			   , elec_night_factor = #{elecNightFactor}
+			   , elec_day_factor = #{elecDayFactor}
+			   , reduction_elec = #{reductionElec}
+			   , update_id = #{updateId}
+	</insert>
+	
+	<!-- 보고서 항목입력 등록 SPEC -->
+	<select id="selectManageFacilitySpec" parameterType="ManageFacility" resultType="ManageFacility">
+		/* ReportMapper.selectManageFacilitySpec */
+		SELECT mfs_id
+			   , site_id
+			   , chillerheater_cnt
+			   , chillerheater_vol
+			   , chillerheater_ele
+			   , chillerheater_gas
+			   , absor_tower_cnt
+			   , absor_tower_vol
+			   , absor_tower_ele
+			   , absor_pump_cnt
+			   , absor_pump_vol
+			   , absor_pump_ele
+			   , turbo_chiller_cnt
+			   , turbo_chiller_vol
+			   , turbo_chiller_ele
+			   , turbo_tower_cnt
+			   , turbo_tower_vol
+			   , turbo_tower_ele
+			   , turbo_pump_cnt
+			   , turbo_pump_vol
+			   , turbo_pump_ele
+			   , prev_absor_amt
+			   , prev_turbo_amt
+			   , prev_gas_amt
+			   , low_chiller_cnt
+			   , low_chiller_day_vol
+			   , low_chiller_day_ele
+			   , low_chiller_night_vol
+			   , low_chiller_night_ele
+			   , icethermal_tower_cnt
+			   , icethermal_tower_vol
+			   , icethermal_tower_ele
+			   , thermal_storage_cnt
+			   , thermal_storage_vol
+			   , heat_exchanger_cnt
+			   , heat_exchanger_vol
+			   , coolstorage_pump_cnt
+			   , coolstorage_pump_vol
+			   , coolstorage_pump_ele
+			   , relestorage_pump_cnt
+			   , relestorage_pump_vol
+			   , relestorage_pump_ele
+			   , brine_pump_cnt
+			   , brine_pump_vol
+			   , brine_pump_ele
+			   , cooling_pump_cnt
+			   , cooling_pump_vol
+			   , cooling_pump_ele
+			   , pres_icethermal_amt
+			   , pres_ele_day_amt
+			   , pres_ele_night_amt
+			   , use_flag
+			   , update_id
+			   , reg_id
+		  FROM tbl_manage_facility_spec
+		 WHERE site_id = #{siteId}
+		   AND use_flag = 'Y'
+	</select>
+	
+	<!-- 보고서 항목입력 등록 RATE -->
+	<select id="selectManageFacilityRate" parameterType="ManageFacility" resultType="ManageFacility">
+		/* ReportMapper.selectManageFacilityRate */
+		SELECT mfr_id
+			   , site_id
+			   , absor_load_rate_05
+			   , absor_load_rate_06
+			   , absor_load_rate_07
+			   , absor_load_rate_08
+			   , absor_load_rate_09
+			   , absor_load_rate_10
+			   , turbo_load_rate_05
+			   , turbo_load_rate_06
+			   , turbo_load_rate_07
+			   , turbo_load_rate_08
+			   , turbo_load_rate_09
+			   , turbo_load_rate_10
+			   , absor_work_rate_05
+			   , absor_work_rate_06
+			   , absor_work_rate_07
+			   , absor_work_rate_08
+			   , absor_work_rate_09
+			   , absor_work_rate_10
+			   , absor_heat_eff_year
+			   , absor_heat_eff_rate
+			   , absor_asst_eff_year
+			   , absor_asst_eff_rate
+			   , absor_open_day
+			   , absor_work_hour
+			   , turbo_work_rate_05
+			   , turbo_work_rate_06
+			   , turbo_work_rate_07
+			   , turbo_work_rate_08
+			   , turbo_work_rate_09
+			   , turbo_work_rate_10
+			   , turbo_heat_eff_year
+			   , turbo_heat_eff_rate
+			   , turbo_asst_eff_year
+			   , turbo_asst_eff_rate
+			   , turbo_open_day
+			   , turbo_work_hour
+			   , elec_night_factor
+			   , elec_day_factor
+			   , reduction_elec
+			   , use_flag
+			   , update_id
+			   , reg_id
+		  FROM tbl_manage_facility_rate
+		 WHERE site_id = #{siteId}
+		   AND use_flag = 'Y'
+	</select>
+	
+	<select id="selectReportSiteList" parameterType="Report" resultType="FlkMap">
+		/* ReportMapper.selectReportSiteList */
+		SELECT site_cd
+			   ,site_desc
+		  FROM tbl_site
+		 WHERE site_id =#{siteId}
+	</select>
+	
+</mapper>

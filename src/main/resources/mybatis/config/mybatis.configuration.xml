@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+
+		<!-- 설정에서 각 mapper 에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부  -->
+		<setting name="cacheEnabled" value="true" />
+
+		<!-- A_COLUMN을 CamelCase형태의 자바 프로퍼티명 형태인 aColumn으로 자동으로 매핑 -->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+
+		<!-- 칼럼을 필드/프로퍼티에 자동으로 매핑할지와 방법에 대해 명시. PARTIAL은 간단한 자동매핑 / FULL은 모든 자동매핑을 처리한다. -->
+		<setting name="autoMappingBehavior" value="FULL" />
+
+		<!-- 한개의 구문에서 여러개의 ResultSet 을 허용할지의 여부 -->
+		<setting name="multipleResultSetsEnabled" value="true" />
+		
+		<!-- 늦은 로딩을 사용할지에 대한 여부. 사용하지 않는다면 모두 즉시 로딩   -->
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+		
+		<!-- 활성화 상태로 두게 되면 늦은(lazy) 로딩 프로퍼티를 가진 객체는  호출에 따라 로드. 반면에 개별 프로퍼티는 요청할때 로드. -->
+		<setting name="aggressiveLazyLoading" value="false" />
+		
+		<setting name="jdbcTypeForNull" value="OTHER" />
+		
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="flkMap" type="com.flk.common.dataaccess.util.FlkMap" />
+		
+		<!-- 코드 -->
+		<typeAlias alias="Code" type="com.flk.system.code.domain.Code" />
+		<!-- 로그인, 관리자 -->
+		<typeAlias alias="Mng" type="com.flk.mng.user.domain.Mng" />
+		<!-- Program -->
+		<typeAlias alias="Program" type="com.flk.system.program.domain.Program" />
+		<!-- Menu -->
+		<typeAlias alias="Menu" type="com.flk.system.menu.domain.Menu" />
+		<!-- Role -->
+		<typeAlias alias="Role" type="com.flk.system.role.domain.Role" />
+		<!-- 첨부파일 -->
+ 		<typeAlias alias="AttachFile" type="com.flk.attachfile.domain.AttachFile" />
+		<!-- 지점그룹 -->
+		<typeAlias alias="SiteGroup" type="com.flk.mng.site.domain.SiteGroup" />
+		<!-- 지점 -->
+		<typeAlias alias="Site" type="com.flk.mng.site.domain.Site" />		
+		<!-- 작업이력 -->
+		<typeAlias alias="WorkHistory" type="com.flk.mng.work.domain.WorkHistory" />
+		<!-- 월별운영데이터 -->
+		<typeAlias alias="Data" type="com.flk.mng.data.domain.Data" />
+		<!-- 장비공통 -->
+		<typeAlias alias="Equipment" type="com.flk.mng.equipment.domain.Equipment" />
+		<!-- 펌프관리 -->
+		<typeAlias alias="Pump" type="com.flk.mng.equipment.domain.Pump" />
+		<!-- 열교환기관리 -->
+		<typeAlias alias="HeatExc" type="com.flk.mng.equipment.domain.HeatExc" />
+		<!-- 냉동기관리 -->
+		<typeAlias alias="Chiller" type="com.flk.mng.equipment.domain.Chiller" />
+		<!-- 자동제어관리 -->
+		<typeAlias alias="AutoCtrl" type="com.flk.mng.equipment.domain.AutoCtrl" />
+		<!-- 심야전기MCC관리 -->
+		<typeAlias alias="ElecMcc" type="com.flk.mng.equipment.domain.ElecMcc" />
+		<!-- 축열조 및 배관 관리 -->
+		<typeAlias alias="HeatStg" type="com.flk.mng.equipment.domain.HeatStg" />
+		<!-- 냉각탑 관리 -->
+		<typeAlias alias="CTower" type="com.flk.mng.equipment.domain.CTower" />
+		<!-- 미니계통계 관리 -->
+		<typeAlias alias="MiniDiagram" type="com.flk.mng.miniDiagram.domain.MiniDiagram" />
+		<!-- 태그 -->
+		<typeAlias alias="Tag" type="com.flk.ems.system.domain.Tag" />
+		<!-- 실시간 태그 값 -->
+		<typeAlias alias="RawData" type="com.flk.ems.system.domain.RawData" />
+		<!-- 시스템 태그매핑 -->
+		<typeAlias alias="SystemTagMap" type="com.flk.ems.system.domain.SystemTagMap" />
+		<!-- 알람 -->
+		<typeAlias alias="Alarm" type="com.flk.ems.alarm.domain.Alarm" />
+		<!-- 공통단가-->
+		<typeAlias alias="CommPrice" type="com.flk.mng.commPrice.domain.CommPrice" />
+		<!--지점단가-->
+		<typeAlias alias="SitePrice" type="com.flk.mng.sitePrice.domain.SitePrice" />		
+			
+		
+		<!-- PLC 통신설정 -->
+		<typeAlias alias="PlcComm" type="com.flk.ems.build.domain.PlcComm" />
+		<!-- 정보변경 -->
+		<typeAlias alias="FixInfo" type="com.flk.ems.build.domain.FixInfo" />
+		<!-- 템플릿 -->
+		<typeAlias alias="SystemTemplate" type="com.flk.ems.build.domain.SystemTemplate" />
+		<!-- 트렌드 그룹 -->
+		<typeAlias alias="TrendGroup" type="com.flk.mng.trendMng.domain.TrendGroup" />
+		
+		<!-- 통합센터 -->
+		<typeAlias alias="Integration" type="com.flk.integration.domain.Integration"/>
+		
+		<!-- 통신관리 -->
+		<typeAlias alias="Comm" type="com.flk.mng.comm.domain.Comm"/>
+		
+		<!-- Dashboard 데이터 -->
+		<typeAlias alias="DashboardData" type="com.flk.main.domain.DashboardData"/>
+		
+		<!-- 보고서관리 -->
+		<typeAlias alias="Report" type="com.flk.mng.report.domain.Report"/>
+		<typeAlias alias="ManageFacility" type="com.flk.mng.report.domain.ManageFacility"/>
+		
+		<!-- 보고서관리 > 상황일지 관리 -->
+		<typeAlias alias="DailyRecord" type="com.flk.mng.report.domain.DailyRecord"/>
+		
+		<!-- 보고서관리 > 정기점검항목관리 -->
+		<typeAlias alias="Maintenance" type="com.flk.mng.report.domain.Maintenance"/>
+		<!-- 날씨 -->
+		<typeAlias alias="Weather" type="com.flk.mng.work.domain.Weather"/>
+		
+		<!-- 스케줄관리 -->
+		<typeAlias alias="ScheduleRecord" type="com.flk.ems.schedule.domain.ScheduleRecord"/>
+		
+		<!-- API Login -->
+		<typeAlias alias="Login" type="com.flk.api.domain.Login"/>
+		<!-- API File -->
+		<typeAlias alias="File" type="com.flk.api.domain.File"/>
+		
+		<!-- Common Module -->
+		<package name="com.flk.common.domain" />
+		
+	    
+	</typeAliases>
+
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String" />
+	</typeHandlers>
+
+
+</configuration>

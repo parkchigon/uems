@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+/* Block Diagram
+.blockDiagram_area::BEFORE	{position:absolute;top:0px;left:0px;content:"";width:100%;height:100%;background: url(/resources/ems/images/temp/ems_tab2.png) 0 0 no-repeat;opacity:0.2; }
+ */
+ 
+.boiler {top:418px;left:955px;}
+ 
+.header_lr {top:230px;left:296px;}
+
+/* CHW */
+.pipe_chw_ud.pipe001 {height: 540px;top:128px;left:95px;}
+.pipe_chw_ud.pipe002 {height: 130px;top:128px;left:345px;}
+.pipe_chw_ud.pipe003 {height: 130px;top:128px;left:525px;}
+.pipe_chw_ud.pipe004 {height: 360px;top:128px;left:705px;}
+.pipe_chw_ud.pipe005 {height: 80px;top:585px;left:345px;}
+.pipe_chw_ud.pipe006 {height: 80px;top:585px;left:635px;}
+
+.pipe_chw_lr.pipe001 {width: 240px;top:118px;left:105px;}
+.pipe_chw_lr.pipe002 {width: 170px;top:118px;left:535px;}
+.pipe_chw_lr.pipe003 {width: 280px;top:490px;left:712px;}
+.pipe_chw_lr.pipe004 {width: 283px;top:576px;left:353px;}
+.pipe_chw_lr.pipe005 {width: 245px;top:670px;left:100px;}
+.pipe_chw_lr.pipe006 {width: 285px;top:670px;left:351px;}
+.pipe_chw_lr.pipe007 {width: 350px;top:670px;left:642px;}
+
+.pipe_chw_corner_ur.corner001 {top:117px;left:95px;}
+.pipe_chw_corner_ur.corner002 {top:117px;left:525px;}
+.pipe_chw_corner_ur.corner003 {top:575px;left:345px;}
+
+.pipe_chw_corner_ul.corner001 {top:117px;left:338px;}
+.pipe_chw_corner_ul.corner002 {top:117px;left:698px;}
+.pipe_chw_corner_ul.corner003 {top:575px;left:628px;}
+
+.pipe_chw_corner_dr.corner001 {top:662px;left:94px;}
+.pipe_chw_corner_dr.corner002 {top:482px;left:704px;}
+
+.pipe_chw_t_lru.corner001 {top:662px;left:338px;}
+.pipe_chw_t_lru.corner002 {top:662px;left:628px;}
+
+.chw .sensor_u_temperature.sensor001 {top:475px;left:835px;}
+.chw .sensor_u_temperature.sensor001 em {bottom:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.chw .sensor_d_temperature.sensor001 {top:676px;left:835px;}
+.chw .sensor_d_temperature.sensor001 em {top:15px;left:50%;margin-left:-50px;text-align: center;}
+
+.chw .coolpump.No1 {top:565px;left:470px;}
+.chw .coolpump.No2 {top:659px;left:470px;}
+.chw .coolpump_area .text_info {top:700px;left:458px;}
+
+
+

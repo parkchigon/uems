@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.sitePrice.mapper.SitePriceMapper">
+	
+	<!--연동TAG 리스트  -->
+	<select id="selectTagList" parameterType="SitePrice" resultType="FlkMap">
+	/*sitePriceMapper.selectTagList */
+		
+		SELECT TAG_ID, TAG_DESC
+		FROM TBL_TAG
+		WHERE TAG_KIND_CD = #{tagKindCd}
+		AND SITE_CD = #{siteCd}
+	</select>
+	
+	<!--종별,업체명 리스트  -->
+	<select id="selectPriceNmList" parameterType="SitePrice" resultType="FlkMap">
+	/*sitePriceMapper.selectPriceNmList */
+		
+		SELECT PRICE_NAME, PCI_ID
+		FROM TBL_PRICE_COMMON_INFO
+		WHERE ENERGY_TYPE = #{energyType}
+	</select>
+	
+	<!-- 지점별단가 리스트 -->
+	<select id ="selectSitePriceList" parameterType="SitePrice" resultType="FlkMap">
+	/*sitePriceMapper.selectSitePriceList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />
+			SELECT 
+				ROW_NUMBER() OVER (ORDER BY S.site_cd ASC) AS RNUM
+				,S.SITE_ID
+				,S.SITE_DESC
+				,S.SG_ID
+				,S.SITE_CD
+				,GROUP_CONCAT(if(PCI.ENERGY_TYPE = '01' AND PM.USE_FLAG ='Y', PCI.PRICE_NAME, NULL))AS NORMAL
+ 				,GROUP_CONCAT(if(PCI.ENERGY_TYPE = '02' AND PM.USE_FLAG ='Y', PCI.PRICE_NAME, NULL)) AS MID_NIGHT 
+				,GROUP_CONCAT(if(PCI.ENERGY_TYPE = '03' AND PM.USE_FLAG ='Y', PCI.PRICE_NAME, NULL)) AS GAS 
+				,MAX(PM.UPDATE_DATE) AS updateDate
+			FROM TBL_SITE S LEFT JOIN TBL_PRICE_MAPPING PM 
+			ON S.SITE_CD = PM.SITE_CD
+			LEFT JOIN TBL_PRICE_COMMON_INFO PCI
+			ON PM.PCI_ID = PCI.PCI_ID
+			WHERE 1=1 
+			<if test="searchCondition != '' and searchCondition != null">
+				AND SG_ID = #{searchCondition}
+			</if>
+			GROUP BY SITE_ID, SG_ID ,SITE_DESC ,SITE_CD
+			HAVING 1=1		
+			<if test="searchCondition2 != '' and searchCondition2 != null">
+				<if test="searchCondition2 == 1">
+					AND	NORMAL IS NOT NULL
+				</if>
+				<if test="searchCondition2 == 2">
+					AND	MID_NIGHT IS NOT NULL
+				</if>
+				<if test="searchCondition2 == 3">
+					AND	GAS IS NOT NULL
+				</if>
+			</if>
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" />
+	</select>				
+	
+	<!--지점단가 상세정보 -->
+	<select id="selectSitePriceInfo" parameterType="SitePrice" resultType="FlkMap">
+	/*sitePriceMapper.selectSitePriceInfo */
+		
+		SELECT 
+			USE_FLAG
+			,PCI_ID
+			,TAG_ID
+			,ELEC_POWER
+			,ELEC_FACTOR_0
+			,ELEC_FACTOR_1
+		FROM TBL_PRICE_MAPPING
+		WHERE SITE_CD = #{siteCd}
+		AND ENERGY_TYPE = #{energyType}
+	</select>
+	
+	<!--지점단가 등록-->
+	<insert id="insertSitePrice" parameterType="SitePrice">
+	/*sitePriceMapper.insertSitePrice */
+	
+		INSERT INTO TBL_PRICE_MAPPING(
+			SITE_CD
+			,ENERGY_TYPE
+			,PCI_ID
+			,TAG_ID
+			<if test="energyType == '01'">
+				,ELEC_FACTOR_0
+				,ELEC_FACTOR_1
+			</if>
+			<if test="energyType == '02'">
+				,ELEC_POWER
+			</if>
+			,USE_FLAG
+			,REG_ID
+			,UPDATE_ID
+		)VALUES(
+			#{siteCd}
+			,#{energyType}
+			,#{pciId}
+			,#{tagId}
+			<if test="energyType == '01'">
+				,#{elecFactor0}
+				,#{elecFactor1}
+			 </if>
+			<if test="energyType == '02'">
+				,#{elecPower}
+			 </if>
+			,#{useFlag}
+			,#{regId}
+			,#{updateId}
+		)
+	</insert>
+	
+	<!--지점단가 수정-->
+	<update id="updateSitePrice" parameterType="SitePrice">
+	/*sitePriceMapper.updateSitePrice */
+	
+		UPDATE TBL_PRICE_MAPPING
+		SET 
+			USE_FLAG = #{useFlag}
+			,TAG_ID = #{tagId}
+			,PCI_ID = #{pciId}
+			<if test="energyType == '01'">
+				,ELEC_FACTOR_0 = #{elecFactor0}
+				,ELEC_FACTOR_1 = #{elecFactor1}
+			</if>
+			<if test="energyType == '02'">
+				,ELEC_POWER = #{elecPower}
+			</if>
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE SITE_CD = #{siteCd}
+		AND ENERGY_TYPE = #{energyType}
+	</update>
+	
+	<!--지점단가 history등록-->
+	<insert id ="insertSitePriceHistory" parameterType="SitePrice">
+	/*sitePriceMapper.insertSitePriceHistory */
+	
+		INSERT INTO TBL_PRICE_MAPPING_HISTORY(
+			SITE_CD
+			,ENERGY_TYPE
+			,PCI_ID
+			,TAG_ID
+			<if test="energyType == '01'">
+				,ELEC_FACTOR_0
+				,ELEC_FACTOR_1
+			</if>
+			<if test="energyType == '02'">
+				,ELEC_POWER
+			</if>
+			,USE_FLAG
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{siteCd}
+			,#{energyType}
+			,#{pciIdHistory}
+			,#{tagIdHistory}
+			<if test="energyType == '01'">
+				,#{elecFactor0History}
+				,#{elecFactor1History}
+			 </if>
+			<if test="energyType == '02'">
+				,#{elecPowerHistory}
+			 </if>
+			,#{useFlagHistory}
+			,#{updateId}
+			,now()
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.commPrice.mapper.CommPriceMapper">
+	<!--종별리스트  -->
+	<select id="selectCommPriceNmList" parameterType="CommPrice" resultType="FlkMap">
+	/*CommPriceMapper.selecrCommPriceNmList*/
+		SELECT 
+			PCI_ID
+			,PRICE_NAME
+		FROM TBL_PRICE_COMMON_INFO
+		WHERE ENERGY_TYPE = #{energyType}
+		<if test="priceName != null and priceName != ''">
+			AND PRICE_NAME = #{priceName}
+		</if>
+	</select>
+	
+	<!--종별선택에 따른 단가 리스트  -->
+	<select id="selectPriceDataList" parameterType="CommPrice" resultType="FlkMap">
+	/*CommPriceMapper.selectPriceDataList*/
+		SELECT 
+			PCD.PCI_ID
+			,PCD.APPLY_DATE
+			,PCD.DATA_01
+			,PCD.DATA_02
+			,PCD.DATA_03
+			,PCD.DATA_04
+			,PCD.DATA_05
+			,PCD.DATA_06
+			,PCD.DATA_07
+			,PCD.DATA_08
+			,PCD.DATA_09
+			,PCD.DATA_10
+			,PCI.PRICE_NAME
+		FROM TBL_PRICE_COMMON_DATA PCD INNER JOIN TBL_PRICE_COMMON_INFO PCI
+		ON PCD.PCI_ID = PCI.PCI_ID
+		WHERE PCI.PCI_ID = #{pciId}
+		ORDER BY PCD.REG_DATE DESC
+	</select> 
+	
+	<!--하단테이블 - 데이터 상세 -->
+	<select id="selectPriceDataInfo" parameterType="CommPrice" resultType="FlkMap">
+	/*CommPriceMapper.selectPriceDataInfo*/
+		SELECT 
+			DATA_01
+			,DATA_02
+			,DATA_03
+			,DATA_04
+			,DATA_05
+			,DATA_06
+			,DATA_07
+			,DATA_08
+			,DATA_09
+			,DATA_10
+			,DATE_FORMAT(STR_TO_DATE(APPLY_DATE, '%Y%m%d'), '%Y-%m-%d') AS applyDate
+		FROM TBL_PRICE_COMMON_DATA
+		WHERE PCI_ID = #{pciId}
+		AND APPLY_DATE = #{applyDate}
+	</select> 
+	
+	<!-- 단가데이터 중복건수 조회 -->
+	<select id ="selectDataCount" parameterType ="CommPrice" resultType ="int">
+	/*CommPriceMapper.selectDataCount*/
+		SELECT COUNT(*) 
+		FROM TBL_PRICE_COMMON_DATA 
+		WHERE APPLY_DATE = #{applyDate}
+		AND PCI_ID = #{pciId} 
+	</select>
+	
+	<!-- 단가데이터 등록-->
+	<insert id="insertCommPrice"  parameterType="CommPrice">
+	/*CommPriceMapper.insertCommPrice*/
+		INSERT INTO TBL_PRICE_COMMON_DATA(
+		  PCI_ID
+			,DATA_01
+			,DATA_02
+			,DATA_03
+			,DATA_04
+			,DATA_05
+			,DATA_06
+			,DATA_07
+			,DATA_08
+			,DATA_09
+			,DATA_10
+			,APPLY_DATE
+			,REG_ID
+			,REG_DATE
+			,UPDATE_ID
+			,UPDATE_DATE
+		)VALUES(
+			#{pciId}
+			,#{data01}
+			,#{data02}
+			,#{data03}
+			,#{data04}
+			,#{data05}
+			,#{data06}
+			,#{data07}
+			,#{data08}
+			,#{data09}
+			,#{data10}
+			,#{applyDate}
+			,#{regId}
+			,now()	
+			,#{updateId}
+			,now()		
+		)	
+	</insert>
+	
+	<!-- 단가데이터 수정  -->
+	<update id="updateCommPrice" parameterType="CommPrice">
+	/*CommPriceMapper.updateCommPrice*/
+		UPDATE TBL_PRICE_COMMON_DATA 
+		SET 
+			DATA_01 = #{data01}
+			,DATA_02 = #{data02}
+			,DATA_03 = #{data03}
+			,DATA_04 = #{data04}
+			,DATA_05 = #{data05}
+			,DATA_06 = #{data06}
+			,DATA_07 = #{data07}
+			,DATA_08 = #{data08}
+			,DATA_09 = #{data09}
+			,DATA_10 = #{data10}
+			,APPLY_DATE = #{applyDate}
+			,UPDATE_ID = #{updateId}
+			,UPDATE_DATE = now()
+		WHERE PCI_ID = #{pciId}
+		AND APPLY_DATE = #{applyDateKey}
+	</update>
+	
+	<!-- 가스요금 종별추가 -->
+	<insert id="insertCommPriceNm" parameterType="CommPrice">
+	/*CommPriceMapper.insertCommPriceNm*/
+		INSERT INTO TBL_PRICE_COMMON_INFO(
+			ENERGY_TYPE
+			,PRICE_NAME
+			,REG_ID
+		)VALUES(
+			'03'
+			,#{priceName}
+			,#{regId}		
+		)
+	</insert>
+</mapper>

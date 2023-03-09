@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flk.common.mapper.CommonMapper">
+<sql id="selectPagingTop"><![CDATA[
+		SELECT A.*, CONVERT((A.S__TOTALCOUNT - A.S__RNUM + 1),CHAR) AS S__PAGELISTNO FROM
+		(
+		    SELECT * , CONVERT(@NO,CHAR)  AS S__TOTALCOUNT
+		        FROM (
+		            SELECT CONVERT(@NO := RNUM,CHAR) AS S__RNUM, A.*
+		            FROM
+		            (]]>
+    </sql>
+    <sql id="selectPagingBottom"><![CDATA[
+		            ) A,
+		            ( SELECT @NO := 0 ) B
+		    ) A
+		) A
+		]]>
+		WHERE A.S__RNUM BETWEEN 
+		<choose>
+	     	<when test="lastIndex == 1">
+				1 AND S__TOTALCOUNT
+			</when>
+	    	<otherwise>
+	    		#{firstIndex} AND #{lastIndex}
+	    	</otherwise>
+		</choose>
+</sql>
+</mapper>

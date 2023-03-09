@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.system.menu.mapper.MenuMapper"> 
+
+	<!-- 메뉴 목록 조회(ConnectBy) -->
+	<select id="selectMenuList" parameterType="Menu" resultType="flkMap">
+	/* MenuMapper.selectMenuList */
+	<![CDATA[
+		SELECT A.*, B.START_PROGRAM_URL
+		FROM (
+			SELECT 
+				 A.MENU_ID 
+				,A.MENU_NAME
+				,A.PARENTMENU_ID
+				,A.MENU_DEPTH
+				,A.SORT_NUM
+				,A.REG_ID			/* 등록 아이디 */
+				,A.REG_DATE			/* 등록 일시 */
+				,A.UPDATE_ID		/* 수정 아이디 */
+				,A.UPDATE_DATE		/* 수정 일시 */
+				,A.USE_YN
+			FROM
+				(
+					SELECT fn_menu_connect_by() AS id , @level AS level
+					FROM
+					( SELECT @start_with:=#{parentmenuId}, @id:=@start_with, @level:=0 , @order_num:=0 ) vars join TBL_MENU
+					WHERE @id IS NOT NULL
+				) func JOIN TBL_MENU A ON func.id = A.MENU_ID
+		) A LEFT OUTER JOIN (
+			SELECT TM.MENU_ID, MAX(TP.PROGRAM_URL) AS START_PROGRAM_URL
+			FROM TBL_MENU TM LEFT OUTER JOIN TBL_PROGRAM TP
+			ON TM.MENU_ID = TP.MENU_ID
+			GROUP BY TM.MENU_ID
+		) B ON A.MENU_ID = B.MENU_ID
+		ORDER BY A.SORT_NUM ASC
+	]]>
+	</select>
+	
+	<!-- 메뉴 등록 -->
+	<insert id="insertMenu" parameterType="Menu" >
+	/* MenuMapper.insertMenu */
+		INSERT INTO TBL_MENU (
+		       MENU_ID			/* 메뉴 아이디 */
+		     , MENU_NAME		/* 메뉴 명 */
+		     , PARENTMENU_ID	/* 부모메뉴 아이디 */
+		     , REG_ID			/* 등록 아이디 */
+		     , REG_DATE			/* 등록 일시 */
+		     , UPDATE_ID		/* 수정 아이디 */
+		     , UPDATE_DATE		/* 수정 일시 */
+		     , SORT_NUM			/* 정렬 번호 */
+		     , MENU_DEPTH		/* 메뉴댑스 */
+		     , USE_YN			/* 사용 여부 */
+		) VALUES (
+		       #{menuId}
+		     , #{menuName}
+		     , #{parentmenuId}
+		     , #{regId}
+		     , NOW()
+		     , #{updateId}
+		     , NOW()
+		     , #{sortNum}
+		     , #{menuDepth}
+		     , #{useYn}
+		)
+	</insert>	
+ 	
+ 	<!-- 메뉴 순서 업데이트 -->
+	<update id="updateMenuOrder" parameterType="Menu">
+	/* MenuMapper.updateMenuOrder */
+		UPDATE TBL_MENU
+		SET		SORT_NUM      = #{sortNum}		/* 정렬 번호 */
+		<if test="parentmenuId != null and parentmenuId != ''">
+			  , PARENTMENU_ID = #{parentmenuId}	/* 부모메뉴 아이디 */
+		</if>
+		<if test="menuDepth != null and menuDepth != ''">
+			  , MENU_DEPTH    = #{menuDepth}    /* 메뉴 댑스 */
+		</if>
+			  , UPDATE_ID     = #{updateId}		/* 수정 아이디 */
+			  , UPDATE_DATE   = NOW()			/* 수정 일시 */
+		WHERE	MENU_ID       = #{menuId}
+	</update>
+	
+	<!-- 메뉴 순서 자동 업데이트 -->
+	<update id="updateMenuOrderAuto" parameterType="Menu">
+	/* MenuMapper.updateMenuOrderAuto */
+		UPDATE TBL_MENU A INNER JOIN 
+		(
+			SELECT MENU_ID
+			FROM TBL_MENU A, ( SELECT @RANK := 0  ) B 
+			WHERE PARENTMENU_ID = #{parentmenuId}
+			ORDER BY SORT_NUM, UPDATE_DATE DESC
+		) B ON A.MENU_ID = B.MENU_ID
+		SET A.SORT_NUM = @RANK := @RANK + 1
+	</update>
+	
+	<!-- 권한 조회 -->
+	<select id="selectRoleList" resultType="flkMap">
+	/* MenuMapper.selectRoleList */
+		SELECT ROLE_ID, GUEST_YN FROM TBL_ROLE
+	</select>
+	
+	<!-- 메뉴 삭제 -->
+	<delete id="deleteMenu" parameterType="Menu" >
+	/* MenuMapper.deleteMenu */
+		DELETE FROM TBL_MENU
+		WHERE MENU_ID IN
+		<foreach item="item" index="index" collection="menuIds" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 메뉴ID로 메뉴프로그램 삭제 -->
+	<delete id="deleteMenuProgramByMenuId" parameterType="Menu" >
+	/* MenuMapper.deleteMenuProgramByMenuId */
+		DELETE FROM TBL_PROGRAM
+		WHERE MENU_ID IN
+		<foreach item="item" index="index" collection="menuIds" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 메뉴 업데이트 -->
+	<update id="updateMenu" parameterType="Menu" >
+	/* MenuMapper.updateMenu */
+		UPDATE TBL_MENU
+	   	SET MENU_NAME 		= #{menuName}				/* 메뉴 명 */
+	      , PARENTMENU_ID 	= #{parentmenuId}		/* 부모메뉴 아이디 */
+	      , UPDATE_ID 		= #{updateId}			/* 수정 아이디 */
+	      , UPDATE_DATE		= NOW()					/* 수정 일시 */
+	      , SORT_NUM 		= #{sortNum}			/* 정렬 번호 */
+	      , MENU_DEPTH 		= #{menuDepth}			/* 메뉴댑스 */
+	      , USE_YN 			= #{useYn}				/* 사용 여부 */	
+	     WHERE MENU_ID 		= #{menuId}
+	</update>
+ 
+	<!-- 메뉴권한 조회 -->
+	<select id="selectRoleMenuList" parameterType="Menu" resultType="java.lang.String">
+		/* MenuMapper.selectRoleList */
+		SELECT 
+			MENU_ID 
+		FROM TBL_ROLE_MENU
+		WHERE ROLE_ID = #{roleId}
+	</select>
+		
+	<!-- 사이트 리스트 조회 -->
+	<select id="selectSiteList" parameterType="Menu" resultType="flkMap">
+		/* MenuMapper.selectSiteList */
+		<![CDATA[
+		SELECT 
+		  URL_TYPE,
+		  LOGIN_URL,
+		  MENU_ID
+		FROM
+		(
+			SELECT fn_menu_connect_by() AS id , @level AS level , @ROWNUM := @ROWNUM + 1 AS ROWNUM
+			FROM
+			( SELECT @start_with:='TOPMENU0000000000000', @id:=@start_with, @level:=0 , @ROWNUM:=0 ) vars join  TBL_MENU
+			WHERE @id IS NOT NULL
+		 ) func JOIN TBL_MENU d ON func.id = d.MENU_ID
+		WHERE PARENTMENU_ID = 'TOPMENU0000000000000'
+		]]>
+		<if test="menuIds != null and !menuIds.isEmpty">
+			AND MENU_ID IN  
+	        <foreach collection="menuIds" item="item" index="index" separator="," open="(" close=")">
+	            #{item , jdbcType=VARCHAR}
+	        </foreach>
+		</if>
+		ORDER BY ROWNUM ASC
+	</select>
+	
+	<!-- 사이트 메뉴 리스트 조회 -->
+	<select id="selectSiteMenuList" parameterType="Menu" resultType="flkMap" >
+		/* MenuMapper.selectSiteMenuList */
+		<![CDATA[
+			SELECT 
+			 	   A.MENU_ID			/* 메뉴 아이디 */
+			     , A.PARENTMENU_ID		/* 부모메뉴 아이디 */
+			     , A.MENU_NAME			/* 메뉴 명 */
+			     , A.SORT_NUM			/* 정렬 번호 */
+			     , A.MENU_DEPTH			/* 메뉴댑스 */
+			     , B.PROGRAM_URL
+				 , B.PROGRAM_NAME
+				 , fn_menu_id_system_connect_by_path('>', A.MENU_ID,'F')  AS PATH 
+				 , level
+				 , A.USE_YN				/* 사용 여부 */
+			FROM
+			(		
+				SELECT 
+				   MENU_ID			/* 메뉴 아이디 */
+				  , MENU_NAME		/* 메뉴 명 */
+				  , PARENTMENU_ID	/* 부모메뉴 아이디 */
+				  , SORT_NUM		/* 정렬 번호 */
+				  , MENU_DEPTH		/* 메뉴댑스 */
+				  , USE_YN			/* 사용 여부 */
+				  , level			
+				  , @ROWNUM := @ROWNUM + 1 AS ROWNUM
+				FROM
+				    ( 
+					 	SELECT fn_menu_connect_by() AS id , @level AS level 
+				    	FROM
+				        ( SELECT @start_with:=#{menuId}, @id:=@start_with, @level:=0, @ROWNUM:=0 ) vars join  TBL_MENU A
+						WHERE @id IS NOT NULL
+					 ) func JOIN TBL_MENU d ON func.id = d.MENU_ID
+			    WHERE 1=1
+		 ]]>
+			<if test="searchCondition == 'TOT'">
+				<![CDATA[ AND	( MNG_NAME LIKE CONCAT('%',#{searchKeyword},'%') OR EMAIL LIKE CONCAT('%',#{searchKeyword},'%') ) ]]>
+			</if>   
+			<if test="menuIds != null and !menuIds.isEmpty">
+				AND MENU_ID IN
+				<foreach collection="menuIds" item="item" index="index" separator="," open="(" close=")">
+					 #{item , jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		 ) A LEFT OUTER JOIN TBL_PROGRAM B ON A.MENU_ID = B.MENU_ID AND B.START_PROGRAM_YN = 'Y'
+		 ORDER BY A.SORT_NUM ASC
+	</select>
+	
+	<!-- 권한 프로그램 리스트 조회 -->
+	<select id="selectSiteProgramList" parameterType="Menu" resultType="flkMap">
+		/* MenuMapper.selectSiteProgramList */
+		SELECT
+			  TP.MENU_ID
+			, TP.PROGRAM_URL
+			, TP.PROGRAM_NAME
+			, TP.START_PROGRAM_YN
+		FROM
+			TBL_ROLE_PROGRAM TRP INNER JOIN TBL_PROGRAM TP			
+				ON TRP.PROGRAM_ID = TP.PROGRAM_ID AND TRP.ROLE_ID = #{roleId} 
+	</select>
+	
+	<!-- 메뉴권한 삭제 -->
+	<insert id="deleteRoleProgram">
+		/* MenuMapper.roleProgramDelete */                          
+		<![CDATA[
+			DELETE FROM TBL_ROLE_PROGRAM
+			WHERE ROLE_ID = #{roleId} AND PROGRAM_ID = #{programId}
+		]]>
+	</insert>
+	
+	<!-- 메뉴권한 등록 -->
+	<insert id="insertRoleProgram">
+		/* MenuMapper.insertRoleProgram */                          
+		<![CDATA[
+			INSERT INTO TBL_ROLE_PROGRAM(ROLE_ID, PROGRAM_ID)
+			VALUES(#{roleId}, #{programId})
+		]]>
+	</insert>
+	
+</mapper>

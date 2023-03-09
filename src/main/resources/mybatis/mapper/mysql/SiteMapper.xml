@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.mng.site.mapper.SiteMapper">
+ 
+ 	<!-- 지점 리스트 -->
+	<select id="selectSiteList" parameterType="Site" resultType="flkMap">
+		/* SiteMapper.selectSiteList */
+		<include refid="com.flk.common.mapper.CommonMapper.selectPagingTop" />  
+		SELECT ROW_NUMBER() OVER (ORDER BY site_cd ASC) AS RNUM
+			   , site_id
+			   , site_cd
+			   , site_name
+			   , site_desc
+			   , site_ip
+			   , region_cd
+			   , IFNULL((SELECT code_name FROM tbl_code WHERE code_use_name = region_cd), '') AS region_cd_name
+			   , TS.sg_id
+			   , TS.use_flag
+			   , TSG.sg_name
+			   , region_x
+			   , region_y
+			   , weather_x
+			   , weather_y
+		  FROM tbl_site TS, tbl_site_group TSG
+		 WHERE TS.sg_id = TSG.sg_id
+	    <if test="searchCondition != '' and searchCondition != null">
+	    	AND TS.sg_id = ${searchCondition}
+	    </if>
+	    <if test="searchKeyword != '' and searchKeyword != null">
+	    	AND site_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="useListYn != '' and useListYn != null">
+			AND TS.use_flag = #{useListYn}
+		</if>		
+		ORDER BY site_cd ASC
+	    <include refid="com.flk.common.mapper.CommonMapper.selectPagingBottom" /> 
+	</select>
+	
+	<!-- 지점관리 상세 조회 -->	
+	<select id="selectSiteView" parameterType="Site" resultType="flkMap">
+		/* SiteMapper.selectSiteView */
+		SELECT site_id
+			   , site_cd
+			   , site_name
+			   , site_desc
+			   , site_ip
+			   , company_no
+			   , address
+			   , region_cd
+			   , total_area
+			   , ice_system_sdate
+			   , tel_no
+			   , charge_person_name
+			   , charge_person_tel
+			   , tech_operation_tel
+			   , region_x
+			   , region_y
+			   , weather_x
+			   , weather_y
+			   , use_flag
+			   , update_id
+			   , update_date
+			   , reg_id
+			   , reg_date
+			   , sg_id
+			   , remarks
+			   , prev_facility_code
+			   , stat_start_day
+			   , stat_end_day
+		  FROM tbl_site
+		 <where>
+		 	<if test="siteId != '' and siteId != null">
+				AND site_id = #{siteId}
+			</if>	
+			<if test="siteCd != '' and siteCd != null">
+				AND site_cd = #{siteCd}
+			</if>	
+		 </where>	
+	</select>	
+	
+	<!-- 지점 등록 -->
+	<insert id="insertSite" parameterType="Site" useGeneratedKeys="true" keyProperty="siteId">
+		/* SiteMapper.insertSite */
+		INSERT INTO tbl_site (
+			   site_cd
+			   , site_name
+			   , site_desc
+			   , site_ip
+			   , company_no
+			   , address
+			   , region_cd
+			   , total_area
+			   , ice_system_sdate
+			   , tel_no
+			   , charge_person_name
+			   , charge_person_tel
+			   , tech_operation_tel
+			   , region_x
+			   , region_y
+			   , weather_x
+			   , weather_y
+			   , use_flag
+			   , update_id
+			   , reg_id
+			   , sg_id
+			   , remarks
+			   , prev_facility_code
+			   , stat_start_day
+			   , stat_end_day
+			   )
+		VALUES (
+				#{siteCd}
+			   , #{siteName}
+			   , #{siteDesc}
+			   , #{siteIp}
+			   , #{companyNo}
+			   , #{address}
+			   , #{regionCd}
+			   , #{totalArea}
+			   , #{iceSystemSdate}
+			   , #{telNo}
+			   , #{chargePersonName}
+			   , #{chargePersonTel}
+			   , #{techOperationTel}
+			   , #{regionX}
+			   , #{regionY}
+			   , #{weatherX}
+			   , #{weatherY}
+			   , #{useFlag}
+			   , #{updateId}
+			   , #{regId}
+			   , #{sgId}
+			   , #{remarks}
+			   , #{prevFacilityCode} 
+			   , #{statStartDay}
+			   , #{statEndDay}
+			   )
+	</insert>
+	
+	<!-- 지점 수정 -->
+	<update id="updateSite" parameterType="Site">
+		/* SiteMapper.updateSite */
+		UPDATE tbl_site
+		   SET site_name = #{siteName}
+			   , site_desc = #{siteDesc}
+			   , site_ip = #{siteIp}
+			   , company_no = #{companyNo}
+			   , address = #{address}
+			   , region_cd = #{regionCd}
+			   , total_area = #{totalArea}
+			   , ice_system_sdate = #{iceSystemSdate}
+			   , tel_no = #{telNo}
+			   , charge_person_name = #{chargePersonName}
+			   , charge_person_tel = #{chargePersonTel}
+			   , tech_operation_tel = #{techOperationTel}
+			   , region_x = #{regionX}
+			   , region_y = #{regionY}
+			   , weather_x = #{weatherX}
+			   , weather_y = #{weatherY}
+			   , use_flag = #{useFlag}
+			   , update_id = #{updateId}
+			   , remarks = #{remarks}
+			   , prev_facility_code = #{prevFacilityCode}
+			   , stat_start_day = #{statStartDay}
+			   , stat_end_day = #{statEndDay}
+			<if test="siteCd != '' and siteCd != null">
+				,site_cd = #{siteCd}	
+			</if>
+			<if test="sgId != '' and sgId != null">
+				,sg_id = #{sgId}	
+			</if>			
+		 WHERE site_id = ${siteId}	
+	</update>
+	
+	<!-- 지점코드 중복체크 -->
+	<select id="selectSiteCd" parameterType="Site" resultType="int">
+		/* SiteMapper.selectSiteCd */
+		SELECT count(site_cd)
+		  FROM tbl_site
+	 	 WHERE site_cd = #{siteCd}	
+	</select>
+
+	<!-- 하위 지점 사용여부 업데이트 -->
+	<update id="updateAllSiteUseFlag" parameterType="Site" >
+		/* SiteMapper.updateAllSiteUseFlag */
+		UPDATE tbl_site
+		   SET use_flag = #{useFlag}
+		 WHERE sg_id = #{sgId}
+	</update>
+
+ 	<!-- 지점의 통계 테이블 존재여부 확인 -->
+ 	<select id="selectCheckTable" parameterType="String" resultType="int">
+		/* BuildMapper.selectCheckTable */
+		SELECT COUNT(*) AS cnt
+          FROM information_schema.tables
+         WHERE table_name = 'tbl_raw_data_${value}'
+	</select> 	
+ 	
+ 	<!-- 지점의 tbl_raw_data_지점CD 생성 테이블 생성 -->
+ 	<insert id="createRawDataTable" parameterType="String">
+		/* BuildMapper.createRawDataTable */
+		CREATE table tbl_raw_data_${value} LIKE tbl_raw_data_template
+	</insert> 
+	
+ 	<!-- 지점의 tbl_stat_1min_지점CD 생성 테이블 생성 -->
+ 	<insert id="createStat1minTable" parameterType="String">
+		/* BuildMapper.createStat1minTable */
+		CREATE table tbl_stat_1min_${value} LIKE tbl_stat_1min_template
+	</insert> 
+	
+</mapper>

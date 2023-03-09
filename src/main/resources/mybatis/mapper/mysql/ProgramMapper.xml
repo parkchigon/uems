@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flk.system.program.mapper.ProgramMapper">
+
+	<!-- 프로그램목록조회 -->
+	<select id="selectProgramList" parameterType="Program" resultType="flkMap">
+		/* ProgramMapper.programList */
+		SELECT PROGRAM_ID		/* 프로그램 아이디    */
+			 , PROGRAM_NAME		/* 프로그램 명        */
+			 , PROGRAM_URL		/* 프로그램 URL       */
+			 , START_PROGRAM_YN	/* 시작 프로그램 여부 */
+			 , REG_DATE			/* 등록 일시          */
+			 , UPDATE_ID		/* 수정 아이디        */
+			 , UPDATE_DATE		/* 수정 일시          */
+			 , REG_ID			/* 등록 아이디        */
+			 , MENU_ID			/* 메뉴 아이디        */
+			 , USE_YN			/* 사용 여부          */
+		FROM TBL_PROGRAM
+		<where>
+		    1=1
+			<if test="menuId != '' and menuId != null">  
+		 	AND MENU_ID = #{menuId}
+		 	</if> 			    
+		    <if test="useYn != '' and useYn != null"> 
+		    AND USE_YN = #{useYn}
+		    </if>	    
+		</where>
+		ORDER BY PROGRAM_ID
+	</select>
+
+	<!-- 프로그램등록 -->
+	<insert id="insertProgram" parameterType="Program" >
+	/* ProgramMapper.insertProgram */
+	INSERT INTO TBL_PROGRAM (
+	       PROGRAM_ID		/* 프로그램 아이디 */
+	     , PROGRAM_NAME		/* 프로그램 명 */
+	     , PROGRAM_URL		/* 프로그램 URL */
+	     , START_PROGRAM_YN	/* 시작 프로그램 여부 */
+	     , REG_DATE			/* 등록 일시 */
+	     , UPDATE_ID		/* 수정 아이디 */
+	     , UPDATE_DATE		/* 수정 일시 */
+	     , REG_ID			/* 등록 아이디 */
+	     , MENU_ID			/* 메뉴 아이디 */
+	     , USE_YN			/* 사용 여부 */
+	) VALUES (
+	       #{programId}
+	     , #{programName}
+	     , #{programUrl}
+	     , #{startProgramYn}
+	     , NOW()
+	     , #{updateId}
+	     , NOW()
+	     , #{regId}
+	     , #{menuId}
+	     , #{useYn}
+	)
+	</insert>
+
+	<!-- 프로그램수정 -->
+	<update id="updateProgram" parameterType="Program" >
+	/* ProgramMapper.updateProgram */
+	UPDATE TBL_PROGRAM
+	   SET PROGRAM_NAME 	= #{programName}		/* 프로그램 명 */
+	     , PROGRAM_URL 		= #{programUrl}			/* 프로그램 URL */
+	     , START_PROGRAM_YN = #{startProgramYn}		/* 시작 프로그램 여부 */
+	     , UPDATE_ID 		= #{updateId}			/* 수정 아이디 */
+	     , UPDATE_DATE		= NOW()					/* 수정 일시 */
+	     , MENU_ID 			= #{menuId}				/* 메뉴 아이디 */
+	     , USE_YN 			= #{useYn}				/* 사용 여부 */
+	 WHERE PROGRAM_ID		= #{programId}
+	</update>
+
+	<!-- 프로그램삭제 -->
+	<delete id="deleteProgram" parameterType="Program">
+	/* ProgramMapper.deleteProgram */
+	DELETE FROM TBL_PROGRAM 
+	WHERE PROGRAM_ID = #{programId}
+	</delete>
+ 
+</mapper>
